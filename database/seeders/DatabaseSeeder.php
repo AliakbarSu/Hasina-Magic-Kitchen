@@ -3,6 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Category;
+use App\Models\Dish;
+use App\Models\Menu;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,11 +16,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $dishes = Dish::factory(10)->create();
+        Category::factory(3)->create();
+        Menu::factory(3)->create()->each(function ($menu) use ($dishes) {
+            $menu->dishes()->attach(
+                $dishes->random(rand(1, 3))
+            );
+            $menu->options()->attach(
+                $dishes->random(rand(1, 2))
+            );
+        });
     }
 }
