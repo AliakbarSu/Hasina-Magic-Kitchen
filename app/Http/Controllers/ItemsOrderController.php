@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-class DishMenuController extends Controller
+
+class ItemsOrderController extends Controller
 {
     //
 }

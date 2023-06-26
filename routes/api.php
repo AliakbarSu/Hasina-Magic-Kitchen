@@ -3,6 +3,7 @@
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrdersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,9 @@ Route::post("/menu", [MenuController::class, "add_menu"]);
 Route::delete("/menu", [MenuController::class, "delete_menu"]);
 
 
+Route::get('/order', [OrdersController::class, "all_orders"]);
+Route::get('/order/{id}', [OrdersController::class, "find_order"]);
+Route::post('/order', [OrdersController::class, "add_order"]);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
