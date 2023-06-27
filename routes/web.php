@@ -16,7 +16,14 @@ use Inertia\Inertia;
 |
 */
 
-Route::inertia("about", "About");
+// Route::inertia("about", "About");
+
+Route::get("/home", function (Request $request){
+    return Inertia::render("Home", []);
+});
+Route::get("/checkout", function (Request $request){
+    return Inertia::render("Checkout", []);
+});
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -24,6 +31,7 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+        // "about" => route('about')
     ]);
 });
 
