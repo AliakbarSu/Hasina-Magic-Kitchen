@@ -73,7 +73,7 @@ class OrdersController extends Controller
         $order = $this->create_order($validatedData);
         
         try {
-            $payment = $customer->pay($order->total * 100);
+            $payment = $customer->pay($order->total * 100, ["metadata" => ["order_id" => $order->id]]);
         } catch (\Throwable $th) {
             Log::error($th);
         }
