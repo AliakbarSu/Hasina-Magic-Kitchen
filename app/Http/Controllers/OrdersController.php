@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Log;
 
 class OrdersController extends Controller
 {
-    public function all_orders()
+    public function all_orders(Orders $orders)
     {
-        return Orders::with(["items" => ["menu", "menu_items.dishes"]])->get()->toJson();
+        return  $orders->all_orders()->toJson();
     }
 
     public function find_order($id)

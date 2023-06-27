@@ -23,9 +23,25 @@ class Orders extends Model
         'status',
     ];
 
+    public function all_orders()
+    {
+        $orders = $this->with(["items" => ["menu", "menu_items.dishes"]])->get();
+        return $orders->map(function($order) {
+            $order->items = $order->items->map(function($item) {
+                $item->dishes = $item->menu_items->map(function($menu_item) {
+                    return $menu_item->dishes;
+                });
+                $item->menu_item = [];
+                return $item;
+            });
+            return $order;
+        });
+        
+    }
+
     public function items()
     {
-        return $this->hasMany(ItemsOrder::class, 'order_id');
+        return $this->hasMany(ItemsOrder::class, 'order_id', 'id');
     }
 
     public function mark_as_paid($id)

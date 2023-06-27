@@ -9,6 +9,7 @@ use App\Models\ItemsMenuOrder;
 use App\Models\ItemsOrder;
 use App\Models\Menu;
 use App\Models\Orders;
+use Database\Factories\AdminFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,6 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        AdminFactory::new()->create();
         $dishes = Dish::factory(10)->create();
         Category::factory(3)->create();
         $menus = Menu::factory(5)->create()->each(function ($menu) use ($dishes) {
@@ -35,6 +37,7 @@ class DatabaseSeeder extends Seeder
                 $itemOrder = new ItemsOrder();
                 $itemOrder->order_id = $order["id"];
                 $itemOrder->menu_id = $menu_id;
+                $itemOrder->quantity = 1;
                 $itemOrder->save();
                 for($j = 0; $j < 3; $j++) {
                     $itemMenuOrder = new ItemsMenuOrder();

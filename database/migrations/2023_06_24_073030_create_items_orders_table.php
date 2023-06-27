@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('order_id');
             $table->uuid('menu_id');
-            $table->number('quantity');
+            $table->integer('quantity');
             $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
             $table->timestamps();
         });

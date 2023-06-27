@@ -9,7 +9,7 @@ use Inertia\Inertia;
 class AdminController extends Controller
 {
     public function orders(Orders $orders) {
-        return Inertia::render('Admin/Orders', ['orders' => $orders->all()]);
+        return Inertia::render('Admin/Orders', ['orders' => $orders->all_orders()]);
     }
 
     public function update_order_status(Request $request, Orders $orders) {
