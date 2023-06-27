@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -36,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
+    Route::patch('/orders/status', [AdminController::class, 'update_order_status'])->name('admin.orders.update.status');
 });
 
 Route::get('/menu', [DishController::class, "menu"])->name('dish.menu');

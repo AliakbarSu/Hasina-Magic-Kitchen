@@ -34,4 +34,19 @@ class Orders extends Model
         $order->status = "paid";
         $order->save();
     }
+
+    // returns an array of dates that are not available for orders
+    public function availability()
+    {
+        $orders = $this->all()->where("date", ">=", date('today'))->groupBy('date');
+        $dates = [];
+        foreach($orders as $order) {
+            $is_available = $order->count() < 1;
+            if($is_available) {
+                continue;
+            }
+            $dates[] = ["date" => $order[0]->date, "available" => $is_available];
+        }
+        return $dates;
+    }
 }

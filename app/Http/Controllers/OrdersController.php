@@ -95,4 +95,8 @@ class OrdersController extends Controller
         }
         return $total;
     }
+
+    public function get_availability(Orders $orders) {
+        return $orders->availability();
+    }
 }
