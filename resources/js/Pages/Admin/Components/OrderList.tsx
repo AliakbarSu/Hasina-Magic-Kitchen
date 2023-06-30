@@ -3,6 +3,7 @@ import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingCartIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Order } from '../Orders'
+import OrderStatusActions from "./OrderStatusActions"
 
 const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
 const navigation = {
@@ -126,20 +127,24 @@ function classNames(...classes: string[]) {
 
 type OrderListProps = {
     orders: Order[];
-    onConfirm: (order: Order) => void;
-    onCancel: (order: Order) => void;
 }
 
-export default function OrderList({ orders, onCancel, onConfirm }: OrderListProps) {
+export default function OrderList({ orders }: OrderListProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
 
     const orderStatusColor = (status: string) => {
-        return status === "pending" ? "text-orange-500" : status === "confirmed" ? "text-indigo-600" : "text-green-600"
+        if (status === "pending") {
+            return "text-orange-500";
+        } else if (status === "confirmed") {
+            return "text-green-600";
+        } else if (status === "cancelled") {
+            return "text-red-600"
+        }
     }
 
     return (
-        <main className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:pb-32 sm:pt-24 lg:px-8">
+        <main className="mx-auto px-4 py-16 sm:px-6 sm:pb-32 sm:pt-24 lg:px-8">
             <div className="max-w-xl">
                 <h1 className="text-3xl font-bold tracking-tight text-gray-900">Your Orders</h1>
                 <p className="mt-2 text-sm text-gray-500">
@@ -167,7 +172,7 @@ export default function OrderList({ orders, onCancel, onConfirm }: OrderListProp
                                     </div> */}
                                 </div>
                             </div>
-                            <div className="mt-6 space-y-4 sm:ml-6 sm:mt-0 sm:w-40 sm:flex-none">
+                            {/* <div className="mt-6 space-y-4 sm:ml-6 sm:mt-0 sm:w-40 sm:flex-none">
                                 <button
                                     onClick={() => onConfirm(order)}
                                     type="button"
@@ -182,8 +187,9 @@ export default function OrderList({ orders, onCancel, onConfirm }: OrderListProp
                                 >
                                     Cancel
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
+                        <OrderStatusActions order={order} onSelect={() => null} />
 
 
                         <div className="-mb-6 mt-6 flow-root divide-y divide-gray-200 border-t border-gray-200">

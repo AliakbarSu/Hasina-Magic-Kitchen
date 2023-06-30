@@ -29,19 +29,16 @@ export interface Order {
 }
 
 export default function Orders({ auth, mustVerifyEmail, status, orders }: PageProps<{ mustVerifyEmail: boolean, status?: string, orders: any[] }>) {
-    const { data, setData, patch, processing, errors, reset } = useForm({
+    const { data, setData, patch, processing, errors, reset, setError } = useForm({
         status: 'pending',
         order_id: '',
     });
 
-    const onConfirmHandler = (order: any) => {
-        setData((prevData) => ({ ...prevData, order_id: order.id }));
-        setData((prevData) => ({ ...prevData, status: "confirmed" }));
-        patch(route('admin.orders.update.status'));
-    }
-    const onCancelHandler = (order: any) => {
-        setData((prevData) => ({ ...prevData, order_id: order.id }));
-        setData((prevData) => ({ ...prevData, status: "cancelled" }));
+
+
+
+
+    const onSubmitHandler = (order: any) => {
         patch(route('admin.orders.update.status'));
     }
 
@@ -51,10 +48,11 @@ export default function Orders({ auth, mustVerifyEmail, status, orders }: PagePr
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Orders</h2>}
         >
             <Head title="Orders" />
+            {errors.order_id ? <div>{errors.order_id}</div> : null}
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                    <OrderList onCancel={onCancelHandler} onConfirm={onConfirmHandler} orders={orders} />
+                    <OrderList orders={orders} />
                 </div>
             </div>
         </AuthenticatedLayout>
