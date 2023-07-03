@@ -28,10 +28,7 @@ Route::get("/dish/{id}", [DishController::class, "dish"]);
 Route::post("/dish", [DishController::class, "add_dish"]);
 Route::delete("/dish", [DishController::class, "delete_dish"]);
 
-Route::get("/menu", [MenuController::class, "all_menus"]);
-Route::get("/menu/{id}", [MenuController::class, "menu"]);
-Route::post("/menu", [MenuController::class, "add_menu"]);
-Route::delete("/menu", [MenuController::class, "delete_menu"]);
+Route::post('/menu/media', [MenuController::class, 'add_menu_media']);
 
 
 Route::get('/order', [OrdersController::class, "all_orders"]);

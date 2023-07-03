@@ -7,10 +7,9 @@ use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
-  
-    public function all_menus()
+    public function all_menus(Menu $menu)
     {
-        return Menu::with(["dishes", "options"])->get()->toJson();
+        return $menu->get_menus_with_media()->toJson();
     }
 
     public function menu($id)
@@ -37,7 +36,16 @@ class MenuController extends Controller
         return $menu->toJson();
     }
 
-    public function delete_menu($id) {
+    public function add_menu_media(Request $request, Menu $menus)
+    {
+        $validatedData = $request->validate([
+            'id' => ['required'],
+            'image' => 'required',
+        ]);
+        $menu = $menus->all()->find($validatedData['id']);
+        $menu->attachMedia($request->file('image'));
+        return response()->json(['message' => 'Menu media added'], 200);
+    }
         $menu = Menu::find($id);
         $menu->delete();
         return response()->json(["message" => "Menu deleted"], 200);
