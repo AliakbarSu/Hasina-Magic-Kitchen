@@ -99,4 +99,31 @@ class OrdersController extends Controller
     public function get_availability(Orders $orders) {
         return $orders->availability();
     }
+
+    public function validate_address(Request $request)
+    {
+        $validatedData = $request->validate([
+            'address' => 'required',
+        ]);
+        $address = $validatedData['address'];
+        $response = Http::post(env('GOOGLE_ADDRESS_API'), [
+            'address' => [
+                'regionCode' => 'NZ',
+                'locality' => 'Auckland',
+                'addressLines' => $address,
+            ],
+        ]);
+        if (
+            property_exists(
+                $response->object()->result->verdict,
+                'hasUnconfirmedComponents'
+            )
+        ) {
+            $isInvalid = !$response->object()->result->verdict
+                ->hasUnconfirmedComponents;
+            return response(['validation result' => $isInvalid]);
+        } else {
+            return response(['validation result' => true]);
+        }
+    }
 }

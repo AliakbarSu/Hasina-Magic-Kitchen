@@ -31,10 +31,7 @@ Route::delete("/dish", [DishController::class, "delete_dish"]);
 Route::post('/menu/media', [MenuController::class, 'add_menu_media']);
 
 
-Route::get('/order', [OrdersController::class, "all_orders"]);
-Route::get('/order/{id}', [OrdersController::class, "find_order"]);
-Route::post('/order', [OrdersController::class, "add_order"]);
-Route::get('/availability', [OrdersController::class, "get_availability"]);
+Route::post('/validate/address', [OrdersController::class, 'validate_address']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
