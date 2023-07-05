@@ -39,12 +39,13 @@ export function Container({
 }: {
     size: 'xs' | 'sm' | 'md' | 'lg'; // Update the type to a union of allowed keys
     className?: string; // Use string as the type for className
+    children: ReactNode
 }) {
     return <div className={clsx(styles[size], className)} {...props} />;
 }
 
 // --------------------------------------------------------------------
-import { useId } from 'react';
+import React, { ReactElement, ReactNode, useId } from 'react';
 
 export function Pattern({
     size = 40,
