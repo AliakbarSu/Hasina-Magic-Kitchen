@@ -11,6 +11,5 @@ class CustomersSeeder extends Seeder
      */
     public function run(): void
     {
-        //
     }
 }
