@@ -20,12 +20,17 @@ class Menu extends Model
         return $this->with(['dishes', 'options'])
             ->get()
             ->each(function ($item) {
-                $item['media'] = array_map(function ($media) {
-                    return [
-                        'id' => $media['id'],
-                        'url' => $media['file_url'],
-                    ];
-                }, $item->fetchAllMedia()->toArray());
+                $item['media'] = $this->add_media($item);
+                $item->dishes->each(function ($dish) {
+                    $dish['media'] = $this->add_media($dish);
+                    unset($dish['pivot']);
+                    return $dish;
+                });
+                $item->options->each(function ($option) {
+                    $option['media'] = $this->add_media($option);
+                    unset($option['pivot']);
+                    return $option;
+                });
                 return $item;
             });
     }
@@ -38,5 +43,15 @@ class Menu extends Model
     public function options()
     {
         return $this->belongsToMany(Dish::class, 'menu_options');
+    }
+
+    private function add_media($item)
+    {
+        return array_map(function ($media) {
+            return [
+                'id' => $media['id'],
+                'url' => $media['file_url'],
+            ];
+        }, $item->fetchAllMedia()->toArray());
     }
 }
