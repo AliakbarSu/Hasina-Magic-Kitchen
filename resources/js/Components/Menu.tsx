@@ -15,80 +15,9 @@ const menuType = [
     },
 ];
 
-const products: Menu[] = [
-    {
-        id: '99801cca-8d04-47d7-a17d-957dbc924b6c',
-        name: 'Prof. Ezequiel Cruickshank',
-        description: 'Debitis minus ipsam labore sed placeat.',
-        price: 113,
-        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80',
-        category: { name: 'Food Menu', id: '99801cca-8d04-47d7-a17d' },
-        created_at: '2023-06-26T04:52:59.000000Z',
-        updated_at: '2023-06-26T04:52:59.000000Z',
-        dishes: [
-            {
-                id: '99801cca-89d6-4aff-bdea-a1a0ef661bd4',
-                name: 'Elza Schroeder',
-                description: 'Corrupti qui ratione repellendus nemo.',
-                price: 29.06,
-                image: 'https://via.placeholder.com/640x480.png/0000ee?text=food+dicta',
-                category: { name: 'Food Menu', id: '99801cca-8d04-47d7-a17d' },
-                created_at: '2023-06-26T04:52:58.000000Z',
-                updated_at: '2023-06-26T04:52:58.000000Z',
-                pivot: {
-                    menu_id: '99801cca-8d04-47d7-a17d-957dbc924b6c',
-                    dish_id: '99801cca-89d6-4aff-bdea-a1a0ef661bd4',
-                },
-            },
-            {
-                id: '99801cca-89d6-4aff-bdea-a1a0ef661bd4',
-                name: 'Elza Schroeder 2',
-                description: 'Corrupti qui ratione repellendus nemo.',
-                price: 29.06,
-                image: 'https://via.placeholder.com/640x480.png/0000ee?text=food+dicta',
-                category: { name: 'Food Menu', id: '99801cca-8d04-47d7-a17d' },
-                created_at: '2023-06-26T04:52:58.000000Z',
-                updated_at: '2023-06-26T04:52:58.000000Z',
-                pivot: {
-                    menu_id: '99801cca-8d04-47d7-a17d-957dbc924b6c',
-                    dish_id: '99801cca-89d6-4aff-bdea-a1a0ef661bd4',
-                },
-            },
-        ],
-        options: [
-            {
-                id: '99801cca-8994-4faf-be99-ec5370bf730c',
-                name: 'Mr. Leonardo Green',
-                description: 'Ducimus et voluptas molestiae et.',
-                price: 16.39,
-                image: 'https://via.placeholder.com/640x480.png/00aa44?text=food+culpa',
-                category: { name: 'Food Menu', id: '99801cca-8d04-47d7-a17d' },
-                created_at: '2023-06-26T04:52:58.000000Z',
-                updated_at: '2023-06-26T04:52:58.000000Z',
-                pivot: {
-                    menu_id: '99801cca-8d04-47d7-a17d-957dbc924b6c',
-                    dish_id: '99801cca-8994-4faf-be99-ec5370bf730c',
-                },
-            },
-            {
-                id: '99801cca-89b7-45e9-b9e0-ffad6d1f762d',
-                name: 'Allan Langosh DDS',
-                description: 'Maiores blanditiis nulla sapiente.',
-                price: 48.19,
-                image: 'https://via.placeholder.com/640x480.png/004400?text=food+officia',
-                category: { name: 'Food Menu', id: '99801cca-8d04-47d7-a17d' },
-                created_at: '2023-06-26T04:52:58.000000Z',
-                updated_at: '2023-06-26T04:52:58.000000Z',
-                pivot: {
-                    menu_id: '99801cca-8d04-47d7-a17d-957dbc924b6c',
-                    dish_id: '99801cca-89b7-45e9-b9e0-ffad6d1f762d',
-                },
-            },
-        ],
-    },
-];
-import { Dish, Menu } from '@/store/slice/cart';
-export default function MenuList() {
+
+import { Dish } from '@/store/slice/cart';
+export default function MenuList({ menu }: { menu: Menu[] }) {
     const [open, setOpen] = useState(false);
 
     return (
@@ -104,7 +33,7 @@ export default function MenuList() {
                             <h2 className="sr-only">Products</h2>
 
                             <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
-                                {products.map((product) => (
+                                {menu.map((product) => (
                                     <MenuItem
                                         key={product.id}
                                         product={product}
@@ -139,7 +68,7 @@ export function MenuItem({
     const dispatch = useDispatch();
 
     const addToCartHandler = () => {
-        dispatch(addItem({ ...product, numOfPeople: numOfPeople }));
+        // dispatch(addItem({ ...product, numOfPeople: numOfPeople }));
     };
 
     const cartItem = useSelector((state: RootState) =>
@@ -150,7 +79,7 @@ export function MenuItem({
         <div className="group flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
             <div className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
                 <img
-                    src={product.image}
+                    src={product.media.length ? product.media[0].url : ''}
                     alt={'Menu Plate'}
                     className="h-full w-full object-cover object-center sm:h-full sm:w-full"
                 />
@@ -174,7 +103,7 @@ export function MenuItem({
                             state={numOfPeople}
                             setState={setNumOfPeople}
                         />
-                        {}
+                        { }
                         <button
                             onClick={() => setOpen(true)}
                             className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -252,6 +181,7 @@ function PeopleInput(props: {
 import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/24/outline';
+import { Menu } from '@/types/application';
 
 export function Example({
     open,

@@ -1,16 +1,17 @@
-import Menu from '@/Components/Menu';
+import MenuComponent from '@/Components/Menu';
 import Header from '@/Layouts/Header';
 import Nav from '@/Layouts/Nav';
 import Filter from '@/Components/Filter';
+import { Menu } from '@/types/application';
 
-function Home() {
+function Home({ menu }: { menu: Menu[] }) {
     return (
         <>
             <Nav />
             <Header />
             <Filter />
             {/* <Deal /> */}
-            <Menu />
+            <MenuComponent menu={menu} />
             <Footer />
         </>
     );

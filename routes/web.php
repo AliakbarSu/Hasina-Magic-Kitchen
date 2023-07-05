@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Menu;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,13 +28,14 @@ Route::get('/checkout', function (Request $request) {
     return Inertia::render('Checkout', []);
 });
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+Route::get('/', function (Menu $menu) {
+    return Inertia::render('Home', [
+        // 'canLogin' => Route::has('login'),
+        // 'canRegister' => Route::has('register'),
+        // 'laravelVersion' => Application::VERSION,
+        // 'phpVersion' => PHP_VERSION,
         // "about" => route('about')
+        'menu' => $menu->get_menus_with_media(),
     ]);
 });
 
