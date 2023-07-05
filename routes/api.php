@@ -26,6 +26,7 @@ Route::delete('/category', [CategoryController::class, 'delete_category']);
 Route::get('/dish', [DishController::class, 'all_dishes']);
 Route::get('/dish/{id}', [DishController::class, 'dish']);
 Route::post('/dish', [DishController::class, 'add_dish']);
+Route::post('/dish/media', [DishController::class, 'add_dish_media']);
 Route::delete('/dish', [DishController::class, 'delete_dish']);
 
 Route::get('/menu', [MenuController::class, 'all_menus']);

@@ -21,8 +21,9 @@ class DishFactory extends Factory
             'name' => $this->faker->name(),
             'description' => $this->faker->text(40),
             'price' => $this->faker->randomFloat(2, 10, 50),
-            "image" => $this->faker->imageUrl(640, 480, "food"),
-            "category_id" => Category::factory(1)->create()->first(),
+            'category_id' => Category::factory(1)
+                ->create()
+                ->first(),
         ];
     }
 }
