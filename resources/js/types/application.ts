@@ -19,5 +19,6 @@ export interface Menu {
     media: Media[];
     description: string;
     dishes: Dish[];
+    options: Dish[];
     created_at: string;
 }
