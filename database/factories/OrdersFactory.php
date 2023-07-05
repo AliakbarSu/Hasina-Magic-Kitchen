@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Customers;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,8 +25,13 @@ class OrdersFactory extends Factory
             'date' => $this->faker->date(),
             'time' => $this->faker->time(),
             'note' => $this->faker->text(),
+            'customer_id' => Customers::factory(1)
+                ->create()
+                ->first(),
             'total' => $this->faker->randomNumber(),
-            'status' => ["pending", "completed", 'canceled'][array_rand([1, 2, 3], 1)]
+            'status' => ['pending', 'completed', 'canceled'][
+                array_rand([1, 2, 3], 1)
+            ],
         ];
     }
 }

@@ -8,6 +8,7 @@ import OrderList from './Components/OrderList';
 
 export interface Order {
     id: string;
+    customer_name: string;
     status: string;
     total: string;
     date: string;
@@ -16,6 +17,15 @@ export interface Order {
     email: string;
     phone: string;
     note: string;
+    created_at: string;
+    addons: {
+        quantity: number;
+        id: string;
+        items: {
+            id: string;
+            name: string;
+        }[]
+    }[]
     items: {
         quantity: string;
         menu: {
@@ -24,7 +34,11 @@ export interface Order {
             price: string;
             description: string;
             created_at: string;
-        }
+        },
+        dishes: [{
+            id: string;
+            name: string;
+        }[]]
     }[]
 }
 

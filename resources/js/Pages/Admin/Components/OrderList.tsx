@@ -4,6 +4,8 @@ import { Bars3Icon, MagnifyingGlassIcon, ShoppingCartIcon, UserIcon, XMarkIcon }
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Order } from '../Orders'
 import OrderStatusActions from "./OrderStatusActions"
+import { Link } from '@inertiajs/react'
+import OrderStatusBadges, { OrderStatus } from './OrderStatusBadges'
 
 const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
 const navigation = {
@@ -134,42 +136,49 @@ export default function OrderList({ orders }: OrderListProps) {
 
 
     const orderStatusColor = (status: string) => {
-        if (status === "pending") {
-            return "text-orange-500";
+        if (status === "placed") {
+            return "text-orange-300";
         } else if (status === "confirmed") {
             return "text-green-600";
-        } else if (status === "cancelled") {
+        } else if (status === "completed") {
+            return "text-green-800";
+        } else if (status === "make") {
+            return "text-orange-600";
+        } else if (status === "canceled") {
             return "text-red-600"
+        } else {
+            return "text-green-600"
         }
     }
 
     return (
-        <main className="mx-auto px-4 py-16 sm:px-6 sm:pb-32 sm:pt-24 lg:px-8">
-            <div className="max-w-xl">
+        <main className="mx-auto px-4 py-16 sm:px-6 sm:pb-32 sm:pt-24 lg:px-8" >
+            <div className="mx-auto max-w-2xl">
                 <h1 className="text-3xl font-bold tracking-tight text-gray-900">Your Orders</h1>
                 <p className="mt-2 text-sm text-gray-500">
                     Check the status of recent orders, manage returns, and discover similar products.
                 </p>
             </div>
 
-            <div className="mt-12 space-y-16 sm:mt-16">
+            <div className="mx-auto max-w-2xl mt-12 space-y-16 sm:mt-16">
                 {orders.map((order) => (
                     <section key={order.id} aria-labelledby={`${order.id}-heading`}>
                         <div className="space-y-1 md:flex md:items-baseline md:space-x-4 md:space-y-0">
-                            <h2 id={`${order.id}-heading`} className="text-lg font-medium text-gray-900 md:flex-shrink-0">
-                                Order #{order.id}
+                            <h2 id={`${order.id}-heading`} className="text-lg font-medium text-gray-900 md:flex-shrink-0 w-2/4">
+                                Order for <b>{order.customer_name}</b>
                             </h2>
                             <div className="space-y-5 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 md:min-w-0 md:flex-1">
                                 {/* <p className="text-sm font-medium text-gray-500">{order.status}</p> */}
                                 <div className="flex text-sm font-medium">
-                                    <span className={classNames("text-indigo-600 hover:text-indigo-500", orderStatusColor(order.status))}>
+                                    {/* <span className={classNames(orderStatusColor(order.status), "hover:" + orderStatusColor(order.status))}>
                                         {order.status}
-                                    </span>
-                                    {/* <div className="ml-4 border-l border-gray-200 pl-4 sm:ml-6 sm:pl-6">
-                                        <a href={order.id} className="text-indigo-600 hover:text-indigo-500">
-                                            View Invoice
-                                        </a>
-                                    </div> */}
+                                    </span> */}
+                                    <OrderStatusBadges status={order.status as OrderStatus} />
+                                    <div className="ml-4 border-l border-gray-200 pl-4 sm:ml-6 sm:pl-6">
+                                        <Link href={route('admin.order_details', { id: order.id })} className="text-indigo-600 hover:text-indigo-500 text-xl">
+                                            دیدن سفارش
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                             {/* <div className="mt-6 space-y-4 sm:ml-6 sm:mt-0 sm:w-40 sm:flex-none">
@@ -192,33 +201,7 @@ export default function OrderList({ orders }: OrderListProps) {
                         <OrderStatusActions order={order} onSelect={() => null} />
 
 
-                        <div className="-mb-6 mt-6 flow-root divide-y divide-gray-200 border-t border-gray-200">
-                            {order.items.map((item) => (
-                                <div key={item.menu.id} className="py-6 sm:flex">
-                                    <div className="flex space-x-4 sm:min-w-0 sm:flex-1 sm:space-x-6 lg:space-x-8">
-                                        {/* <img
-                                        src={product.imageSrc}
-                                        alt={product.imageAlt}
-                                        className="h-20 w-20 flex-none rounded-md object-cover object-center sm:h-48 sm:w-48"
-                                    /> */}
-                                        <div className="min-w-0 flex-1 pt-1.5 sm:pt-0">
-                                            <h3 className="text-sm font-medium text-gray-900">
-                                                <a >{item.menu.name}</a>
-                                            </h3>
-                                            <p className="truncate text-sm text-gray-500">
-                                                {/* <span>{product.color}</span>{' '} */}
-                                                <span className="mx-1 text-gray-400" aria-hidden="true">
-                                                    &middot;
-                                                </span>{' '}
-                                                <span>for {item.quantity} person(s)</span>
-                                            </p>
-                                            {/* <p className="mt-1 font-medium text-gray-900">{item.menu.name}</p> */}
-                                        </div>
-                                    </div>
 
-                                </div>
-                            ))}
-                        </div>
                     </section>
                 ))}
             </div>

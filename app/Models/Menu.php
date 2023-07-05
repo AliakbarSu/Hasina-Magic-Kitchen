@@ -12,11 +12,8 @@ class Menu extends Model
     use MediaAlly;
     use HasFactory;
     use HasUuids;
-    
-    protected $fillable = [
-        "name",
-        "description",
-        "price",
+
+    protected $fillable = ['name', 'description', 'price'];
 
     public function get_menus_with_media()
     {
@@ -35,11 +32,11 @@ class Menu extends Model
 
     public function dishes()
     {
-        return $this->belongsToMany(Dish::class, "dish_menu" );
+        return $this->belongsToMany(Dish::class, 'dish_menu');
     }
 
     public function options()
     {
-        return $this->belongsToMany(Dish::class, "menu_options");
+        return $this->belongsToMany(Dish::class, 'menu_options');
     }
 }

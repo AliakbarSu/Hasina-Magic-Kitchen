@@ -11,15 +11,11 @@ class ItemsOrder extends Model
     use HasFactory;
     use HasUuids;
 
-    protected $fillable = [
-        'order_id',
-        'menu_id',
-        'quantity',
-    ];
+    protected $fillable = ['order_id', 'menu_id', 'quantity'];
 
     public function menu_items()
     {
-        return $this->hasMany(ItemsMenuOrder::class, "item_id");
+        return $this->hasMany(ItemsMenuOrder::class, 'item_id');
     }
 
     public function menu()

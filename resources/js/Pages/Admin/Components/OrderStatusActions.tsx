@@ -2,9 +2,10 @@ import { useForm } from "@inertiajs/react";
 import { Order } from "../Orders";
 
 const orderStatus = [
-    { id: 'confirm', title: 'Confirm' },
-    { id: 'reject', title: 'Reject' },
-    { id: 'cancel', title: 'Cancel' },
+    { id: 'confirmed', title: 'Confirm' },
+    { id: 'canceled', title: 'Cancel' },
+    { id: 'make', title: 'In Progress' },
+    { id: 'completed', title: 'Completed' },
 ]
 
 export default function OrderStatusActions({ onSelect, order }: { onSelect: (value: string) => void, order: Order }) {
@@ -22,8 +23,8 @@ export default function OrderStatusActions({ onSelect, order }: { onSelect: (val
     }
     return (
         <div>
-            <label className="text-base font-semibold text-gray-900">Status</label>
-            <p className="text-sm text-gray-500">Your order status</p>
+            {/* <label className="text-base font-semibold text-gray-900">Status</label> */}
+            <p className="text-sm text-gray-500">Update order status</p>
             <fieldset className="mt-4">
                 <legend className="sr-only">Order Status</legend>
                 <div className="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
@@ -33,7 +34,7 @@ export default function OrderStatusActions({ onSelect, order }: { onSelect: (val
                                 id={orderStatus.id}
                                 name={order.id + "order-status"}
                                 type="radio"
-                                defaultChecked={orderStatus.id === 'confirm'}
+                                defaultChecked={orderStatus.id === order.status}
                                 onChange={() => onSelectHandler(orderStatus.id)}
                                 className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                             />
@@ -43,15 +44,17 @@ export default function OrderStatusActions({ onSelect, order }: { onSelect: (val
                         </div>
                     ))}
                 </div>
+
             </fieldset>
             <div className="py-3">
                 <button
                     onClick={onSubmitHandler}
                     type="button"
-                    className="flex w-1/6 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-2.5 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:flex-grow-0"
+                    className="rounded bg-indigo-600 px-2 py-1 text-md font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                     Update
                 </button>
+
             </div>
 
         </div>

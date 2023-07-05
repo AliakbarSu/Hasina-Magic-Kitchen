@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class DishMenu extends Model
 {
-    protected $table = "dish_menu";
+    protected $table = 'dish_menu';
     use HasFactory;
     protected $fillable = ['menu_id', 'dish_id'];
+    protected $hidden = ['menu_id', 'dish_id', 'pivot'];
 }
