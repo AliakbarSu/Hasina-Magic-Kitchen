@@ -29,3 +29,24 @@ export interface Menu {
     options: Dish[];
     created_at: string;
 }
+
+export interface Order {
+    customer_name: string;
+    email: string;
+    phone: number;
+    address: string;
+    date: string; // "12-06-2023"
+    time: string; // "10:00"
+    note: string;
+    items: {
+        menu_id: string;
+        dishes: string[];
+        quantity: number;
+    }[];
+    addons: { dish_id: string; quantity: number }[];
+}
+
+export type OrderResponse = {
+    message: string;
+    payment_link: string;
+};
