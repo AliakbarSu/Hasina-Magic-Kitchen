@@ -23,7 +23,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         AdminFactory::new()->create();
-        $dishes = Dish::factory(10)->create();
+        $dishes = Dish::factory(4)->create();
+        $dishes->each(function ($dish) {
+            $dish->attachMedia();
+            return $dish;
+        });
         Category::factory(3)->create();
         $menus = Menu::factory(5)
             ->create()

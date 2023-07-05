@@ -3,12 +3,19 @@ export interface Media {
     url: string;
 }
 
+export interface Category {
+    id: string;
+    name: string;
+    description: string;
+}
+
 export interface Dish {
     id: string;
     name: string;
     price: string;
     description: string;
     media: Media[];
+    category: Category;
     created_at: string;
 }
 
