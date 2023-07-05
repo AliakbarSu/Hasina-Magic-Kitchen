@@ -29,6 +29,10 @@ const products = [
     },
     // More products...
 ];
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { CartItem } from '@/store/slice/cart';
+import { RootState } from '@/store';
+
 function InfoSection() {
     const [isPickup, setIsPickup] = useState(false);
     const [date, setDate] = useState('');
@@ -59,6 +63,8 @@ function InfoSection() {
             note,
         };
     };
+
+    const cartItems = useSelector((state: RootState) => state.cart.items);
 
     return (
         <div className="bg-white relative">
@@ -98,25 +104,25 @@ function InfoSection() {
                             role="list"
                             className="divide-y divide-white divide-opacity-10 text-sm font-medium"
                         >
-                            {products.map((product) => (
+                            {cartItems.map((product: CartItem) => (
                                 <li
                                     key={product.id}
                                     className="flex items-start space-x-4 py-6"
                                 >
                                     <img
-                                        src={product.imageSrc}
-                                        alt={product.imageAlt}
+                                        src={product.image}
+                                        alt={`Image of ${product.name} menu`}
                                         className="border h-20 w-20 flex-none rounded-md object-cover object-center"
                                     />
                                     <div className="flex-auto space-y-1">
                                         <h3 className="text-black">
                                             {product.name}
                                         </h3>
-                                        <p>{product.color}</p>
-                                        <p>{product.size}</p>
+                                        <p>{product.description}</p>
+                                        <p className="text-gray-900 font-extrabold">{`For ${product.numOfPeople} people`}</p>
                                     </div>
                                     <p className="flex-none text-base font-medium text-black">
-                                        {product.price}
+                                        ${product.price}
                                     </p>
                                 </li>
                             ))}
