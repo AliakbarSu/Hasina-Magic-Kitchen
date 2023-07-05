@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import { Link } from '@inertiajs/react';
 
 export default function Example() {
     const isCartEmpty = useSelector((state: RootState) =>
@@ -25,9 +26,12 @@ export default function Example() {
                                         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                                         alt="Your Company"
                                     /> */}
-                                    <h1 className="font-extrabold font-mono text-white text-2xl">
-                                        HSM
-                                    </h1>
+                                    <Link href={route('home')}>
+                                        <h1 className="font-extrabold font-mono text-white text-2xl">
+                                            HSM
+                                        </h1>
+                                    </Link>
+
                                     {/* <img
                                         className="hidden h-8 w-auto lg:block"
                                         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -38,12 +42,12 @@ export default function Example() {
                             <div className="hidden sm:ml-6 sm:flex ">
                                 <div className="hidden sm:mr-6 sm:flex sm:space-x-8">
                                     {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                                    <a
-                                        href="#"
+                                    <Link
+                                        href={route('home')}
                                         className="inline-flex items-center border-white px-1 pt-1 text-md font-medium text-white"
                                     >
                                         Home
-                                    </a>
+                                    </Link>
                                     <a
                                         href="#"
                                         className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-md font-medium text-white hover:border-gray-300 hover:text-gray-300"
@@ -64,11 +68,11 @@ export default function Example() {
                                     {isCartEmpty && (
                                         <div className="rounded-full h-3 w-3 bg-red-500 absolute top-4 -right-1 animate-bounce" />
                                     )}
-                                    <span className="sr-only">Go to cart</span>
-                                    <ShoppingCartIcon
+                                    <Link href={route('profile.checkout')}><ShoppingCartIcon
                                         className="h-6 w-6"
                                         aria-hidden="true"
-                                    />
+                                    /></Link>
+
                                 </button>
                             </div>
                             <div className="-mr-2 flex items-center sm:hidden">
@@ -149,10 +153,13 @@ export default function Example() {
                                     <span className="sr-only">
                                         View notifications
                                     </span>
-                                    <ShoppingCartIcon
-                                        className="h-6 w-6"
-                                        aria-hidden="true"
-                                    />
+                                    <Link href={route('profile.checkout')}>
+                                        <ShoppingCartIcon
+                                            className="h-6 w-6"
+                                            aria-hidden="true"
+                                        />
+                                    </Link>
+
                                 </button>
                             </div>
                             <div className="mt-3 space-y-1">
