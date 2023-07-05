@@ -14,91 +14,143 @@ const menuType = [
         type: 'Snack!',
     },
 ];
-const products = [
-    {
-        id: 1,
-        name: 'Kabuli Palau',
-        href: '#',
-        price: '$256',
-        description:
-            'Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.',
 
-        imageSrc:
-            'https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80',
-        imageAlt:
-            'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
-    },
+const products: Menu[] = [
     {
-        id: 2,
-        name: 'Chicken',
-        href: '#',
-        price: '$32',
-        description:
-            'Look like a visionary CEO and wear the same black t-shirt every day.',
-
-        imageSrc:
-            'https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80',
-        imageAlt: 'Front of plain black t-shirt.',
+        id: '99801cca-8d04-47d7-a17d-957dbc924b6c',
+        name: 'Prof. Ezequiel Cruickshank',
+        description: 'Debitis minus ipsam labore sed placeat.',
+        price: 113,
+        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80',
+        category: { name: 'Food Menu', id: '99801cca-8d04-47d7-a17d' },
+        created_at: '2023-06-26T04:52:59.000000Z',
+        updated_at: '2023-06-26T04:52:59.000000Z',
+        dishes: [
+            {
+                id: '99801cca-89d6-4aff-bdea-a1a0ef661bd4',
+                name: 'Elza Schroeder',
+                description: 'Corrupti qui ratione repellendus nemo.',
+                price: 29.06,
+                image: 'https://via.placeholder.com/640x480.png/0000ee?text=food+dicta',
+                category: { name: 'Food Menu', id: '99801cca-8d04-47d7-a17d' },
+                created_at: '2023-06-26T04:52:58.000000Z',
+                updated_at: '2023-06-26T04:52:58.000000Z',
+                pivot: {
+                    menu_id: '99801cca-8d04-47d7-a17d-957dbc924b6c',
+                    dish_id: '99801cca-89d6-4aff-bdea-a1a0ef661bd4',
+                },
+            },
+            {
+                id: '99801cca-89d6-4aff-bdea-a1a0ef661bd4',
+                name: 'Elza Schroeder 2',
+                description: 'Corrupti qui ratione repellendus nemo.',
+                price: 29.06,
+                image: 'https://via.placeholder.com/640x480.png/0000ee?text=food+dicta',
+                category: { name: 'Food Menu', id: '99801cca-8d04-47d7-a17d' },
+                created_at: '2023-06-26T04:52:58.000000Z',
+                updated_at: '2023-06-26T04:52:58.000000Z',
+                pivot: {
+                    menu_id: '99801cca-8d04-47d7-a17d-957dbc924b6c',
+                    dish_id: '99801cca-89d6-4aff-bdea-a1a0ef661bd4',
+                },
+            },
+        ],
+        options: [
+            {
+                id: '99801cca-8994-4faf-be99-ec5370bf730c',
+                name: 'Mr. Leonardo Green',
+                description: 'Ducimus et voluptas molestiae et.',
+                price: 16.39,
+                image: 'https://via.placeholder.com/640x480.png/00aa44?text=food+culpa',
+                category: { name: 'Food Menu', id: '99801cca-8d04-47d7-a17d' },
+                created_at: '2023-06-26T04:52:58.000000Z',
+                updated_at: '2023-06-26T04:52:58.000000Z',
+                pivot: {
+                    menu_id: '99801cca-8d04-47d7-a17d-957dbc924b6c',
+                    dish_id: '99801cca-8994-4faf-be99-ec5370bf730c',
+                },
+            },
+            {
+                id: '99801cca-89b7-45e9-b9e0-ffad6d1f762d',
+                name: 'Allan Langosh DDS',
+                description: 'Maiores blanditiis nulla sapiente.',
+                price: 48.19,
+                image: 'https://via.placeholder.com/640x480.png/004400?text=food+officia',
+                category: { name: 'Food Menu', id: '99801cca-8d04-47d7-a17d' },
+                created_at: '2023-06-26T04:52:58.000000Z',
+                updated_at: '2023-06-26T04:52:58.000000Z',
+                pivot: {
+                    menu_id: '99801cca-8d04-47d7-a17d-957dbc924b6c',
+                    dish_id: '99801cca-89b7-45e9-b9e0-ffad6d1f762d',
+                },
+            },
+        ],
     },
-    {
-        id: 3,
-        name: 'German Rolls',
-        href: '#',
-        price: '$32',
-        description:
-            'Look like a visionary CEO and wear the same black t-shirt every day.',
-
-        imageSrc:
-            'https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80',
-        imageAlt: 'Front of plain black t-shirt.',
-    },
-    // More products...
 ];
-
-export default function Menu() {
+import { Dish, Menu } from '@/store/slice/cart';
+export default function MenuList() {
     const [open, setOpen] = useState(false);
 
     return (
         <>
-            {menuType.map((menuTypes) => (
-                <>
-                    <div key={menuType.type} className="bg-white">
-                        <div className="max-w-6xl mx-auto pt-8">
-                            <h2 className="text-3xl font-extrabold text-gray-900 pl-4">
-                                {menuTypes.type}
-                            </h2>
+            <div className="bg-white">
+                <div className="max-w-2xl lg:max-w-6xl mx-auto pt-8">
+                    <h2 className="text-3xl font-extrabold text-gray-900 pl-4 sm:pl-6">
+                        {'All Menus!'}
+                    </h2>
 
-                            <div className="bg-white">
-                                <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6  lg:max-w-7xl lg:px-8">
-                                    <h2 className="sr-only">Products</h2>
+                    <div className="bg-white">
+                        <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6  lg:max-w-7xl ">
+                            <h2 className="sr-only">Products</h2>
 
-                                    <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
-                                        {products.map((product) => (
-                                            <MenuItem
-                                                key={product.id}
-                                                product={product}
-                                                setOpen={setOpen}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
+                            <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
+                                {products.map((product) => (
+                                    <MenuItem
+                                        key={product.id}
+                                        product={product}
+                                        setOpen={setOpen}
+                                    />
+                                ))}
                             </div>
                         </div>
                     </div>
-                </>
-            ))}
+                </div>
+            </div>
+
             <Modal open={open} setOpen={setOpen} />
             {/* <Example open={open} setOpen={setOpen} /> */}
         </>
     );
 }
 
-export function MenuItem({ product, setOpen }) {
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem } from '@/store/slice/cart';
+import { RootState } from '@/store';
+
+export function MenuItem({
+    product,
+    setOpen,
+}: {
+    product: Menu;
+    setOpen: (value: boolean) => void;
+}) {
+    const [numOfPeople, setNumOfPeople] = useState(15);
+
+    const dispatch = useDispatch();
+
+    const addToCartHandler = () => {
+        dispatch(addItem({ ...product, numOfPeople: numOfPeople }));
+    };
+
+    const cartItem = useSelector((state: RootState) =>
+        state.cart.items.filter((item) => item.id === product.id)
+    );
+
     return (
         <div className="group flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
             <div className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
                 <img
-                    src={product.imageSrc}
+                    src={product.image}
                     alt={'Menu Plate'}
                     className="h-full w-full object-cover object-center sm:h-full sm:w-full"
                 />
@@ -112,26 +164,42 @@ export function MenuItem({ product, setOpen }) {
                 </h3>
                 <p className="text-sm text-gray-700">{product.description}</p>
                 <p className="text-base font-extrabold text-gray-500  pb-4">
-                    {product.price + ' Per Person'}
+                    {`$${product.price} Per Person`}
                 </p>
 
-                <PeopleInput />
-                <button className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    Add to cart
-                </button>
-                <button
-                    onClick={() => setOpen(true)}
-                    className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Customize
-                </button>
+                {cartItem[0] ? (
+                    <>
+                        {/* {JSON.stringify(cartItem)} */}
+                        <PeopleInput
+                            state={numOfPeople}
+                            setState={setNumOfPeople}
+                        />
+                        {}
+                        <button
+                            onClick={() => setOpen(true)}
+                            className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                            Customize
+                        </button>
+                    </>
+                ) : (
+                    <button
+                        onClick={addToCartHandler}
+                        className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                        Add to cart
+                    </button>
+                )}
             </div>
         </div>
     );
 }
 
 import { UsersIcon, PlusIcon, MinusIcon } from '@heroicons/react/20/solid';
-function PeopleInput() {
+function PeopleInput(props: {
+    state: number;
+    setState: (value: number) => void;
+}) {
     return (
         <div>
             <label
@@ -185,7 +253,13 @@ import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 
-export function Example({ open, setOpen }) {
+export function Example({
+    open,
+    setOpen,
+}: {
+    open: boolean;
+    setOpen: (value: boolean) => void;
+}) {
     const cancelButtonRef = useRef(null);
 
     return (

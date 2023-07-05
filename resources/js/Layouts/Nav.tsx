@@ -1,16 +1,17 @@
-import { Fragment } from 'react';
-import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { Disclosure } from '@headlessui/react';
 import {
     Bars3Icon,
     ShoppingCartIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline';
-
-function classNames(...classes: any) {
-    return classes.filter(Boolean).join(' ');
-}
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 export default function Example() {
+    const isCartEmpty = useSelector((state: RootState) =>
+        state.cart.items.length > 0 ? true : false
+    );
+
     return (
         <Disclosure as="nav" className="bg-blue-600 shadow mb-1">
             {({ open }) => (
@@ -58,8 +59,11 @@ export default function Example() {
                                 </div>
                                 <button
                                     type="button"
-                                    className="rounded-full p-1 text-white hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                    className="relative rounded-full p-1 text-white hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
+                                    {isCartEmpty && (
+                                        <div className="rounded-full h-3 w-3 bg-red-500 absolute top-4 -right-1 animate-bounce" />
+                                    )}
                                     <span className="sr-only">Go to cart</span>
                                     <ShoppingCartIcon
                                         className="h-6 w-6"

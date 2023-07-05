@@ -73,10 +73,6 @@ const policies = [
     },
 ];
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ');
-}
-
 export function Modal() {
     return (
         <div className="bg-white">
@@ -94,56 +90,36 @@ export function Modal() {
                             </div>
                         </div>
 
-                        {/* Image gallery */}
+                        {/* Image and Description */}
                         <div className="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
                             <h2 className="sr-only">Images</h2>
 
-                            <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
-                                {/* {product.images.map((image) => (
-                                    <img
-                                        key={image.id}
-                                        src={image.imageSrc}
-                                        alt={image.imageAlt}
-                                        className={classNames(
-                                            image.primary
-                                                ? 'lg:col-span-2 lg:row-span-2'
-                                                : 'hidden lg:block',
-                                            'rounded-lg'
-                                        )}
+                            <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 ">
+                                <img
+                                    src={`https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80`}
+                                    alt={'food'}
+                                    className={'col-span-2 row-span-2'}
+                                />
+                                <div className="mt-10 col-span-2 ">
+                                    <h2 className="text-sm font-medium text-gray-900 ">
+                                        Description
+                                    </h2>
+
+                                    <div
+                                        className="prose prose-sm mt-4 text-gray-500"
+                                        dangerouslySetInnerHTML={{
+                                            __html: product.description,
+                                        }}
                                     />
-                                ))} */}
+                                </div>
                             </div>
                         </div>
 
                         <div className="mt-8 lg:col-span-5">
                             {/* Product details */}
-                            <div className="mt-10">
-                                <h2 className="text-sm font-medium text-gray-900">
-                                    Description
-                                </h2>
-
-                                <div
-                                    className="prose prose-sm mt-4 text-gray-500"
-                                    dangerouslySetInnerHTML={{
-                                        __html: product.description,
-                                    }}
-                                />
-                            </div>
-
-                            <div className="mt-8 border-t border-gray-200 pt-8">
-                                <h2 className="text-sm font-medium text-gray-900">
-                                    Fabric &amp; Care
-                                </h2>
-
-                                <div className="prose prose-sm mt-4 text-gray-500">
-                                    <ul role="list">
-                                        {product.details.map((item) => (
-                                            <li key={item}>{item}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-
+                            <Tags />
+                            <Example1 />
+                            {/* <Tags /> */}
                             {/* Policies */}
                             <section
                                 aria-labelledby="policies-heading"
@@ -181,7 +157,6 @@ export function Modal() {
 
 import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { CheckIcon } from '@heroicons/react/24/outline';
 
 export default function Example({ open, setOpen }) {
     const cancelButtonRef = useRef(null);
@@ -242,5 +217,98 @@ export default function Example({ open, setOpen }) {
                 </div>
             </Dialog>
         </Transition.Root>
+    );
+}
+
+const projects = [
+    {
+        name: 'Graph API',
+        initials: 'GA',
+        href: '#',
+        members: 16,
+        bgColor: 'bg-pink-600',
+    },
+    {
+        name: 'Component Design',
+        initials: 'CD',
+        href: '#',
+        members: 12,
+        bgColor: 'bg-purple-600',
+    },
+    {
+        name: 'Templates',
+        initials: 'T',
+        href: '#',
+        members: 16,
+        bgColor: 'bg-yellow-500',
+    },
+    {
+        name: 'React Components',
+        initials: 'RC',
+        href: '#',
+        members: 8,
+        bgColor: 'bg-green-500',
+    },
+];
+import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
+
+function Tags() {
+    return (
+        <div className="h-[80px]">
+            <h2 className="text-sm font-medium text-gray-500">Menu Items</h2>
+
+            <ul
+                role="list"
+                className="mt-1 flex max-h-20 flex-col flex-wrap gap-1 overflow-x-scroll"
+            >
+                {projects.map((project) => (
+                    <li
+                        key={project.name}
+                        className="flex rounded-md shadow-sm"
+                    >
+                        <div className="flex flex-1 items-center justify-between truncate rounded-md border border-gray-200 bg-white">
+                            <div className="flex-1 truncate px-4 py-2 text-sm">
+                                <p className="font-medium text-gray-900 hover:text-gray-600">
+                                    {project.name}
+                                </p>
+                            </div>
+                            <div className="flex-shrink-0 pr-2">
+                                <button
+                                    type="button"
+                                    className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                >
+                                    <span className="sr-only">
+                                        Open options
+                                    </span>
+                                    <EllipsisVerticalIcon
+                                        className="h-5 w-5"
+                                        aria-hidden="true"
+                                    />
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+import { PlusIcon } from '@heroicons/react/20/solid';
+
+export function Example1() {
+    return (
+        <div className="my-20 ">
+            <h2 className="text-sm font-medium text-gray-500">
+                Add Extra Dish
+            </h2>
+            <div className="mt-4 flex justify-center items-center bg-gray-100 border rounded-md py-10">
+                <button
+                    type="button"
+                    className=" rounded-full bg-gray-400 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                </button>
+            </div>
+        </div>
     );
 }
