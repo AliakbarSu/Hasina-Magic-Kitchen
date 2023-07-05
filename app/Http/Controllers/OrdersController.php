@@ -45,6 +45,7 @@ class OrdersController extends Controller
             ],
             'items.*.menu_id' => ['required', 'uuid', 'exists:menus,id'],
             'items.*.quantity' => ['numeric', 'max:500', 'min:1'],
+            'addons' => ['array'],
             'addons.*.dish_id' => ['exists:dishes,id'],
             'addons.*.quantity' => ['numeric', 'min:1', 'max:500'],
         ]);
@@ -55,15 +56,19 @@ class OrdersController extends Controller
         $customer = $customersController->create_customer($request);
         $order = $this->create_order($validatedData, $customer->id);
         try {
-            $payment = $customer->pay($order->total * 100, [
-                'metadata' => ['order_id' => $order->id],
-            ]);
+            $payment = $customer->payWith(
+                $order->total * 100,
+                ['card'],
+                [
+                    'metadata' => ['order_id' => $order->id],
+                ]
+            );
         } catch (\Throwable $th) {
             Log::error($th);
         }
         return response()->json([
             'message' => 'Order created successfully',
-            'payment_link' => $payment->client_secret,
+            'client_secret' => $payment->client_secret,
         ]);
     }
 
@@ -156,9 +161,9 @@ class OrdersController extends Controller
         ) {
             $isInvalid = !$response->object()->result->verdict
                 ->hasUnconfirmedComponents;
-            return response(['validation result' => $isInvalid]);
+            return response(['validation_result' => $isInvalid]);
         } else {
-            return response(['validation result' => true]);
+            return response(['validation_result' => true]);
         }
     }
 }
