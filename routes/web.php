@@ -26,7 +26,7 @@ Route::get('/home', function (Request $request) {
 });
 Route::get('/checkout', function (Request $request) {
     return Inertia::render('Checkout', []);
-});
+})->name('profile.checkout');
 
 Route::get('/', function (Menu $menu) {
     return Inertia::render('Home', [
@@ -37,7 +37,7 @@ Route::get('/', function (Menu $menu) {
         // "about" => route('about')
         'menu' => $menu->get_menus_with_media(),
     ]);
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

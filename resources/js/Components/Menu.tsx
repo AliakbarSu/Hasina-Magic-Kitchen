@@ -88,7 +88,7 @@ export function MenuItem({
             <div className="flex flex-1 flex-col space-y-2 p-4">
                 <h3 className="text-xl font-medium text-gray-900">
                     {/* <a href={product.href}> */}
-                    <span aria-hidden="true" className="absolute inset-0" />
+                    {/* <span aria-hidden="true" className="absolute inset-0" /> */}
                     {product.name}
                     {/* </a> */}
                 </h3>
