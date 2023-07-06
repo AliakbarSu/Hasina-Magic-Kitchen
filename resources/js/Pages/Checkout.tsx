@@ -132,7 +132,7 @@ function InfoSection() {
                             role="list"
                             className="divide-y divide-white divide-opacity-10 text-sm font-medium"
                         >
-                            {cartItems.map((product: CartItem) => (
+                            {cartItems.map((product: any) => (
                                 <li
                                     key={product.id}
                                     className="flex items-start space-x-4 py-6"
