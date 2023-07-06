@@ -16,7 +16,8 @@ const menuType = [
 ];
 
 
-import { Dish } from '@/store/slice/cart';
+import { Dish } from '@/types/application';
+
 export default function MenuList({ menu }: { menu: Menu[] }) {
     const [open, setOpen] = useState(false);
 
@@ -68,7 +69,7 @@ export function MenuItem({
     const dispatch = useDispatch();
 
     const addToCartHandler = () => {
-        // dispatch(addItem({ ...product, numOfPeople: numOfPeople }));
+        dispatch(addItem({ ...product, numOfPeople: numOfPeople }));
     };
 
     const cartItem = useSelector((state: RootState) =>
