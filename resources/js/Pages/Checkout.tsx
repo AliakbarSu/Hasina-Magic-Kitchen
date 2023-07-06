@@ -2,6 +2,11 @@ import { FormEvent, useEffect, useState } from 'react';
 import Nav from '@/Layouts/Nav';
 import { Footer } from './Home';
 
+import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
+
+
+
+
 function Checkout() {
     return (
         <>
@@ -14,54 +19,77 @@ function Checkout() {
 
 export default Checkout;
 
-const products = [
-    {
-        id: 1,
-        name: 'High Wall Tote',
-        href: '#',
-        price: '$210.00',
-        color: 'White and black',
-        size: '15L',
-        imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/checkout-page-07-product-01.jpg',
-        imageAlt:
-            'Front of zip tote bag with white canvas, white handles, and black drawstring top.',
-    },
-    // More products...
-];
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { CartItem } from '@/store/slice/cart';
 import { RootState } from '@/store';
 
 function InfoSection() {
+    const { setData, data, post } = useForm({
+        customer_name: '',
+        address: '',
+        date: '',
+        time: '',
+        phone: 0,
+        email: '',
+        note: ''
+    })
     const [isPickup, setIsPickup] = useState(false);
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
+    const elements = useElements();
+    const stripe = useStripe();
+    const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const [name, setName] = useState('');
-    const [number, setNumber] = useState('');
-    const [email, setEmail] = useState('');
+    const handleError = (error: Error) => {
+        setLoading(false);
+        setErrorMessage(error.message);
+    }
 
-    const [address, setAddress] = useState({
-        address1: '',
-        suburb: '',
-        city: '',
-        postCode: '',
-    });
-    const [note, setNote] = useState('');
-
-    const formHandler = (e: FormEvent) => {
+    const formHandler = async (e: FormEvent) => {
         e.preventDefault();
+        if (!stripe) {
+            return;
+        }
 
-        const formData = {
-            isPickup,
-            date,
-            time,
-            name,
-            number,
-            address,
-            note,
-        };
+        setLoading(true);
+
+        const submittedElements = await elements?.submit();
+        if (submittedElements?.error) {
+            handleError(submittedElements.error as unknown as Error);
+            return;
+        }
+
+        const order: Order = {
+            customer_name: data.customer_name,
+            phone: data.phone,
+            email: data.email,
+            address: data.address,
+            date: data.date,
+            time: data.time,
+            note: data.note,
+            items: [{
+                menu_id: "999265ff-5e4d-43df-ac5b-fc5e10d9c4f1",
+                dishes: ["999265ff-5c61-42ec-9d43-bf1ed9bd6b7b"],
+                quantity: 150
+            }],
+            addons: []
+        }
+        if (!elements) return
+        try {
+            const { data } = await axios.post(route('order.add'), order);
+            const paymentMethod = await stripe?.createPaymentMethod({
+                elements
+            })
+            const result = await stripe?.confirmCardPayment(data.client_secret, {
+                payment_method: paymentMethod?.paymentMethod?.id,
+            },)
+            console.log(result)
+
+        } finally {
+            setLoading(false)
+        }
+
+
+
     };
 
     const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -150,6 +178,9 @@ function InfoSection() {
                             </div>
                         </dl>
                     </div>
+                    <div className='mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0 mt-6'>
+                        <PaymentElement />
+                    </div>
                 </section>
 
                 <section
@@ -160,7 +191,7 @@ function InfoSection() {
                         Delivery details
                     </h2>
 
-                    <form>
+                    <form onSubmit={formHandler}>
                         <div className="@container mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0 flex flex-col gap-3.5">
                             {/* Content goes here */}
                             {/* <InfoTab /> */}
@@ -171,12 +202,12 @@ function InfoSection() {
 
                                 <div className="mt-6 flex flex-col gap-3.5">
                                     <DateCalender
-                                        state={date}
-                                        setState={setDate}
+                                        state={data.date}
+                                        setState={(date) => setData('date', date)}
                                     />
                                     <TimeInput
-                                        state={time}
-                                        setState={setTime}
+                                        state={data.time}
+                                        setState={(time) => setData('time', time)}
                                     />
                                     <div className="mt-2">
                                         <input
@@ -206,21 +237,21 @@ function InfoSection() {
 
                                 <div className="mt-6 flex flex-col gap-3.5">
                                     <NameInput
-                                        state={name}
-                                        setState={setName}
+                                        state={data.customer_name}
+                                        setState={name => setData('customer_name', name)}
                                     />
                                     <MobileNumInput
-                                        state={number}
-                                        setState={setNumber}
+                                        state={data.phone as unknown as string}
+                                        setState={number => setData('phone', number as unknown as number)}
                                     />
                                     <EmailInput
-                                        state={email}
-                                        setState={setEmail}
+                                        state={data.email}
+                                        setState={email => setData('email', email)}
                                     />
-                                    <AddressInput setState={setAddress} />
+                                    <AddressInput setState={address => setData('address', address)} />
                                     <NoteInput
-                                        state={note}
-                                        setState={setNote}
+                                        state={data.note}
+                                        setState={note => setData('note', note)}
                                     />
                                 </div>
                             </div>
@@ -271,7 +302,7 @@ function MobileNumInput(props: {
                 </div>
                 <input
                     value={props.state}
-                    onChange={() => props.setState(props.state)}
+                    onChange={(e) => props.setState(e.target.value)}
                     type="text"
                     name="mobile-number"
                     id="mobile-number"
@@ -305,7 +336,7 @@ function EmailInput(props: {
                 </div>
                 <input
                     value={props.state}
-                    onChange={() => props.setState(props.state)}
+                    onChange={(e) => props.setState(e.target.value)}
                     type="email"
                     name="email"
                     id="email"
@@ -323,11 +354,21 @@ interface Address {
     postCode: string;
 }
 
-function AddressInput(props: { setState: (value: Address) => void }) {
+function AddressInput(props: { setState: (value: string) => void }) {
     const [address1, setAddress1] = useState('');
     const [suburb, setSuburb] = useState('');
     const [city, setCity] = useState('Auckland');
     const [postCode, setPostCode] = useState('');
+    const [error, setError] = useState('');
+    const [hasError, setHasError] = useState(false);
+
+
+    let timeout: any;
+    var debounce = function (func: () => Promise<void>, delay: number) {
+        clearTimeout(timeout);
+        timeout = setTimeout(func, delay);
+    };
+
 
     useEffect(() => {
         const address = {
@@ -336,8 +377,20 @@ function AddressInput(props: { setState: (value: Address) => void }) {
             city,
             postCode,
         };
-        props.setState(address);
-    }, []);
+        debounce(() => axios.post('/api/validate/address', {
+            address: `${address1}, ${suburb}`
+        }).then(result => {
+            const isValid = result.data.validation_result
+            setHasError(!isValid)
+            if (!isValid) {
+                setError('Invalid address');
+            } else {
+                setError('')
+            }
+        }), 200);
+
+        props.setState(`${address.address1}, ${address.suburb}`);
+    }, [address1, suburb, city, postCode]);
 
     return (
         <div>
@@ -352,7 +405,7 @@ function AddressInput(props: { setState: (value: Address) => void }) {
                         </label>
                         <input
                             value={address1}
-                            onChange={() => setAddress1(address1)}
+                            onChange={({ target }) => setAddress1(target.value)}
                             type="text"
                             name="address"
                             id="address"
@@ -366,7 +419,7 @@ function AddressInput(props: { setState: (value: Address) => void }) {
                         </label>
                         <input
                             value={suburb}
-                            onChange={() => setSuburb(suburb)}
+                            onChange={({ target }) => setSuburb(target.value)}
                             type="text"
                             name="suburb"
                             id="suburb"
@@ -381,7 +434,7 @@ function AddressInput(props: { setState: (value: Address) => void }) {
                             </label>
                             <input
                                 disabled
-                                onChange={() => setCity(city)}
+                                onChange={({ target }) => setCity(target.value)}
                                 value={city}
                                 type="text"
                                 name="city"
@@ -396,7 +449,7 @@ function AddressInput(props: { setState: (value: Address) => void }) {
                             </label>
                             <input
                                 value={postCode}
-                                onChange={() => setPostCode(postCode)}
+                                onChange={({ target }) => setPostCode(target.value)}
                                 type="text"
                                 name="postcode"
                                 id="postcode"
@@ -405,57 +458,27 @@ function AddressInput(props: { setState: (value: Address) => void }) {
                             />
                         </div>
                     </div>
+
                 </div>
+                {hasError && <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-2 ml-1">
+                    {error}
+                </span>}
             </fieldset>
         </div>
     );
 }
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
-const days = [
-    { date: '2021-12-27' },
-    { date: '2021-12-28' },
-    { date: '2021-12-29' },
-    { date: '2021-12-30' },
-    { date: '2021-12-31' },
-    { date: '2022-01-01', isCurrentMonth: true },
-    { date: '2022-01-02', isCurrentMonth: true },
-    { date: '2022-01-03', isCurrentMonth: true },
-    { date: '2022-01-04', isCurrentMonth: true },
-    { date: '2022-01-05', isCurrentMonth: true },
-    { date: '2022-01-06', isCurrentMonth: true },
-    { date: '2022-01-07', isCurrentMonth: true },
-    { date: '2022-01-08', isCurrentMonth: true },
-    { date: '2022-01-09', isCurrentMonth: true },
-    { date: '2022-01-10', isCurrentMonth: true },
-    { date: '2022-01-11', isCurrentMonth: true },
-    { date: '2022-01-12', isCurrentMonth: true, isToday: true },
-    { date: '2022-01-13', isCurrentMonth: true },
-    { date: '2022-01-14', isCurrentMonth: true },
-    { date: '2022-01-15', isCurrentMonth: true },
-    { date: '2022-01-16', isCurrentMonth: true },
-    { date: '2022-01-17', isCurrentMonth: true },
-    { date: '2022-01-18', isCurrentMonth: true },
-    { date: '2022-01-19', isCurrentMonth: true },
-    { date: '2022-01-20', isCurrentMonth: true },
-    { date: '2022-01-21', isCurrentMonth: true },
-    { date: '2022-01-22', isCurrentMonth: true, isSelected: true },
-    { date: '2022-01-23', isCurrentMonth: true },
-    { date: '2022-01-24', isCurrentMonth: true },
-    { date: '2022-01-25', isCurrentMonth: true },
-    { date: '2022-01-26', isCurrentMonth: true },
-    { date: '2022-01-27', isCurrentMonth: true },
-    { date: '2022-01-28', isCurrentMonth: true },
-    { date: '2022-01-29', isCurrentMonth: true },
-    { date: '2022-01-30', isCurrentMonth: true },
-    { date: '2022-01-31', isCurrentMonth: true },
-    { date: '2022-02-01' },
-    { date: '2022-02-02' },
-    { date: '2022-02-03' },
-    { date: '2022-02-04' },
-    { date: '2022-02-05' },
-    { date: '2022-02-06' },
-];
+
+
+
+type CalendarDate = {
+    date: string,
+    isCurrentMonth?: boolean,
+    isToday?: boolean,
+    isSelected?: boolean
+    isDisabled?: boolean
+}
 function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ');
 }
@@ -463,18 +486,81 @@ function DateCalender(props: {
     state: string;
     setState: (value: string) => void;
 }) {
+
+    const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+    const [days, setDays] = useState<CalendarDate[]>([]);
+
+    const onDateClick = (date: string) => {
+        props.setState(date)
+    }
+
+    const onIncrementMonth = () => {
+        setCurrentMonth(currentMonth => currentMonth + 1);
+    }
+    const onDecrementMonth = () => {
+        setCurrentMonth(currentMonth => currentMonth - 1);
+    }
+
+    const getMonthName = (monthNumber: number) => {
+        const date = new Date();
+        date.setMonth(monthNumber - 1);
+        const monthName = date.toLocaleString('default', { month: 'long' });
+        return monthName;
+    }
+    const compareDates = (dateString1: string, dateString2: string) => {
+        const date1 = new Date(dateString1).getTime();
+        const date2 = new Date(dateString2).getTime();
+        return date1 < date2
+    }
+
+
+    const getMonthDays = (month: number) => {
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = month || currentDate.getMonth();
+        const today = currentDate.getDate();
+
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+        const arrayOfObjects = [];
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const date = new Date(currentYear, currentMonth, day);
+
+            const object = {
+                date: date.toLocaleDateString('en-NZ'),
+                isCurrentMonth: true,
+                isToday: day === today && currentMonth === currentDate.getMonth() && currentYear === currentDate.getFullYear(),
+                isSelected: false,
+                isDisabled: compareDates(date.toString(), currentDate.toString())
+            };
+
+            arrayOfObjects.push(object);
+        }
+
+        return arrayOfObjects;
+    }
+
+    useEffect(() => {
+        setDays(getMonthDays(currentMonth))
+    }, [currentMonth])
+
+
+
     return (
         <div className="text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 xl:col-start-9">
             <div className="flex items-center text-gray-900">
                 <button
+                    onClick={onDecrementMonth}
                     type="button"
                     className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
                 >
                     <span className="sr-only">Previous month</span>
                     <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
-                <div className="flex-auto text-sm font-semibold">January</div>
+                <div className="flex-auto text-sm font-semibold">{getMonthName(currentMonth)}</div>
                 <button
+                    onClick={onIncrementMonth}
                     type="button"
                     className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
                 >
@@ -494,7 +580,9 @@ function DateCalender(props: {
             <div className="isolate mt-1 grid grid-cols-7 gap-px rounded-lg border border-gray-300 bg-gray-200 text-sm shadow-sm">
                 {days.map((day, dayIdx) => (
                     <button
+                        onClick={() => onDateClick(day.date)}
                         key={day.date}
+                        disabled={day.isDisabled}
                         type="button"
                         className={classNames(
                             'py-1.5 hover:bg-gray-100 focus:z-10',
@@ -502,18 +590,19 @@ function DateCalender(props: {
                             (day.isSelected || day.isToday) && 'font-semibold',
                             day.isSelected && 'text-white',
                             !day.isSelected &&
-                                day.isCurrentMonth &&
-                                !day.isToday &&
-                                'text-gray-900',
+                            day.isCurrentMonth &&
+                            !day.isToday &&
+                            'text-gray-900',
                             !day.isSelected &&
-                                !day.isCurrentMonth &&
-                                !day.isToday &&
-                                'text-gray-400',
+                            !day.isCurrentMonth &&
+                            !day.isToday &&
+                            'text-gray-400',
                             day.isToday && !day.isSelected && 'text-indigo-600',
                             dayIdx === 0 && 'rounded-tl-lg',
                             dayIdx === 6 && 'rounded-tr-lg',
                             dayIdx === days.length - 7 && 'rounded-bl-lg',
-                            dayIdx === days.length - 1 && 'rounded-br-lg'
+                            dayIdx === days.length - 1 && 'rounded-br-lg',
+                            day.isDisabled && 'cursor-not-allowed opacity-25'
                         )}
                     >
                         <time
@@ -521,21 +610,24 @@ function DateCalender(props: {
                             className={classNames(
                                 'mx-auto flex h-7 w-7 items-center justify-center rounded-full',
                                 day.isSelected &&
-                                    day.isToday &&
-                                    'bg-indigo-600',
+                                day.isToday &&
+                                'bg-indigo-600',
                                 day.isSelected && !day.isToday && 'bg-gray-900'
                             )}
                         >
-                            {day.date.split('-')?.pop()?.replace(/^0/, '')}
+                            {day.date.split('/')[0]?.replace(/^0/, '')}
                         </time>
                     </button>
                 ))}
             </div>
-        </div>
+        </div >
     );
 }
 
 import { ClockIcon } from '@heroicons/react/24/solid';
+import { useForm } from '@inertiajs/react';
+import { Order } from '@/types/application';
+import axios from 'axios';
 export function TimeInput(props: {
     state: string;
     setState: (value: string) => void;
@@ -557,7 +649,7 @@ export function TimeInput(props: {
                 </div>
                 <input
                     value={props.state}
-                    onChange={() => props.setState(props.state)}
+                    onChange={(e) => props.setState(e.target.value)}
                     type="time"
                     name="time"
                     id="time"
@@ -585,7 +677,7 @@ export function NoteInput(props: {
                 <div className="mt-2">
                     <textarea
                         value={props.state}
-                        onChange={() => props.setState(props.state)}
+                        onChange={(e) => props.setState(e.target.value)}
                         id="about"
                         name="about"
                         rows={3}
@@ -616,7 +708,7 @@ function NameInput(props: {
             <div className="mt-2">
                 <input
                     value={props.state}
-                    onChange={() => props.setState(props.state)}
+                    onChange={(e) => props.setState(e.target.value)}
                     type="text"
                     name="first-name"
                     id="first-name"

@@ -37,7 +37,9 @@ Route::delete('/menu', [MenuController::class, 'delete_menu']);
 
 Route::get('/order', [OrdersController::class, 'all_orders']);
 Route::get('/order/{id}', [OrdersController::class, 'find_order']);
-Route::post('/order', [OrdersController::class, 'add_order']);
+Route::post('/order', [OrdersController::class, 'add_order'])->name(
+    'order.add'
+);
 
 Route::get('/availability', [OrdersController::class, 'get_availability']);
 Route::post('/validate/address', [OrdersController::class, 'validate_address']);

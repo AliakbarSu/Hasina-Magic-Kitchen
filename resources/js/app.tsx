@@ -6,6 +6,9 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { store } from '@/store';
 import { Provider } from 'react-redux';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+const stripePromise = loadStripe('pk_test_h5jTkhh7fGyGO6YrjfyfRTId');
 
 const appName =
     window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
@@ -19,12 +22,21 @@ createInertiaApp({
         ),
     setup({ el, App, props }) {
         const root = createRoot(el);
+        const options = {
+            mode: 'setup' as any,
+            currency: 'nzd',
+            paymentMethodCreation: "manual"
+            // Fully customizable with appearance API.
+            // appearance: {/*...*/ },
+        };
 
         root.render(
             <>
-                <Provider store={store}>
-                    <App {...props} />
-                </Provider>
+                <Elements stripe={stripePromise} options={options}>
+                    <Provider store={store}>
+                        <App {...props} />
+                    </Provider>
+                </Elements>
             </>
         );
     },
