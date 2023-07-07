@@ -28,7 +28,7 @@ jobs:
         working-directory: .
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: 148311307753.dkr.ecr.ap-southeast-2.amazonaws.com/hasina_magic_kitchen
+          ECR_REPOSITORY: hasina_magic_kitchen
           IMAGE_TAG: latest
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
