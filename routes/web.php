@@ -21,10 +21,7 @@ use Inertia\Inertia;
 
 // Route::inertia("about", "About");
 
-Route::get('/home', function (Request $request) {
-    return Inertia::render('Home', []);
-});
-Route::get('/checkout', function (Request $request) {
+Route::get('/checkout', function () {
     return Inertia::render('Checkout', []);
 })->name('profile.checkout');
 
@@ -37,7 +34,7 @@ Route::get('/', function (Menu $menu) {
         // "about" => route('about')
         'menu' => $menu->get_menus_with_media(),
     ]);
-})->name('home');
+})->name('main.home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

@@ -26,7 +26,7 @@ export default function Example() {
                                         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                                         alt="Your Company"
                                     /> */}
-                                    <Link href={route('home')}>
+                                    <Link href={route('main.home')}>
                                         <h1 className="font-extrabold font-mono text-white text-2xl">
                                             HSM
                                         </h1>
