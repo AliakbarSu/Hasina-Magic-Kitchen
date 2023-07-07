@@ -1,6 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
 import Nav from '@/Layouts/Nav';
-import { Footer } from './Home';
 
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
@@ -628,6 +627,7 @@ import { ClockIcon } from '@heroicons/react/24/solid';
 import { useForm } from '@inertiajs/react';
 import { Order } from '@/types/application';
 import axios from 'axios';
+import { Footer } from '@/Components/UI/Footer';
 export function TimeInput(props: {
     state: string;
     setState: (value: string) => void;
