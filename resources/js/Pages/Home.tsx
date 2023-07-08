@@ -2,17 +2,31 @@ import MenuComponent from '@/Components/Menu';
 import Header from '@/Layouts/Header';
 import Nav from '@/Layouts/Nav';
 import Filter from '@/Components/Filter';
-import { Menu } from '@/types/application';
+import { Dish, Menu } from '@/types/application';
 import { Footer } from '@/Components/UI/Footer';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDishes, setMenus } from '@/store/slice/menu';
+import { RootState } from '@/store';
 
-function Home({ menu }: { menu: Menu[] }) {
+function Home({ menu, dishes }: { menu: Menu[], dishes: Dish[] }) {
+    const dispatch = useDispatch();
+    const menus = useSelector((state: RootState) => state.menu.menus);
+    const storeDishes = useSelector((state: RootState) => state.menu.dishes);
+    useEffect(() => {
+        if (menus.length > 0) return;
+        dispatch(setMenus(menu));
+        if (storeDishes.length > 0) return;
+        dispatch(setDishes(dishes));
+    }, [])
+
     return (
         <>
             <Nav />
             <Header />
             <Filter />
             {/* <Deal /> */}
-            <MenuComponent menu={menu} />
+            <MenuComponent menu={menus} />
             <Footer />
         </>
     );
@@ -67,33 +81,4 @@ function Deal() {
     );
 }
 
-// ----------------------------------------------------------------
-const products = [
-    {
-        id: 1,
-        name: 'Basic Tee 8-Pack',
-        href: '#',
-        price: '$256',
-        description:
-            'Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.',
-        options: '8 colors',
-        imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg',
-        imageAlt:
-            'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
-    },
-    {
-        id: 2,
-        name: 'Basic Tee',
-        href: '#',
-        price: '$32',
-        description:
-            'Look like a visionary CEO and wear the same black t-shirt every day.',
-        options: 'Black',
-        imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg',
-        imageAlt: 'Front of plain black t-shirt.',
-    },
-    // More products...
-];
 

@@ -10,7 +10,7 @@ class DishController extends Controller
 {
     public function all_dishes(Dish $dishes)
     {
-        return $dishes->get_menus_with_media()->toJson();
+        return $dishes->get_menus_with_media();
     }
     public function dish($id)
     {

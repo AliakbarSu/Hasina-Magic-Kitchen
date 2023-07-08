@@ -31,13 +31,14 @@ Route::get('/admin', function () {
     return Inertia::render('Admin/Admin', []);
 });
 
-Route::get('/', function (Menu $menu) {
+Route::get('/', function (Menu $menu, DishController $dishes, Dish $dish) {
     return Inertia::render('Home', [
         // 'canLogin' => Route::has('login'),
         // 'canRegister' => Route::has('register'),
         // 'laravelVersion' => Application::VERSION,
         // 'phpVersion' => PHP_VERSION,
         // "about" => route('about')
+        'dishes' => $dishes->all_dishes($dish)->toArray(),
         'menu' => $menu->get_menus_with_media(),
     ]);
 })->name('main.home');

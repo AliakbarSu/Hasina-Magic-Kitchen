@@ -1,25 +1,9 @@
 import Modal from '@/Components/CustomizeModal';
-
-const menuType = [
-    {
-        type: 'Pre Made!',
-    },
-    {
-        type: 'Base Food!',
-    },
-    {
-        type: 'AddOns!',
-    },
-    {
-        type: 'Snack!',
-    },
-];
-
-
 import { Dish } from '@/types/application';
 
+
+
 export default function MenuList({ menu }: { menu: Menu[] }) {
-    const [open, setOpen] = useState(false);
 
     return (
         <>
@@ -38,7 +22,6 @@ export default function MenuList({ menu }: { menu: Menu[] }) {
                                     <MenuItem
                                         key={product.id}
                                         product={product}
-                                        setOpen={setOpen}
                                     />
                                 ))}
                             </div>
@@ -47,26 +30,28 @@ export default function MenuList({ menu }: { menu: Menu[] }) {
                 </div>
             </div>
 
-            <Modal open={open} setOpen={setOpen} />
+
             {/* <Example open={open} setOpen={setOpen} /> */}
         </>
     );
 }
 
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem } from '@/store/slice/cart';
+import { addItem, updateQuantity } from '@/store/slice/cart';
 import { RootState } from '@/store';
 
 export function MenuItem({
     product,
-    setOpen,
 }: {
-    product: Menu;
-    setOpen: (value: boolean) => void;
+    product: Menu
 }) {
+
+
+    const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
+
     const [numOfPeople, setNumOfPeople] = useState(15);
 
-    const dispatch = useDispatch();
 
     const addToCartHandler = () => {
         dispatch(addItem({ ...product, numOfPeople: numOfPeople }));
@@ -76,8 +61,17 @@ export function MenuItem({
         state.cart.items.filter((item) => item.id === product.id)
     );
 
+    useEffect(() => {
+        dispatch(updateQuantity({ id: product.id, quantity: numOfPeople }));
+    }, [numOfPeople])
+
+    const onCustomizeClickHandler = () => {
+        dispatch(setSelectedMenu(product))
+        setOpen(true);
+    }
     return (
         <div className="group flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
+            <Modal open={open} setOpen={setOpen} />
             <div className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
                 <img
                     src={product.media.length ? product.media[0].url : ''}
@@ -106,7 +100,7 @@ export function MenuItem({
                         />
                         { }
                         <button
-                            onClick={() => setOpen(true)}
+                            onClick={onCustomizeClickHandler}
                             className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
                             Customize
@@ -130,6 +124,19 @@ function PeopleInput(props: {
     state: number;
     setState: (value: number) => void;
 }) {
+
+    const onIncreaseHandler = () => {
+        if (props.state < 200) {
+            props.setState(props.state + 1);
+        }
+    }
+
+    const onDecreaseHandler = () => {
+        if (props.state > 15) {
+            props.setState(props.state - 1);
+        }
+    }
+
     return (
         <div>
             <label
@@ -150,14 +157,17 @@ function PeopleInput(props: {
                         type="number"
                         name="number"
                         id="number"
-                        min="10"
+                        min="15"
                         max="200"
+                        value={props.state}
+                        onChange={(e) => null}
                         className="block w-full rounded-none rounded-l-md border-gray-300 pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         placeholder="Minimum 15 people"
                     />
                 </div>
                 <button
                     type="button"
+                    onClick={onDecreaseHandler}
                     className="relative -ml-px inline-flex items-center space-x-2  border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                 >
                     <MinusIcon
@@ -167,6 +177,7 @@ function PeopleInput(props: {
                 </button>
                 <button
                     type="button"
+                    onClick={onIncreaseHandler}
                     className="relative -ml-px inline-flex items-center space-x-2 rounded-r-md border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                 >
                     <PlusIcon
@@ -179,10 +190,11 @@ function PeopleInput(props: {
     );
 }
 
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { Menu } from '@/types/application';
+import { setSelectedMenu } from '@/store/slice/menu';
 
 export function Example({
     open,

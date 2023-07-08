@@ -12,7 +12,7 @@ export interface Category {
 export interface Dish {
     id: string;
     name: string;
-    price: string;
+    price: number;
     description: string;
     media: Media[];
     category: Category;
@@ -22,7 +22,7 @@ export interface Dish {
 export interface Menu {
     id: string;
     name: string;
-    price: string;
+    price: number;
     media: Media[];
     description: string;
     dishes: Dish[];
@@ -50,3 +50,9 @@ export type OrderResponse = {
     message: string;
     payment_link: string;
 };
+
+export interface Addon {
+    name: string;
+    dish_id: string;
+    quantity: number;
+}
