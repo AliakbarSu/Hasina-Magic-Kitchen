@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Dish;
 use Illuminate\Http\Request;
 
@@ -30,7 +31,7 @@ class DishController extends Controller
         $dish->name = $validatedData['name'];
         $dish->description = $validatedData['description'];
         $dish->price = $validatedData['price'];
-        $dish->category()->associate($validatedData['category']);
+        $dish->category_id = $validatedData['category'];
         $dish->save();
         return $dish->toJson();
     }

@@ -3,6 +3,8 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Category;
+use App\Models\Dish;
 use App\Models\Menu;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +26,10 @@ use Inertia\Inertia;
 Route::get('/checkout', function () {
     return Inertia::render('Checkout', []);
 })->name('profile.checkout');
+
+Route::get('/admin', function () {
+    return Inertia::render('Admin/Admin', []);
+});
 
 Route::get('/', function (Menu $menu) {
     return Inertia::render('Home', [
@@ -52,9 +58,27 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name(
         'profile.destroy'
     );
+
     Route::get('/orders', [AdminController::class, 'orders'])->name(
         'admin.orders'
     );
+
+    Route::get('/admin/add-category', function (Category $category) {
+        return Inertia::render('Admin/AddCategory', []);
+    })->name('admin.addCategory');
+
+    Route::get('/admin/add-dish', function (Category $category) {
+        return Inertia::render('Admin/AddDish', [
+            'categories' => $category->get_all_categories()->toArray(),
+        ]);
+    })->name('admin.addDish');
+
+    Route::get('/admin/add-menu', function (Dish $dishes) {
+        return Inertia::render('Admin/AddMenu', [
+            'dishes' => $dishes->all()->toArray(),
+        ]);
+    })->name('admin.addMenu');
+
     Route::get('/orders/{id}', [AdminController::class, 'order_details'])->name(
         'admin.order_details'
     );

@@ -11,10 +11,12 @@ class Category extends Model
 {
     use HasFactory;
     use HasUuids;
-    protected $fillable=[
-        'name',
-        'description'
-    ];
+    protected $fillable = ['name', 'description'];
+
+    public function get_all_categories()
+    {
+        return $this->all();
+    }
 
     public function dishes(): HasMany
     {
