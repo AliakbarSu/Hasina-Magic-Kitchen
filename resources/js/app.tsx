@@ -11,7 +11,7 @@ import { Elements } from '@stripe/react-stripe-js';
 const stripePromise = loadStripe('pk_test_h5jTkhh7fGyGO6YrjfyfRTId');
 
 const appName =
-    window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+    window.document.getElementsByTagName('title')[0]?.innerText || 'Hasina\'s Magic Kitchen';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

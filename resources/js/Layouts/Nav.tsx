@@ -7,6 +7,7 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { Link } from '@inertiajs/react';
+import { classNames } from '@/utils/classNames';
 
 export default function Example() {
     const isCartEmpty = useSelector((state: RootState) =>
@@ -42,24 +43,19 @@ export default function Example() {
                             <div className="hidden sm:ml-6 sm:flex ">
                                 <div className="hidden sm:mr-6 sm:flex sm:space-x-8">
                                     {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
+
                                     <Link
-                                        href={route('home')}
-                                        className="inline-flex items-center border-white px-1 pt-1 text-md font-medium text-white"
-                                    >
-                                        Home
-                                    </Link>
-                                    <a
-                                        href="#"
-                                        className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-md font-medium text-white hover:border-gray-300 hover:text-gray-300"
+                                        href={route('about')}
+                                        className={classNames("inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-md font-medium text-white hover:border-gray-300 hover:text-gray-300")}
                                     >
                                         About
-                                    </a>
-                                    <a
-                                        href="#"
-                                        className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-md font-medium text-white hover:border-gray-300 hover:text-gray-300"
+                                    </Link>
+                                    <Link
+                                        href={route('contact')}
+                                        className={classNames("inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-md font-medium text-white hover:border-gray-300 hover:text-gray-300")}
                                     >
                                         Contact
-                                    </a>
+                                    </Link>
                                 </div>
                                 <button
                                     type="button"
@@ -101,94 +97,25 @@ export default function Example() {
                         <div className="space-y-1 pb-3 pt-2">
                             {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
                             <Disclosure.Button
-                                as="a"
-                                href="#"
-                                className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
-                            >
-                                Dashboard
-                            </Disclosure.Button>
-                            <Disclosure.Button
-                                as="a"
-                                href="#"
-                                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-                            >
-                                Team
-                            </Disclosure.Button>
-                            <Disclosure.Button
-                                as="a"
-                                href="#"
-                                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-                            >
-                                Projects
-                            </Disclosure.Button>
-                            <Disclosure.Button
-                                as="a"
-                                href="#"
-                                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-                            >
-                                Calendar
-                            </Disclosure.Button>
-                        </div>
-                        <div className="border-t border-gray-200 pb-3 pt-4">
-                            <div className="flex items-center px-4">
-                                <div className="flex-shrink-0">
-                                    <img
-                                        className="h-10 w-10 rounded-full"
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="ml-3">
-                                    <div className="text-base font-medium text-gray-800">
-                                        Tom Cook
-                                    </div>
-                                    <div className="text-sm font-medium text-gray-500">
-                                        tom@example.com
-                                    </div>
-                                </div>
-                                <button
-                                    type="button"
-                                    className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                >
-                                    <span className="sr-only">
-                                        View notifications
-                                    </span>
-                                    <Link href={route('profile.checkout')}>
-                                        <ShoppingCartIcon
-                                            className="h-6 w-6"
-                                            aria-hidden="true"
-                                        />
-                                    </Link>
+                                as={Link}
+                                href={route('about')}
+                                className={classNames("block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-white hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700", route().current("about") && "text-indigo-700 border-indigo-500 bg-indigo-50")}
 
-                                </button>
-                            </div>
-                            <div className="mt-3 space-y-1">
-                                <Disclosure.Button
-                                    as="a"
-                                    href="#"
-                                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                                >
-                                    Your Profile
-                                </Disclosure.Button>
-                                <Disclosure.Button
-                                    as="a"
-                                    href="#"
-                                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                                >
-                                    Settings
-                                </Disclosure.Button>
-                                <Disclosure.Button
-                                    as="a"
-                                    href="#"
-                                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                                >
-                                    Sign out
-                                </Disclosure.Button>
-                            </div>
+                            >
+                                About
+                            </Disclosure.Button>
+                            <Disclosure.Button
+                                as={Link}
+                                href={route('contact')}
+                                className={classNames("block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-white hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700", route().current("about") && "text-indigo-700 border-indigo-500 bg-indigo-50")}
+                            >
+                                Contact
+                            </Disclosure.Button>
                         </div>
                     </Disclosure.Panel>
                 </>
-            )}
-        </Disclosure>
+            )
+            }
+        </Disclosure >
     );
 }

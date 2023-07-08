@@ -43,6 +43,18 @@ Route::get('/', function (Menu $menu, DishController $dishes, Dish $dish) {
     ]);
 })->name('main.home');
 
+Route::get('/about', function (Menu $menu, DishController $dishes, Dish $dish) {
+    return Inertia::render('About', []);
+})->name('about');
+
+Route::get('/contact', function (
+    Menu $menu,
+    DishController $dishes,
+    Dish $dish
+) {
+    return Inertia::render('Contact', []);
+})->name('contact');
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })
