@@ -32,13 +32,14 @@ function Checkout() {
 export default Checkout;
 
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import { CartItem, selectCartTotal } from '@/store/slice/cart';
+import { CartItem, clearCart, selectCartTotal } from '@/store/slice/cart';
 import { RootState } from '@/store';
 import { EmailInput } from '@/Components/Checkout/EmailInput';
 import { TimeInput } from '@/Components/Checkout/TimeInput';
 import { NameInput } from '@/Components/Checkout/NameInput';
 import { NoteInput } from '@/Components/Checkout/NoteInput';
 import { classNames } from '@/utils/classNames';
+import { useDispatch } from 'react-redux';
 
 function InfoSection() {
     const { setData, data, post, errors, setError, clearErrors } = useForm({
@@ -52,6 +53,7 @@ function InfoSection() {
     });
     const elements = useElements();
     const stripe = useStripe();
+    const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState('');
     const [orderFailedModal, setOrderFailedModal] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -137,6 +139,7 @@ function InfoSection() {
             await stripe?.confirmCardPayment(data.client_secret, {
                 payment_method: paymentMethod?.paymentMethod?.id,
             });
+            dispatch(clearCart())
             router.visit(route('order.summary', { id: data.id }));
         } catch (err) {
             setOrderFailedModal(true);

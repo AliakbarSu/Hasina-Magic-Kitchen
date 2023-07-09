@@ -14,6 +14,7 @@ const initialState: CartState = {
 };
 
 import { Addon, Menu } from '@/types/application';
+import { clearCart as emptyCart } from '../../utils/cart_localstorage';
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -105,6 +106,11 @@ const cartSlice = createSlice({
                 }
             });
         },
+        clearCart: (state) => {
+            emptyCart();
+            state.items = [];
+            state.addons = [];
+        },
     },
 });
 
@@ -117,6 +123,7 @@ export const {
     updateMenuItem,
     addOrUpdate,
     removeAddon,
+    clearCart,
 } = cartSlice.actions;
 
 export const selectCartTotal = (state: { cart: { items: CartItem[] } }) => {
