@@ -49,9 +49,14 @@ Route::get('/about', function (Menu $menu, DishController $dishes, Dish $dish) {
 })->name('about');
 
 Route::get('/order-summary/{id}', function (Request $request, Orders $order) {
-    return Inertia::render('OrderSummaries', [
-        'order' => $order->get_order_by_id($request->id),
-    ]);
+    try {
+        $order = $order->get_order_by_id($request->id);
+        return Inertia::render('OrderSummaries', [
+            'order' => $order,
+        ]);
+    } catch (Exception $e) {
+        return Inertia::render('404', []);
+    }
 })->name('order.summary');
 
 Route::get('/contact', function () {
