@@ -60,7 +60,7 @@ const CartAddon = ({ item }: { item: Dish }) => {
         <div className="flex justify-center">
             <button
                 type="button"
-                onClick={() => onUpdateAddon(item, quantity - 1)}
+                onClick={() => quantity > 0 && onUpdateAddon(item, quantity - 1)}
                 className="relative -ml-px inline-flex rounded-l-md items-center space-x-2  border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
             >
                 <MinusIcon
@@ -73,7 +73,7 @@ const CartAddon = ({ item }: { item: Dish }) => {
             </span>
             <button
                 type="button"
-                onClick={() => onUpdateAddon(item, quantity + 1)}
+                onClick={() => quantity < 100 && onUpdateAddon(item, quantity + 1)}
                 className="relative -ml-px inline-flex items-center space-x-2 rounded-r-md border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
             >
                 <PlusIcon

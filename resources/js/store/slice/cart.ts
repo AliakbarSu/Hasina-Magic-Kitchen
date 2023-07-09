@@ -40,7 +40,8 @@ const cartSlice = createSlice({
             if (!addonExist) {
                 state.addons = [...state.addons, action.payload];
             } else {
-                addonExist.quantity = action.payload.quantity;
+                addonExist.quantity =
+                    action.payload.quantity > 0 ? action.payload.quantity : 0;
                 state.addons = state.addons.map((addon) => {
                     if (addon.dish_id === action.payload.dish_id) {
                         return addonExist;
