@@ -5,6 +5,7 @@ import { Switch } from '@headlessui/react'
 import { classNames } from '@/utils/classNames'
 import Nav from '@/Layouts/Nav'
 import Header from '@/Layouts/Header'
+import { Footer } from '@/Components/UI/Footer'
 
 
 export default function Contact() {
@@ -159,6 +160,7 @@ export default function Contact() {
                     </div>
                 </form>
             </div>
+            <Footer />
         </div>
     )
 }
