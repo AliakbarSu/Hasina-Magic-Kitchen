@@ -94,7 +94,6 @@ function InfoSection() {
         const submittedElements = await elements?.submit();
 
         // Do validation here
-        console.log(data.time);
         clearErrors();
         const results = formSchema.safeParse({ ...data });
         if (!results.success) {
@@ -102,7 +101,7 @@ function InfoSection() {
                 setError(
                     issue.path.at(0) as any,
                     errorMessages[
-                        issue.path.at(0) as keyof typeof errorMessages
+                    issue.path.at(0) as keyof typeof errorMessages
                     ]
                 );
             });
@@ -178,7 +177,7 @@ function InfoSection() {
 
                 <section
                     aria-labelledby="summary-heading"
-                    className="bg-gray-100 py-12 text-gray-500 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:bg-transparent lg:px-0 lg:pb-24 lg:pt-0"
+                    className="row-start-2 bg-gray-100 py-12 text-gray-500 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:bg-transparent lg:px-0 lg:pb-24 lg:pt-0"
                 >
                     <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
                         <h2 id="summary-heading" className="sr-only">
@@ -240,6 +239,19 @@ function InfoSection() {
                     <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0 mt-6">
                         <PaymentElement />
                     </div>
+                    <div className="mt-10 flex justify-end border-t border-gray-200 pt-6">
+                        <button
+                            form='checkout-form'
+                            disabled={loading}
+                            type="submit"
+                            className={classNames(
+                                'rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50',
+                                loading && 'disabled'
+                            )}
+                        >
+                            {loading ? 'Submitting..' : 'Pay now'}
+                        </button>
+                    </div>
                 </section>
 
                 <section
@@ -250,7 +262,7 @@ function InfoSection() {
                         Delivery details
                     </h2>
 
-                    <form onSubmit={formHandler}>
+                    <form onSubmit={formHandler} id='checkout-form'>
                         <div className="@container mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0 flex flex-col gap-3.5">
                             {/* Content goes here */}
                             {/* <InfoTab /> */}
@@ -359,18 +371,7 @@ function InfoSection() {
                                 </div>
                             </div>
 
-                            <div className="mt-10 flex justify-end border-t border-gray-200 pt-6">
-                                <button
-                                    disabled={loading}
-                                    type="submit"
-                                    className={classNames(
-                                        'rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50',
-                                        loading && 'disabled'
-                                    )}
-                                >
-                                    {loading ? 'Submitting..' : 'Pay now'}
-                                </button>
-                            </div>
+
                         </div>
                     </form>
                 </section>
