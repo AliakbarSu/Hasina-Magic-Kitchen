@@ -53,7 +53,7 @@ export default function Contact() {
                 setError(
                     issue.path.at(0) as any,
                     errorMessages[
-                        issue.path.at(0) as keyof typeof errorMessages
+                    issue.path.at(0) as keyof typeof errorMessages
                     ]
                 );
             });
@@ -69,6 +69,7 @@ export default function Contact() {
 
     return (
         <div>
+            <Head title="Contact" />
             <MessageSent open={messageSent} setOpen={setMessageSent} />
             <Nav />
             <div className="bg-white px-6 py-24 sm:py-32 lg:px-8">

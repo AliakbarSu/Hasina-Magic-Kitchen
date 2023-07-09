@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDishes, setMenus } from '@/store/slice/menu';
 import { RootState } from '@/store';
+import { Head } from '@inertiajs/react';
 
 function Home({ menu, dishes }: { menu: Menu[], dishes: Dish[] }) {
     const dispatch = useDispatch();
@@ -22,6 +23,7 @@ function Home({ menu, dishes }: { menu: Menu[], dishes: Dish[] }) {
 
     return (
         <>
+            <Head title='Menu' />
             <Nav />
             <Header />
             <Filter />

@@ -5,7 +5,7 @@ import {
     useElements,
     useStripe,
 } from '@stripe/react-stripe-js';
-import { router, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import { Order } from '@/types/application';
 import axios from 'axios';
 import { Footer } from '@/Components/UI/Footer';
@@ -22,6 +22,7 @@ const GST = 0.15;
 function Checkout() {
     return (
         <>
+            <Head title="Checkout" />
             <Nav />
             <InfoSection />
             <Footer />

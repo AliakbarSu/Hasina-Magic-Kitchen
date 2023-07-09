@@ -3,7 +3,7 @@ import { Order } from "./Admin/Orders"
 import { formatNZD } from "@/utils/currentcy"
 import Nav from "@/Layouts/Nav"
 import { Footer } from '@/Components/UI/Footer';
-import { Link } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import dayjs from "dayjs";
 import { useState } from "react";
 
@@ -27,6 +27,7 @@ export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
 
     return (
         <>
+            <Head title="Order Summaries" />
             {!print && <Nav />}
             <main className="relative lg:min-h-full flex justify-center">
 
