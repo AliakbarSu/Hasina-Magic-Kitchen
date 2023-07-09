@@ -1,5 +1,3 @@
-
-
 export function PhoneNumberInput(props: {
     state: string;
     setState: (value: string) => void;
@@ -29,7 +27,7 @@ export function PhoneNumberInput(props: {
                 <input
                     value={props.state}
                     onChange={(e) => props.setState(e.target.value)}
-                    type="text"
+                    type="number"
                     name="mobile-number"
                     id="mobile-number"
                     className="block w-full rounded-md border-gray-300 pl-16 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"

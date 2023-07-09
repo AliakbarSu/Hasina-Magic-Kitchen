@@ -94,6 +94,7 @@ function InfoSection() {
         const submittedElements = await elements?.submit();
 
         // Do validation here
+        console.log(data.time);
         clearErrors();
         const results = formSchema.safeParse({ ...data });
         if (!results.success) {
