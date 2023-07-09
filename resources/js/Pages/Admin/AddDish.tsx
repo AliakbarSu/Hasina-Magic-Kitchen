@@ -21,7 +21,7 @@ export default function AddDish({ auth, categories }: PageProps<{ categories: Ca
         name: '',
         price: '',
         description: '',
-        category: categories[0].id,
+        category: categories.at(0)?.id,
         image: ''
     })
 

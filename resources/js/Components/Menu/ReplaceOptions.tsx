@@ -15,7 +15,7 @@ export function ReplaceOptionsModal({ open, setOpen, dishes = [], onApply }: Opt
     const [options, setOptions] = useState<string>('');
 
     useEffect(() => {
-        setOptions(() => dishes.length > 0 ? dishes[0].id : '')
+        setOptions(() => dishes.at(0)?.id || '')
     }, [dishes])
 
 
@@ -68,7 +68,7 @@ export function ReplaceOptionsModal({ open, setOpen, dishes = [], onApply }: Opt
                                     </label>
                                     <form className="mt-2">
                                         <select
-                                            value={dishes.length > 0 ? dishes[0].id : ''}
+                                            value={dishes.at(0)?.id}
                                             onChange={onInputChangeHandler}
                                             id="dishes"
                                             name="dishes"

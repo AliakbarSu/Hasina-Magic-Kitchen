@@ -74,7 +74,7 @@ export function MenuItem({
             <Modal open={open} setOpen={setOpen} />
             <div className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
                 <img
-                    src={product.media.length ? product.media[0].url : ''}
+                    src={product.media.at(0)?.url}
                     alt={'Menu Plate'}
                     className="h-full w-full object-cover object-center sm:h-full sm:w-full"
                 />
