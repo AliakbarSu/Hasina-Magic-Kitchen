@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Dish;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class DishController extends Controller
 {
@@ -33,6 +34,7 @@ class DishController extends Controller
         $dish->price = $validatedData['price'];
         $dish->category_id = $validatedData['category'];
         $dish->save();
+        Log::info('Dish created', ['dish' => $dish->name, 'id' => $dish->id]);
         return $dish->toJson();
     }
 
@@ -44,6 +46,7 @@ class DishController extends Controller
         ]);
         $dish = $dishes->all()->find($validatedData['id']);
         $dish->attachMedia($request->file('image'));
+        Log::info('Dish media added', ['id' => $dish->id]);
         return response()->json(['message' => 'Dish media added'], 200);
     }
 
@@ -51,6 +54,7 @@ class DishController extends Controller
     {
         $dish = Dish::find($id);
         $dish->delete();
+        Log::info('Dish deleted', ['id' => $dish->id]);
         return response()->json(['message' => 'Dish deleted'], 200);
     }
 }
