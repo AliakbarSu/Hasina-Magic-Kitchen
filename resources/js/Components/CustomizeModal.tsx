@@ -6,17 +6,21 @@ import { Dialog, Transition } from '@headlessui/react';
 import { CustomizeItem } from './Menu/CustomizeItem';
 import { getSelectedMenu } from '@/store/slice/menu';
 
-
-export default function CustomizeModal({ open, setOpen }: { open: boolean, setOpen: any }) {
+export default function CustomizeModal({
+    open,
+    setOpen,
+}: {
+    open: boolean;
+    setOpen: any;
+}) {
     const cancelButtonRef = useRef(null);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const selectedMenu = useSelector(getSelectedMenu) as Menu;
-
 
     const onApplyHandler = () => {
         dispatch(updateMenuItemInCart(selectedMenu));
         setOpen(false);
-    }
+    };
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -76,8 +80,3 @@ export default function CustomizeModal({ open, setOpen }: { open: boolean, setOp
         </Transition.Root>
     );
 }
-
-
-
-
-

@@ -1,34 +1,35 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { Fragment, useEffect, useRef, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
 import { Dish } from '@/types/application';
 
-
 type OptionsModalProps = {
-    dishes: Dish[],
-    open: boolean,
-    setOpen: (state: boolean) => void,
-    onApply: (id: string) => void
-}
+    dishes: Dish[];
+    open: boolean;
+    setOpen: (state: boolean) => void;
+    onApply: (id: string) => void;
+};
 
-export function ReplaceOptionsModal({ open, setOpen, dishes = [], onApply }: OptionsModalProps) {
+export function ReplaceOptionsModal({
+    open,
+    setOpen,
+    dishes = [],
+    onApply,
+}: OptionsModalProps) {
     const cancelButtonRef = useRef(null);
     const [options, setOptions] = useState<string>('');
 
     useEffect(() => {
-        setOptions(() => dishes.length > 0 ? dishes[0].id : '')
-    }, [dishes])
-
+        setOptions(() => (dishes.length > 0 ? dishes[0].id : ''));
+    }, [dishes]);
 
     const onInputChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setOptions(() => e.target.value)
-    }
+        setOptions(() => e.target.value);
+    };
 
     const onApplyHandler = () => {
         setOpen(false);
         onApply(options);
-    }
-
-
+    };
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -36,7 +37,7 @@ export function ReplaceOptionsModal({ open, setOpen, dishes = [], onApply }: Opt
                 as="div"
                 className="relative z-10"
                 initialFocus={cancelButtonRef}
-                onClose={(setOpen)}
+                onClose={setOpen}
             >
                 <Transition.Child
                     as={Fragment}
@@ -51,7 +52,7 @@ export function ReplaceOptionsModal({ open, setOpen, dishes = [], onApply }: Opt
                 </Transition.Child>
 
                 <div className="fixed inset-0 z-10 overflow-y-auto">
-                    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                    <div className="flex min-h-full justify-center p-4 text-center items-center sm:p-0">
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -61,20 +62,31 @@ export function ReplaceOptionsModal({ open, setOpen, dishes = [], onApply }: Opt
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-6xl sm:p-6">
+                            <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 w-full sm:max-w-2xl sm:p-6">
                                 <div className="sm:col-span-3">
-                                    <label htmlFor="dishes" className="block text-sm font-medium leading-6 text-gray-900">
+                                    <label
+                                        htmlFor="dishes"
+                                        className="block text-sm font-medium leading-6 text-gray-900"
+                                    >
                                         Dishes
                                     </label>
                                     <form className="mt-2">
                                         <select
-                                            value={dishes.length > 0 ? dishes[0].id : ''}
+                                            value={
+                                                dishes.length > 0
+                                                    ? dishes[0].id
+                                                    : ''
+                                            }
                                             onChange={onInputChangeHandler}
                                             id="dishes"
                                             name="dishes"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                         >
-                                            {dishes.map(({ name, id }) => (<option key={id} value={id}>{name}</option>))}
+                                            {dishes.map(({ name, id }) => (
+                                                <option key={id} value={id}>
+                                                    {name}
+                                                </option>
+                                            ))}
                                         </select>
                                     </form>
                                 </div>
