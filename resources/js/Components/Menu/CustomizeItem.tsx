@@ -39,8 +39,8 @@ export function CustomizeItem() {
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 ">
                                 <img
-                                    src={`https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80`}
-                                    alt={'food'}
+                                    src={selectedMenu.media.at(0)?.url || ''}
+                                    alt={'Photo fo ' + selectedMenu.name}
                                     className={'col-span-2 row-span-2'}
                                 />
                                 <div className="mt-10 col-span-2 ">
