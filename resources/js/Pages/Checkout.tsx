@@ -6,7 +6,7 @@ import { Order } from '@/types/application';
 import axios from 'axios';
 import { Footer } from '@/Components/UI/Footer';
 import { formatNZD } from '@/utils/currentcy';
-import { Calander } from '@/Components/Checkout/Calander';
+import Calander from '@/Components/Checkout/Calander';
 import { AddressInput } from '@/Components/Checkout/AddressInput';
 import { PhoneNumberInput } from '@/Components/Checkout/PhoneNumberInput';
 
@@ -35,7 +35,7 @@ import { NameInput } from '@/Components/Checkout/NameInput';
 import { NoteInput } from '@/Components/Checkout/NoteInput';
 
 function InfoSection() {
-    const { setData, data, post } = useForm({
+    const { setData, data, post, errors, setError } = useForm({
         customer_name: '',
         address: '',
         date: '',
@@ -225,31 +225,20 @@ function InfoSection() {
 
                                 <div className="mt-6 flex flex-col gap-3.5">
                                     <Calander
-                                        state={data.date}
-                                        setState={(date) => setData('date', date)}
+                                        setState={value => setData('date', value)}
+                                        setError={value => setError('date', value)}
                                     />
+                                    {errors.time && <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
+                                        {errors.time}
+                                    </span>}
                                     <TimeInput
                                         state={data.time}
                                         setState={(time) => setData('time', time)}
+                                        setError={(error) => setError('time', error)}
                                     />
-                                    <div className="mt-2">
-                                        <input
-                                            id="same-as-shipping"
-                                            name="same-as-shipping"
-                                            type="checkbox"
-                                            checked={isPickup}
-                                            onChange={() =>
-                                                setIsPickup(isPickup)
-                                            }
-                                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                        />
-                                        <label
-                                            htmlFor="same-as-shipping"
-                                            className="ml-2 text-md font-medium text-blue-600"
-                                        >
-                                            I want to pick up
-                                        </label>
-                                    </div>
+                                    {errors.time && <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
+                                        {errors.time}
+                                    </span>}
                                 </div>
                             </div>
 
