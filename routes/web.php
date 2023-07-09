@@ -6,7 +6,8 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Category;
 use App\Models\Dish;
 use App\Models\Menu;
-use Illuminate\Foundation\Application;
+use App\Models\Orders;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -47,11 +48,13 @@ Route::get('/about', function (Menu $menu, DishController $dishes, Dish $dish) {
     return Inertia::render('About', []);
 })->name('about');
 
-Route::get('/contact', function (
-    Menu $menu,
-    DishController $dishes,
-    Dish $dish
-) {
+Route::get('/order-summary/{id}', function (Request $request, Orders $order) {
+    return Inertia::render('OrderSummaries', [
+        'order' => $order->get_order_by_id($request->id),
+    ]);
+})->name('order.summary');
+
+Route::get('/contact', function () {
     return Inertia::render('Contact', []);
 })->name('contact');
 

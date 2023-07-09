@@ -57,6 +57,7 @@ class Orders extends Model
             });
             $item->menu_item = [];
             $item->menu_items = [];
+            $item->menu->media = Orders::add_media($item->menu);
             return $item;
         });
         return $order;
@@ -108,5 +109,15 @@ class Orders extends Model
     {
         $orders = Orders::where('date', '=', date('today'))->get();
         return $orders->count() <= 3;
+    }
+
+    static function add_media($item)
+    {
+        return array_map(function ($media) {
+            return [
+                'id' => $media['id'],
+                'url' => $media['file_url'],
+            ];
+        }, $item->fetchAllMedia()->toArray());
     }
 }
