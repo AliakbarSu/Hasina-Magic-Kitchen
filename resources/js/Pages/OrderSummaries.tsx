@@ -5,9 +5,11 @@ import Nav from "@/Layouts/Nav"
 import { Footer } from '@/Components/UI/Footer';
 import { Link } from "@inertiajs/react";
 import dayjs from "dayjs";
+import { useState } from "react";
 
 
 export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
+    const [print, setPrint] = useState(false)
     const getTime = (time: string) => {
         return {
             h: time.split(":").at(0) as unknown as number || 0,
@@ -15,20 +17,42 @@ export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
         }
     }
 
+    const savePage = () => {
+        setPrint(true)
+        setTimeout(() => {
+            window.print()
+            setPrint(false)
+        }, 100)
+    }
+
     return (
         <>
-            <Nav />
+            {!print && <Nav />}
             <main className="relative lg:min-h-full flex justify-center">
 
                 <div>
                     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:grid lg:max-w-7xl lg:gap-x-8 lg:px-8 lg:py-32 xl:gap-x-24">
                         <div className="lg:col-start-2">
-                            <h1 className="text-sm font-medium text-indigo-600">Payment successful</h1>
-                            <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Thanks for ordering</p>
-                            <p className="mt-2 text-base text-gray-500">
+                            {!print ? <div className="flex justify-between">
+                                <h1 className="text-sm font-medium text-indigo-600">Payment successful</h1>
+                                <button
+                                    onClick={savePage}
+                                    type="button"
+                                    className="rounded bg-indigo-600 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                >
+                                    Save as PDF
+                                </button>
+                            </div>
+                                :
+                                <div className="flex justify-between">
+                                    <h1 className="text-sm font-medium text-indigo-600"><b>Customer Name: </b>{order.customer_name}</h1>
+                                </div>}
+
+                            {!print && <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Thanks for ordering</p>}
+                            {!print && <p className="mt-2 text-base text-gray-500">
                                 We appreciate your order, we’re currently processing it. So hang tight and we’ll send you confirmation
                                 very soon!
-                            </p>
+                            </p>}
 
                             <dl className="mt-16 text-sm font-medium">
                                 <dt className="text-gray-900">Order ID</dt>
@@ -123,17 +147,17 @@ export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
                                 </div> */}
                             </dl>
 
-                            <div className="mt-16 border-t border-gray-200 py-6 text-right">
+                            {!print && <div className="mt-16 border-t border-gray-200 py-6 text-right">
                                 <Link href={route('main.home')} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
                                     Continue Ordering
                                     <span aria-hidden="true"> &rarr;</span>
                                 </Link>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 </div>
             </main>
-            <Footer />
+            {!print && <Footer />}
         </>
     )
 }
