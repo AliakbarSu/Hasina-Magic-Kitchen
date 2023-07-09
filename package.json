@@ -28,11 +28,15 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@emotion/react": "^11.11.1",
+        "@emotion/styled": "^11.11.0",
         "@heroicons/react": "^2.0.18",
+        "@mui/x-date-pickers": "^6.9.2",
         "@reduxjs/toolkit": "^1.9.5",
         "@stripe/react-stripe-js": "^2.1.1",
         "@stripe/stripe-js": "^1.54.1",
         "clsx": "^1.2.1",
+        "dayjs": "^1.11.9",
         "react-redux": "^8.1.1"
     }
 }

@@ -1,35 +1,37 @@
-import { ClockIcon } from "@heroicons/react/20/solid";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker, TimePickerProps } from '@mui/x-date-pickers/TimePicker';
+import dayjs, { Dayjs } from "dayjs";
+import { TimeValidationError } from "@mui/x-date-pickers";
 
+const fiveAM = dayjs().set('hour', 5).startOf('hour');
+const ninePM = dayjs().set('hour', 22).startOf('hour');
 
 export function TimeInput(props: {
     state: string;
     setState: (value: string) => void;
+    setError: (value: string) => void;
 }) {
+
+    const shouldDisableTime: TimePickerProps<Dayjs>['shouldDisableTime'] = (
+        value,
+        view,
+    ) => view === 'hours' && value.hour() >= 20;
+
+    const timeChangeHandler = (value: dayjs.Dayjs | null) => {
+        const time = value?.format('HH:MM')
+        props.setState(`${time}`)
+    }
+
+    const onErrorHandler = (error: TimeValidationError) => {
+        if (error === "minTime" || error === "maxTime") {
+            props.setError("Please select a valid time")
+        }
+    }
+
     return (
-        <div>
-            <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-            >
-                Time
-            </label>
-            <div className="relative mt-2 rounded-md shadow-sm">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <ClockIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                    />
-                </div>
-                <input
-                    value={props.state}
-                    onChange={(e) => props.setState(e.target.value)}
-                    type="time"
-                    name="time"
-                    id="time"
-                    className="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    placeholder="Select time"
-                />
-            </div>
-        </div>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TimePicker onError={onErrorHandler} minTime={fiveAM} maxTime={ninePM} label="Order time" onAccept={timeChangeHandler} />
+        </LocalizationProvider>
     );
 }

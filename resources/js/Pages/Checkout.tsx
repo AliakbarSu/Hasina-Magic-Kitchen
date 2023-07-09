@@ -6,7 +6,7 @@ import { Order } from '@/types/application';
 import axios from 'axios';
 import { Footer } from '@/Components/UI/Footer';
 import { formatNZD } from '@/utils/currentcy';
-import { Calander } from '@/Components/Checkout/Calander';
+import Calander from '@/Components/Checkout/Calander';
 import { AddressInput } from '@/Components/Checkout/AddressInput';
 import { PhoneNumberInput } from '@/Components/Checkout/PhoneNumberInput';
 
@@ -33,9 +33,10 @@ import { EmailInput } from '@/Components/Checkout/EmailInput';
 import { TimeInput } from '@/Components/Checkout/TimeInput';
 import { NameInput } from '@/Components/Checkout/NameInput';
 import { NoteInput } from '@/Components/Checkout/NoteInput';
+import { classNames } from '@/utils/classNames';
 
 function InfoSection() {
-    const { setData, data, post } = useForm({
+    const { setData, data, post, errors, setError } = useForm({
         customer_name: '',
         address: '',
         date: '',
@@ -44,13 +45,13 @@ function InfoSection() {
         email: '',
         note: ''
     })
-    const [isPickup, setIsPickup] = useState(false);
     const elements = useElements();
     const stripe = useStripe();
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const cartTotal = useSelector(selectCartTotal);
+    const cartAddons = useSelector((state: RootState) => state.cart.addons)
 
     const handleError = (error: Error) => {
         setLoading(false);
@@ -63,14 +64,11 @@ function InfoSection() {
             return;
         }
 
-        setLoading(true);
-
         const submittedElements = await elements?.submit();
         if (submittedElements?.error) {
             handleError(submittedElements.error as unknown as Error);
             return;
         }
-
         const order: Order = {
             customer_name: data.customer_name,
             phone: data.phone,
@@ -84,25 +82,22 @@ function InfoSection() {
                 dishes: dishes.map(({ id }) => id),
                 quantity: numOfPeople
             })),
-            addons: []
+            addons: cartAddons
         }
         if (!elements) return
         try {
+            setLoading(true);
             const { data } = await axios.post(route('order.add'), order);
             const paymentMethod = await stripe?.createPaymentMethod({
                 elements
             })
-            const result = await stripe?.confirmCardPayment(data.client_secret, {
+            await stripe?.confirmCardPayment(data.client_secret, {
                 payment_method: paymentMethod?.paymentMethod?.id,
-            },)
-            console.log(result)
+            })
 
         } finally {
             setLoading(false)
         }
-
-
-
     };
 
 
@@ -161,7 +156,7 @@ function InfoSection() {
                                     className="flex items-start space-x-4 py-6"
                                 >
                                     <img
-                                        src={item.media[0].url}
+                                        src={item.media.at(0)?.url}
                                         alt={`Image of ${item.name} menu`}
                                         className="border h-20 w-20 flex-none rounded-md object-cover object-center"
                                     />
@@ -225,31 +220,20 @@ function InfoSection() {
 
                                 <div className="mt-6 flex flex-col gap-3.5">
                                     <Calander
-                                        state={data.date}
-                                        setState={(date) => setData('date', date)}
+                                        setState={value => setData('date', value)}
+                                        setError={value => setError('date', value)}
                                     />
+                                    {errors.time && <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
+                                        {errors.time}
+                                    </span>}
                                     <TimeInput
                                         state={data.time}
                                         setState={(time) => setData('time', time)}
+                                        setError={(error) => setError('time', error)}
                                     />
-                                    <div className="mt-2">
-                                        <input
-                                            id="same-as-shipping"
-                                            name="same-as-shipping"
-                                            type="checkbox"
-                                            checked={isPickup}
-                                            onChange={() =>
-                                                setIsPickup(isPickup)
-                                            }
-                                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                        />
-                                        <label
-                                            htmlFor="same-as-shipping"
-                                            className="ml-2 text-md font-medium text-blue-600"
-                                        >
-                                            I want to pick up
-                                        </label>
-                                    </div>
+                                    {errors.time && <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
+                                        {errors.time}
+                                    </span>}
                                 </div>
                             </div>
 
@@ -281,10 +265,11 @@ function InfoSection() {
 
                             <div className="mt-10 flex justify-end border-t border-gray-200 pt-6">
                                 <button
+                                    disabled={loading}
                                     type="submit"
-                                    className="rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                                    className={classNames("rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50", loading && "disabled")}
                                 >
-                                    Pay now
+                                    {loading ? "Submitting.." : "Pay now"}
                                 </button>
                             </div>
                         </div>

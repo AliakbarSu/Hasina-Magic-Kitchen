@@ -33,7 +33,7 @@ class OrdersController extends Controller
             'phone' => ['required', 'numeric', 'min:10'],
             'email' => ['required', 'email'],
             'address' => ['required', 'string'],
-            'date' => ['required', 'date_format:d-m-Y'],
+            'date' => ['required', 'date'],
             'time' => ['required', 'date_format:H:i'],
             'note' => ['required', 'string', 'max:80'],
             'items' => ['required', 'array'],
@@ -79,7 +79,7 @@ class OrdersController extends Controller
         $order->phone = $orderDetails['phone'];
         $order->email = $orderDetails['email'];
         $order->address = $orderDetails['address'];
-        $order->date = $orderDetails['date'];
+        $order->date = date('Y-m-d', strtotime($orderDetails['date']));
         $order->time = $orderDetails['time'];
         $order->note = $orderDetails['note'];
         $order->total = 100;

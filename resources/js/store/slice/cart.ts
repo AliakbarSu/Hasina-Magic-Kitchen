@@ -2,13 +2,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface CartItem extends Menu {
     numOfPeople: number;
 }
-interface CartState {
+export interface CartState {
     items: CartItem[];
     addons: Addon[];
+    loaded: boolean;
 }
 const initialState: CartState = {
     items: [],
     addons: [],
+    loaded: false,
 };
 
 import { Addon, Menu } from '@/types/application';
@@ -17,7 +19,13 @@ const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
+        setCart: (state, action: PayloadAction<CartState>) => {
+            state.addons = action.payload.addons;
+            state.items = action.payload.items;
+            state.loaded = true;
+        },
         addItem: (state, action: PayloadAction<CartItem>) => {
+            state.loaded = true;
             const itemExist = state.items.find(
                 (item) => item.id === action.payload.id
             );
@@ -67,13 +75,15 @@ const cartSlice = createSlice({
         ) => {},
         updateQuantity: (
             state,
-            action: PayloadAction<{ id: string; quantity: number }>
+            {
+                payload: { quantity, id },
+            }: PayloadAction<{ id: string; quantity: number }>
         ) => {
             state.items = state.items.map((item) => {
-                if (item.id === action.payload.id) {
+                if (item.id === id) {
                     return {
                         ...item,
-                        numOfPeople: action.payload.quantity,
+                        numOfPeople: quantity,
                     };
                 }
                 return item;
@@ -82,7 +92,7 @@ const cartSlice = createSlice({
         updateMenuItem: (state, action: PayloadAction<Menu>) => {
             state.items = state.items.map((item) => {
                 if (item.id === action.payload.id) {
-                    return action.payload as CartItem;
+                    return { ...item, ...action.payload } as CartItem;
                 }
                 return item;
             });
@@ -99,6 +109,7 @@ const cartSlice = createSlice({
 });
 
 export const {
+    setCart,
     addItem,
     removeItem,
     getItemQuantity,
