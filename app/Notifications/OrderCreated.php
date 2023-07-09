@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Orders;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -14,10 +15,11 @@ class OrderCreated extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(Orders $order)
     {
-        //
+        $this->order = $order;
     }
+    private $order;
 
     /**
      * Get the notification's delivery channels.

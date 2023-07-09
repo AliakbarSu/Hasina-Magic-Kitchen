@@ -1,18 +1,38 @@
-import { Head } from '@inertiajs/react'
+import { Head, useForm } from '@inertiajs/react'
 import { useState } from 'react'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { Switch } from '@headlessui/react'
-import { classNames } from '@/utils/classNames'
 import Nav from '@/Layouts/Nav'
-import Header from '@/Layouts/Header'
 import { Footer } from '@/Components/UI/Footer'
+import MessageSent from '@/Components/Contact/MessageSent'
 
 
 export default function Contact() {
     const [agreed, setAgreed] = useState(false)
+    const [messageSent, setMessageSent] = useState(false)
+    const { post, data, setData, setError, errors, hasErrors } = useForm({
+        first_name: '',
+        last_name: '',
+        company: '',
+        email: '',
+        number: '',
+        message: '',
+        terms: true,
+    })
+
+
+    const onSubmitHandler = (e: any) => {
+        e.preventDefault()
+        if (!hasErrors) {
+            post('api/contact', {
+                onSuccess: () => {
+                    setMessageSent(true)
+                }
+            })
+        }
+    }
 
     return (
         <div>
+            <MessageSent open={messageSent} setOpen={setMessageSent} />
             <Nav />
             <div className="bg-white px-6 py-24 sm:py-32 lg:px-8">
                 <Head title='Contact' />
@@ -34,7 +54,7 @@ export default function Contact() {
                         Please use the form below to contact us. We will get back to you as soon as possible.
                     </p>
                 </div>
-                <form action="#" method="POST" className="mx-auto mt-16 max-w-xl sm:mt-20">
+                <form onSubmit={onSubmitHandler} action="#" method="POST" className="mx-auto mt-16 max-w-xl sm:mt-20">
                     <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                         <div>
                             <label htmlFor="first-name" className="block text-sm font-semibold leading-6 text-gray-900">
@@ -42,13 +62,18 @@ export default function Contact() {
                             </label>
                             <div className="mt-2.5">
                                 <input
+                                    value={data.first_name}
                                     type="text"
                                     name="first-name"
                                     id="first-name"
                                     autoComplete="given-name"
+                                    onChange={(e) => setData('first_name', e.target.value)}
                                     className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
+                            {errors.first_name && <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-2 ml-1">
+                                {errors.first_name}
+                            </span>}
                         </div>
                         <div>
                             <label htmlFor="last-name" className="block text-sm font-semibold leading-6 text-gray-900">
@@ -56,10 +81,12 @@ export default function Contact() {
                             </label>
                             <div className="mt-2.5">
                                 <input
+                                    value={data.last_name}
                                     type="text"
                                     name="last-name"
                                     id="last-name"
                                     autoComplete="family-name"
+                                    onChange={(e) => setData('last_name', e.target.value)}
                                     className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -70,10 +97,12 @@ export default function Contact() {
                             </label>
                             <div className="mt-2.5">
                                 <input
+                                    value={data.company}
                                     type="text"
                                     name="company"
                                     id="company"
                                     autoComplete="organization"
+                                    onChange={(e) => setData('company', e.target.value)}
                                     className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -84,10 +113,12 @@ export default function Contact() {
                             </label>
                             <div className="mt-2.5">
                                 <input
+                                    value={data.email}
                                     type="email"
                                     name="email"
                                     id="email"
                                     autoComplete="email"
+                                    onChange={(e) => setData('email', e.target.value)}
                                     className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -97,12 +128,13 @@ export default function Contact() {
                                 Phone number
                             </label>
                             <div className="relative mt-2.5">
-
                                 <input
+                                    value={data.number}
                                     type="tel"
                                     name="phone-number"
                                     id="phone-number"
                                     autoComplete="tel"
+                                    onChange={(e) => setData('number', e.target.value)}
                                     className="block w-full rounded-md border-0 px-3.5 py-2 pl-20 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -113,15 +145,16 @@ export default function Contact() {
                             </label>
                             <div className="mt-2.5">
                                 <textarea
+                                    value={data.message}
                                     name="message"
                                     id="message"
                                     rows={4}
                                     className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    defaultValue={''}
+                                    onChange={(e) => setData('message', e.target.value)}
                                 />
                             </div>
                         </div>
-                        <Switch.Group as="div" className="flex gap-x-4 sm:col-span-2">
+                        {/* <Switch.Group as="div" className="flex gap-x-4 sm:col-span-2" onChange={(e) => setData('terms', (e.target as any).value)}>
                             <div className="flex h-6 items-center">
                                 <Switch
                                     checked={agreed}
@@ -148,7 +181,7 @@ export default function Contact() {
                                 </a>
                                 .
                             </Switch.Label>
-                        </Switch.Group>
+                        </Switch.Group> */}
                     </div>
                     <div className="mt-10">
                         <button

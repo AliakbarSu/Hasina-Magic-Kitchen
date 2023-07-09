@@ -2,24 +2,24 @@
 
 namespace App\Notifications;
 
-use App\Models\Orders;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewOrder extends Notification
+class Contact extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Orders $order)
+    public function __construct($contact_form)
     {
-        $this->order = $order;
+        $this->contact_form = $contact_form;
     }
-    private $order;
+
+    private $contact_form;
 
     /**
      * Get the notification's delivery channels.
@@ -37,9 +37,12 @@ class NewOrder extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->greeting('New Order')
-            ->action('View Order', url('/'))
-            ->line('There is a new order!');
+            ->greeting('Hi there')
+            ->action('View message', url('/'))
+            ->line(
+                "you have a new message from {$this->contact_form['first_name']} {$this->contact_form['last_name']}"
+            )
+            ->line('Message' . $this->contact_form['message']);
     }
 
     /**

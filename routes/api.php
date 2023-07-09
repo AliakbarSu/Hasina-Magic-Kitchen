@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CategoryController;
@@ -56,6 +57,7 @@ Route::post('/order', [OrdersController::class, 'add_order'])->name(
 
 Route::get('/availability', [OrdersController::class, 'get_availability']);
 Route::post('/validate/address', [OrdersController::class, 'validate_address']);
+Route::post('/contact', [AdminController::class, 'contact']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
