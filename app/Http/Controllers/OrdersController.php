@@ -49,10 +49,10 @@ class OrdersController extends Controller
             'addons.*.dish_id' => ['exists:dishes,id'],
             'addons.*.quantity' => ['numeric', 'min:1', 'max:500'],
         ]);
-
-        if (!Orders::can_palce_order()) {
-            return response(400)->json('Cannot place order for this date!');
-        }
+        // TODO Needs to be implemented
+        // if (!Orders::can_palce_order()) {
+        //     return response(400)->json('Cannot place order for this date!');
+        // }
         $customer = $customersController->create_customer($request);
         $order = $this->create_order($validatedData, $customer->id);
         try {
