@@ -8,22 +8,21 @@ interface Address {
     postCode: string;
 }
 
-
-export function AddressInput(props: { setState: (value: string) => void }) {
+export function AddressInput(props: {
+    setState: (value: string) => void;
+    setError: (err: string | null) => void;
+}) {
     const [address1, setAddress1] = useState('');
     const [suburb, setSuburb] = useState('');
     const [city, setCity] = useState('Auckland');
     const [postCode, setPostCode] = useState('');
-    const [error, setError] = useState('');
     const [hasError, setHasError] = useState(false);
-
 
     let timeout: any;
     var debounce = function (func: () => Promise<void>, delay: number) {
         clearTimeout(timeout);
         timeout = setTimeout(func, delay);
     };
-
 
     useEffect(() => {
         const address = {
@@ -32,17 +31,23 @@ export function AddressInput(props: { setState: (value: string) => void }) {
             city,
             postCode,
         };
-        debounce(() => axios.post('/api/validate/address', {
-            address: `${address1}, ${suburb}`
-        }).then(result => {
-            const isValid = result.data.validation_result
-            setHasError(!isValid)
-            if (!isValid) {
-                setError('Invalid address');
-            } else {
-                setError('')
-            }
-        }), 200);
+        debounce(
+            () =>
+                axios
+                    .post('/api/validate/address', {
+                        address: `${address1}, ${suburb}`,
+                    })
+                    .then((result) => {
+                        const isValid = result.data.validation_result;
+                        setHasError(!isValid);
+                        if (!isValid) {
+                            props.setError('Invalid address');
+                        } else {
+                            props.setError(null);
+                        }
+                    }),
+            200
+        );
 
         props.setState(`${address.address1}, ${address.suburb}`);
     }, [address1, suburb, city, postCode]);
@@ -104,7 +109,9 @@ export function AddressInput(props: { setState: (value: string) => void }) {
                             </label>
                             <input
                                 value={postCode}
-                                onChange={({ target }) => setPostCode(target.value)}
+                                onChange={({ target }) =>
+                                    setPostCode(target.value)
+                                }
                                 type="text"
                                 name="postcode"
                                 id="postcode"
@@ -113,11 +120,7 @@ export function AddressInput(props: { setState: (value: string) => void }) {
                             />
                         </div>
                     </div>
-
                 </div>
-                {hasError && <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-2 ml-1">
-                    {error}
-                </span>}
             </fieldset>
         </div>
     );

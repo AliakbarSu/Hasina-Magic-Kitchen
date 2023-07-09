@@ -1,6 +1,10 @@
 import { FormEvent, useState } from 'react';
 import Nav from '@/Layouts/Nav';
-import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import {
+    PaymentElement,
+    useElements,
+    useStripe,
+} from '@stripe/react-stripe-js';
 import { useForm } from '@inertiajs/react';
 import { Order } from '@/types/application';
 import axios from 'axios';
@@ -9,10 +13,10 @@ import { formatNZD } from '@/utils/currentcy';
 import Calander from '@/Components/Checkout/Calander';
 import { AddressInput } from '@/Components/Checkout/AddressInput';
 import { PhoneNumberInput } from '@/Components/Checkout/PhoneNumberInput';
+import { z } from 'zod';
 
 const DEV_FEE = 25;
 const GST = 0.15;
-
 
 function Checkout() {
     return (
@@ -36,27 +40,48 @@ import { NoteInput } from '@/Components/Checkout/NoteInput';
 import { classNames } from '@/utils/classNames';
 
 function InfoSection() {
-    const { setData, data, post, errors, setError } = useForm({
+    const { setData, data, post, errors, setError, clearErrors } = useForm({
         customer_name: '',
         address: '',
         date: '',
         time: '',
         phone: 0,
         email: '',
-        note: ''
-    })
+        note: '',
+    });
     const elements = useElements();
     const stripe = useStripe();
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const cartTotal = useSelector(selectCartTotal);
-    const cartAddons = useSelector((state: RootState) => state.cart.addons)
+    const cartAddons = useSelector((state: RootState) => state.cart.addons);
+
+    const formSchema = z.object({
+        customer_name: z.string().min(2).max(20),
+        address: z.string().min(5).max(80),
+        date: z.string().min(8).max(10),
+        time: z.string().min(4).max(5),
+        phone: z.string().min(6).max(14),
+        email: z.string().email(),
+        note: z.string().max(600).optional(),
+    });
+
+    const errorMessages = {
+        customer_name:
+            'Name is required and should be 2 to 20 characters long.',
+        address: 'Address is required and must be valid.',
+        date: 'Date is required.',
+        time: 'Time is required.',
+        phone: 'Mobile number is required and must be valid.',
+        email: 'Email is required and must be valid.',
+        note: 'Note should not exceed 600 characters',
+    };
 
     const handleError = (error: Error) => {
         setLoading(false);
         setErrorMessage(error.message);
-    }
+    };
 
     const formHandler = async (e: FormEvent) => {
         e.preventDefault();
@@ -65,6 +90,22 @@ function InfoSection() {
         }
 
         const submittedElements = await elements?.submit();
+
+        // Do validation here
+        clearErrors();
+        const results = formSchema.safeParse({ ...data });
+        if (!results.success) {
+            results.error.issues.forEach((issue) => {
+                setError(
+                    issue.path.at(0) as any,
+                    errorMessages[
+                        issue.path.at(0) as keyof typeof errorMessages
+                    ]
+                );
+            });
+            return;
+        }
+
         if (submittedElements?.error) {
             handleError(submittedElements.error as unknown as Error);
             return;
@@ -75,32 +116,29 @@ function InfoSection() {
             email: data.email,
             address: data.address,
             date: data.date,
-            time: data.time,
+            time: data.time.toString(),
             note: data.note,
             items: cartItems.map(({ id, dishes, numOfPeople }: CartItem) => ({
                 menu_id: id,
                 dishes: dishes.map(({ id }) => id),
-                quantity: numOfPeople
+                quantity: numOfPeople,
             })),
-            addons: cartAddons
-        }
-        if (!elements) return
+            addons: cartAddons,
+        };
+        if (!elements) return;
         try {
             setLoading(true);
             const { data } = await axios.post(route('order.add'), order);
             const paymentMethod = await stripe?.createPaymentMethod({
-                elements
-            })
+                elements,
+            });
             await stripe?.confirmCardPayment(data.client_secret, {
                 payment_method: paymentMethod?.paymentMethod?.id,
-            })
-
+            });
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     };
-
-
 
     function calculateGST(price: number) {
         const result = price * GST;
@@ -110,7 +148,7 @@ function InfoSection() {
     const getTotal = (price: number) => {
         const tax = calculateGST(price);
         return price + tax + DEV_FEE;
-    }
+    };
 
     return (
         <div className="bg-white relative">
@@ -136,15 +174,6 @@ function InfoSection() {
                         <h2 id="summary-heading" className="sr-only">
                             Order summary
                         </h2>
-
-                        {/* <dl>
-                            <dt className="text-sm font-medium">
-                                Total Amount
-                            </dt>
-                            <dd className="mt-1 text-3xl font-bold tracking-tight text-black">
-                                ${formatNZD(cartTotal)} NZD
-                            </dd>
-                        </dl> */}
 
                         <ul
                             role="list"
@@ -192,11 +221,13 @@ function InfoSection() {
 
                             <div className="flex items-center justify-between border-t border-black border-opacity-10 pt-6 text-black">
                                 <dt className="text-base">Total</dt>
-                                <dd className="text-base">{formatNZD(getTotal(cartTotal))} NZD</dd>
+                                <dd className="text-base">
+                                    {formatNZD(getTotal(cartTotal))} NZD
+                                </dd>
                             </div>
                         </dl>
                     </div>
-                    <div className='mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0 mt-6'>
+                    <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0 mt-6">
                         <PaymentElement />
                     </div>
                 </section>
@@ -220,20 +251,32 @@ function InfoSection() {
 
                                 <div className="mt-6 flex flex-col gap-3.5">
                                     <Calander
-                                        setState={value => setData('date', value)}
-                                        setError={value => setError('date', value)}
+                                        setState={(value) =>
+                                            setData('date', value)
+                                        }
+                                        setError={(value) =>
+                                            setError('date', value)
+                                        }
                                     />
-                                    {errors.time && <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
-                                        {errors.time}
-                                    </span>}
+                                    {errors.date && (
+                                        <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
+                                            {errors.date}
+                                        </span>
+                                    )}
                                     <TimeInput
                                         state={data.time}
-                                        setState={(time) => setData('time', time)}
-                                        setError={(error) => setError('time', error)}
+                                        setState={(time) =>
+                                            setData('time', time)
+                                        }
+                                        setError={(error) =>
+                                            setError('time', error)
+                                        }
                                     />
-                                    {errors.time && <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
-                                        {errors.time}
-                                    </span>}
+                                    {errors.time && (
+                                        <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
+                                            {errors.time}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
 
@@ -245,21 +288,64 @@ function InfoSection() {
                                 <div className="mt-6 flex flex-col gap-3.5">
                                     <NameInput
                                         state={data.customer_name}
-                                        setState={name => setData('customer_name', name)}
+                                        setState={(name) =>
+                                            setData('customer_name', name)
+                                        }
                                     />
+                                    {errors.customer_name && (
+                                        <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
+                                            {errors.customer_name}
+                                        </span>
+                                    )}
                                     <PhoneNumberInput
                                         state={data.phone as unknown as string}
-                                        setState={number => setData('phone', number as unknown as number)}
+                                        setState={(number) =>
+                                            setData(
+                                                'phone',
+                                                number as unknown as number
+                                            )
+                                        }
                                     />
+                                    {errors.phone && (
+                                        <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
+                                            {errors.phone}
+                                        </span>
+                                    )}
                                     <EmailInput
                                         state={data.email}
-                                        setState={email => setData('email', email)}
+                                        setState={(email) =>
+                                            setData('email', email)
+                                        }
                                     />
-                                    <AddressInput setState={address => setData('address', address)} />
+                                    {errors.email && (
+                                        <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
+                                            {errors.email}
+                                        </span>
+                                    )}
+                                    <AddressInput
+                                        setState={(address) =>
+                                            setData('address', address)
+                                        }
+                                        setError={(error) =>
+                                            error && setError('address', error)
+                                        }
+                                    />
+                                    {errors.address && (
+                                        <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
+                                            {errors.address}
+                                        </span>
+                                    )}
                                     <NoteInput
                                         state={data.note}
-                                        setState={note => setData('note', note)}
+                                        setState={(note) =>
+                                            setData('note', note)
+                                        }
                                     />
+                                    {errors.note && (
+                                        <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
+                                            {errors.note}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
 
@@ -267,9 +353,12 @@ function InfoSection() {
                                 <button
                                     disabled={loading}
                                     type="submit"
-                                    className={classNames("rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50", loading && "disabled")}
+                                    className={classNames(
+                                        'rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50',
+                                        loading && 'disabled'
+                                    )}
                                 >
-                                    {loading ? "Submitting.." : "Pay now"}
+                                    {loading ? 'Submitting..' : 'Pay now'}
                                 </button>
                             </div>
                         </div>
@@ -279,16 +368,3 @@ function InfoSection() {
         </div>
     );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
