@@ -33,6 +33,7 @@ import { EmailInput } from '@/Components/Checkout/EmailInput';
 import { TimeInput } from '@/Components/Checkout/TimeInput';
 import { NameInput } from '@/Components/Checkout/NameInput';
 import { NoteInput } from '@/Components/Checkout/NoteInput';
+import { classNames } from '@/utils/classNames';
 
 function InfoSection() {
     const { setData, data, post, errors, setError } = useForm({
@@ -44,13 +45,13 @@ function InfoSection() {
         email: '',
         note: ''
     })
-    const [isPickup, setIsPickup] = useState(false);
     const elements = useElements();
     const stripe = useStripe();
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const cartTotal = useSelector(selectCartTotal);
+    const cartAddons = useSelector((state: RootState) => state.cart.addons)
 
     const handleError = (error: Error) => {
         setLoading(false);
@@ -63,14 +64,11 @@ function InfoSection() {
             return;
         }
 
-        setLoading(true);
-
         const submittedElements = await elements?.submit();
         if (submittedElements?.error) {
             handleError(submittedElements.error as unknown as Error);
             return;
         }
-
         const order: Order = {
             customer_name: data.customer_name,
             phone: data.phone,
@@ -84,25 +82,22 @@ function InfoSection() {
                 dishes: dishes.map(({ id }) => id),
                 quantity: numOfPeople
             })),
-            addons: []
+            addons: cartAddons
         }
         if (!elements) return
         try {
+            setLoading(true);
             const { data } = await axios.post(route('order.add'), order);
             const paymentMethod = await stripe?.createPaymentMethod({
                 elements
             })
-            const result = await stripe?.confirmCardPayment(data.client_secret, {
+            await stripe?.confirmCardPayment(data.client_secret, {
                 payment_method: paymentMethod?.paymentMethod?.id,
-            },)
-            console.log(result)
+            })
 
         } finally {
             setLoading(false)
         }
-
-
-
     };
 
 
@@ -270,10 +265,11 @@ function InfoSection() {
 
                             <div className="mt-10 flex justify-end border-t border-gray-200 pt-6">
                                 <button
+                                    disabled={loading}
                                     type="submit"
-                                    className="rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                                    className={classNames("rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50", loading && "disabled")}
                                 >
-                                    Pay now
+                                    {loading ? "Submitting.." : "Pay now"}
                                 </button>
                             </div>
                         </div>

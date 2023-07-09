@@ -1,12 +1,9 @@
-import { ClockIcon } from "@heroicons/react/20/solid";
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker, TimePickerProps } from '@mui/x-date-pickers/TimePicker';
 import dayjs, { Dayjs } from "dayjs";
 import { TimeValidationError } from "@mui/x-date-pickers";
 
-const today = dayjs();
 const fiveAM = dayjs().set('hour', 5).startOf('hour');
 const ninePM = dayjs().set('hour', 22).startOf('hour');
 
@@ -21,9 +18,9 @@ export function TimeInput(props: {
         view,
     ) => view === 'hours' && value.hour() >= 20;
 
-    const timeChangeHandler = (value: any) => {
-        console.log(value)
-        props.setState(`${value.$H}:${value.$m}`)
+    const timeChangeHandler = (value: dayjs.Dayjs | null) => {
+        const time = value?.format('HH:MM')
+        props.setState(`${time}`)
     }
 
     const onErrorHandler = (error: TimeValidationError) => {

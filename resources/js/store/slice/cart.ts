@@ -67,13 +67,15 @@ const cartSlice = createSlice({
         ) => {},
         updateQuantity: (
             state,
-            action: PayloadAction<{ id: string; quantity: number }>
+            {
+                payload: { quantity, id },
+            }: PayloadAction<{ id: string; quantity: number }>
         ) => {
             state.items = state.items.map((item) => {
-                if (item.id === action.payload.id) {
+                if (item.id === id) {
                     return {
                         ...item,
-                        numOfPeople: action.payload.quantity,
+                        numOfPeople: quantity,
                     };
                 }
                 return item;
@@ -82,7 +84,7 @@ const cartSlice = createSlice({
         updateMenuItem: (state, action: PayloadAction<Menu>) => {
             state.items = state.items.map((item) => {
                 if (item.id === action.payload.id) {
-                    return action.payload as CartItem;
+                    return { ...item, ...action.payload } as CartItem;
                 }
                 return item;
             });
