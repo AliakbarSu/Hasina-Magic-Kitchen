@@ -1,11 +1,13 @@
 import { Dish, Menu } from '@/types/application';
 import Dropdown from './Dropdown';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateMenuItem } from '@/store/slice/menu';
+import { RootState } from '@/store';
 
 
 export function MenuItems({ items, menu }: { items: Dish[], menu: Menu }) {
     const dispatch = useDispatch()
+    const originalMenu = useSelector((state: RootState) => state.menu.originalMenu)
 
     const onItemRemoveHanlder = (id: string) => {
         const updatedMenu = {
@@ -32,9 +34,23 @@ export function MenuItems({ items, menu }: { items: Dish[], menu: Menu }) {
         }
         dispatch(updateMenuItem(updatedMenu))
     }
+
+    const onResetItemsHandler = () => {
+        const originalItem = originalMenu.find((item) => item.id === menu.id)
+        if (!originalItem) return
+        const updatedMenu = {
+            ...menu,
+            dishes: originalItem.dishes
+        }
+        dispatch(updateMenuItem(updatedMenu))
+    }
+
     return (
         <div className="h-[80px]">
-            <h2 className="text-sm font-medium text-gray-500">Menu Items</h2>
+            <div className='flex justify-between'>
+                <h2 className="text-sm font-medium text-gray-500">Menu Items</h2>
+                <span className='text-sm text-red-500 cursor-pointer hover:text-red-400' onClick={onResetItemsHandler}><b>Reset</b></span>
+            </div>
 
             <ul
                 role="list"

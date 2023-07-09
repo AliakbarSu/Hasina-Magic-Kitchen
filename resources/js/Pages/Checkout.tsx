@@ -5,7 +5,7 @@ import {
     useElements,
     useStripe,
 } from '@stripe/react-stripe-js';
-import { useForm } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
 import { Order } from '@/types/application';
 import axios from 'axios';
 import { Footer } from '@/Components/UI/Footer';
@@ -14,6 +14,7 @@ import Calander from '@/Components/Checkout/Calander';
 import { AddressInput } from '@/Components/Checkout/AddressInput';
 import { PhoneNumberInput } from '@/Components/Checkout/PhoneNumberInput';
 import { z } from 'zod';
+import OrderFailed from '@/Components/Checkout/OrderFailed';
 
 const DEV_FEE = 25;
 const GST = 0.15;
@@ -52,6 +53,7 @@ function InfoSection() {
     const elements = useElements();
     const stripe = useStripe();
     const [errorMessage, setErrorMessage] = useState('');
+    const [orderFailedModal, setOrderFailedModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const cartTotal = useSelector(selectCartTotal);
@@ -135,6 +137,9 @@ function InfoSection() {
             await stripe?.confirmCardPayment(data.client_secret, {
                 payment_method: paymentMethod?.paymentMethod?.id,
             });
+            router.visit(route('order.summary', { id: data.id }));
+        } catch (err) {
+            setOrderFailedModal(true);
         } finally {
             setLoading(false);
         }
@@ -152,6 +157,10 @@ function InfoSection() {
 
     return (
         <div className="bg-white relative">
+            <OrderFailed
+                open={orderFailedModal}
+                setOpen={setOrderFailedModal}
+            />
             {/* Background color split screen for large screens */}
 
             <div

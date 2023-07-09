@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Orders;
+use App\Notifications\Contact;
 use App\Notifications\NewOrder;
 use App\Notifications\OrderPlaced;
 use Illuminate\Http\Request;
@@ -46,8 +47,25 @@ class AdminController extends Controller
 
     public function notifiy_new_order(Orders $order)
     {
-        return Notification::route('mail', env('NOTIFICATION_EMAIL'))->notify(
+        Notification::route('mail', env('NOTIFICATION_EMAIL'))->notify(
             new NewOrder($order)
         );
+    }
+
+    public function contact(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|max:40|min:2',
+            'last_name' => 'required|max:40|min:2',
+            'email' => 'required|email',
+            'company' => 'max:40',
+            'number' => 'required|numeric',
+            'message' => 'required|max:200',
+            'terms' => 'required|accepted',
+        ]);
+        Notification::route('mail', env('NOTIFICATION_EMAIL'))->notify(
+            new Contact($validated)
+        );
+        return redirect()->back();
     }
 }

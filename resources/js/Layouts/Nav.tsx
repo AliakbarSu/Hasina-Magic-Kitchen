@@ -99,7 +99,7 @@ export default function Example() {
                             <Disclosure.Button
                                 as={Link}
                                 href={route('about')}
-                                className={classNames("block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-white hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700", route().current("about") && "text-indigo-700 border-indigo-500 bg-indigo-50")}
+                                className={classNames("block border-l-4 py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700", route().current("about") && "text-indigo-700 border-indigo-500 bg-indigo-50", !route().current('about') && "text-white border-transparent")}
 
                             >
                                 About
@@ -107,7 +107,8 @@ export default function Example() {
                             <Disclosure.Button
                                 as={Link}
                                 href={route('contact')}
-                                className={classNames("block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-white hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700", route().current("about") && "text-indigo-700 border-indigo-500 bg-indigo-50")}
+                                className={
+                                    classNames("block border-l-4 py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700", route().current("contact") && "text-indigo-700 border-indigo-500 bg-indigo-50", !route().current('contact') && "text-white border-transparent")}
                             >
                                 Contact
                             </Disclosure.Button>

@@ -67,6 +67,7 @@ class OrdersController extends Controller
             Log::error($th);
         }
         return response()->json([
+            'id' => $order->id,
             'message' => 'Order created successfully',
             'client_secret' => $payment->client_secret,
         ]);

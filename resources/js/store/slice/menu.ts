@@ -4,11 +4,13 @@ export interface CartItem extends Menu {
 }
 interface MenuState {
     menus: Menu[];
+    originalMenu: Menu[];
     selectedMenu: Menu | null;
     dishes: Dish[];
 }
 const initialState: MenuState = {
     menus: [],
+    originalMenu: [],
     selectedMenu: null,
     dishes: [],
 };
@@ -21,6 +23,7 @@ const menuSlice = createSlice({
     reducers: {
         setMenus: (state, action: PayloadAction<Menu[]>) => {
             state.menus = action.payload;
+            state.originalMenu = action.payload;
         },
         setDishes: (state, action: PayloadAction<Dish[]>) => {
             state.dishes = action.payload;

@@ -1,7 +1,7 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/20/solid";
-import { Addon, Dish, Menu } from '@/types/application';
+import { Dish } from '@/types/application';
 import { useDispatch, useSelector } from 'react-redux';
-import { addOrUpdate, removeAddon, updateMenuItem } from '@/store/slice/cart';
+import { addOrUpdate, removeAddon } from '@/store/slice/cart';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { RootState } from "@/store";
@@ -18,7 +18,7 @@ type ModalProps = {
 
 const CartAddon = ({ item }: { item: Dish }) => {
     const dispatch = useDispatch();
-    const [quantity, setQuantity] = useState(1)
+    const [quantity, setQuantity] = useState(0)
     const cartAddons = useSelector((state: RootState) => state.cart.addons);
 
     const onUpdateAddon = (addon: Dish, quantity: number) => {

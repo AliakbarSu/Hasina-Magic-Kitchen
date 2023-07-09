@@ -10,6 +10,8 @@ export interface Order {
     id: string;
     customer_name: string;
     status: string;
+    subtotal: number;
+    gst: number;
     total: string;
     date: string;
     time: string;
@@ -34,6 +36,9 @@ export interface Order {
             price: string;
             description: string;
             created_at: string;
+            media: {
+                url: string
+            }[]
         },
         dishes: [{
             id: string;

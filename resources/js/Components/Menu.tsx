@@ -1,5 +1,4 @@
 import Modal from '@/Components/CustomizeModal';
-import { Dish } from '@/types/application';
 
 
 
@@ -37,7 +36,7 @@ export default function MenuList({ menu }: { menu: Menu[] }) {
 }
 
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, updateQuantity } from '@/store/slice/cart';
+import { addItem, removeItem, updateQuantity } from '@/store/slice/cart';
 import { RootState } from '@/store';
 
 export function MenuItem({
@@ -60,6 +59,10 @@ export function MenuItem({
     const cartItem = useSelector((state: RootState) =>
         state.cart.items.filter((item) => item.id === product.id)
     );
+
+    const onRemoveItemHandler = () => {
+        dispatch(removeItem(product.id))
+    }
 
     useEffect(() => {
         dispatch(updateQuantity({ id: product.id, quantity: numOfPeople }));
@@ -91,20 +94,28 @@ export function MenuItem({
                     {`$${product.price} Per Person`}
                 </p>
 
-                {cartItem[0] ? (
+                {cartItem.length > 0 ? (
                     <>
-                        {/* {JSON.stringify(cartItem)} */}
                         <PeopleInput
                             state={numOfPeople}
                             setState={setNumOfPeople}
                         />
                         { }
-                        <button
-                            onClick={onCustomizeClickHandler}
-                            className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Customize
-                        </button>
+                        <div className='flex gap-2'>
+                            <button
+                                onClick={onCustomizeClickHandler}
+                                className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                                Customize
+                            </button>
+                            <button
+                                onClick={onRemoveItemHandler}
+                                className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            >
+                                Remove
+                            </button>
+                        </div>
+
                     </>
                 ) : (
                     <button
