@@ -44,7 +44,7 @@ import { useDispatch } from 'react-redux';
 import { InformationCircleIcon } from '@heroicons/react/20/solid';
 
 function InfoSection() {
-    const { setData, data, post, errors, setError, clearErrors } = useForm({
+    const { setData, data, post, errors, setError, clearErrors, isDirty, hasErrors } = useForm({
         customer_name: '',
         address: '',
         date: '',
@@ -62,6 +62,7 @@ function InfoSection() {
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const cartTotal = useSelector(selectCartTotal);
     const cartAddons = useSelector((state: RootState) => state.cart.addons);
+    const disableBtn = loading || !isDirty || cartItems.length === 0;
 
     const formSchema = z.object({
         customer_name: z.string().min(2).max(20),
@@ -148,6 +149,7 @@ function InfoSection() {
             dispatch(clearCart())
             router.visit(route('order.summary', { id: data.id }));
         } catch (err) {
+            console.log(err);
             setOrderFailedModal(true);
         } finally {
             setLoading(false);
@@ -264,11 +266,14 @@ function InfoSection() {
                     <div className="mt-10 flex justify-end border-t border-gray-200 pt-6">
                         <button
                             form='checkout-form'
-                            disabled={loading}
+                            disabled={disableBtn}
                             type="submit"
                             className={classNames(
-                                'rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50',
-                                loading && 'disabled'
+                                'rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50',
+                                !disableBtn && 'hover:bg-indigo-700',
+                                disableBtn && 'disabled',
+                                disableBtn && 'opacity-50',
+                                disableBtn && 'cursor-not-allowed'
                             )}
                         >
                             {loading ? 'Submitting..' : 'Pay now'}

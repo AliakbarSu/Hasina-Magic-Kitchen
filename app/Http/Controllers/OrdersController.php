@@ -34,25 +34,14 @@ class OrdersController extends Controller
         // }
         $customer = $customersController->create_customer($request);
         $order = $this->create_order($validatedData, $customer->id);
-        try {
-            $payment = $customer->payWith(
-                $order->total * 100,
-                ['card'],
-                [
-                    'metadata' => ['order_id' => $order->id],
-                ]
-            );
-            return response()->json([
-                'id' => $order->id,
-                'message' => 'Order created successfully',
-                'client_secret' => $payment->client_secret,
-            ]);
-        } catch (\Throwable $th) {
-            Log::error($th);
-            return response()->json([
-                'message' => 'Payment failed',
-            ]);
-        }
+        $payment_intent = $this->create_payment_intent($customer, $order);
+        Log::info('Order created successfully', ['order_id' => $order->id]);
+        $this->notify_customer($customer, $order);
+        return response()->json([
+            'id' => $order->id,
+            'message' => 'Order created successfully',
+            'client_secret' => $payment_intent->client_secret,
+        ]);
     }
 
     private function create_order($orderDetails, $customer_id): Orders
@@ -164,6 +153,36 @@ class OrdersController extends Controller
     private function calculate_delivery_fee()
     {
         return $this->delivery_fee_rate;
+    }
+
+    private function create_payment_intent($customer, $order)
+    {
+        try {
+            return $customer->payWith(
+                $order->total * 100,
+                ['card'],
+                [
+                    'metadata' => ['order_id' => $order->id],
+                ]
+            );
+        } catch (\Throwable $th) {
+            Log::error($th);
+            response()->json(
+                [
+                    'message' => 'Payment failed',
+                ],
+                500
+            );
+        }
+    }
+
+    private function notify_customer($customer, $order)
+    {
+        try {
+            $customer->notify(new OrderCreated($order));
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
     }
 
     public function get_availability(Orders $orders)

@@ -32,7 +32,12 @@ Route::get('/admin', function () {
     return Inertia::render('Admin/Admin', []);
 });
 
-Route::get('/', function (Menu $menu, DishController $dishes, Dish $dish) {
+Route::get('/', function (
+    Menu $menu,
+    DishController $dishes,
+    Dish $dish,
+    Category $category
+) {
     return Inertia::render('Home', [
         // 'canLogin' => Route::has('login'),
         // 'canRegister' => Route::has('register'),
@@ -41,6 +46,7 @@ Route::get('/', function (Menu $menu, DishController $dishes, Dish $dish) {
         // "about" => route('about')
         'dishes' => $dishes->all_dishes($dish)->toArray(),
         'menu' => $menu->get_menus_with_media(),
+        'categories' => $category->get_all_categories()->toArray(),
     ]);
 })->name('main.home');
 
