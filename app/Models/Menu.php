@@ -20,18 +20,15 @@ class Menu extends Model
         return $this->with(['dishes', 'options'])
             ->get()
             ->each(function ($item) {
-                $item['media'] = $this->add_media($item);
+                $item->media = $this->add_media($item);
                 $item->dishes->each(function ($dish) {
-                    $dish['media'] = $this->add_media($dish);
-                    unset($dish['pivot']);
-                    return $dish;
+                    $dish->makeHidden('pivot');
+                    $dish->media = $this->add_media($dish);
                 });
                 $item->options->each(function ($option) {
-                    $option['media'] = $this->add_media($option);
-                    unset($option['pivot']);
-                    return $option;
+                    $option->makeHidden('pivot');
+                    $option->media = $this->add_media($option);
                 });
-                return $item;
             });
     }
 

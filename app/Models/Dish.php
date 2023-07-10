@@ -22,8 +22,7 @@ class Dish extends Model
         return $this::with(['category', 'menus'])
             ->get()
             ->each(function ($item) {
-                $item['media'] = $this->add_media($item);
-                return $item;
+                $item->media = $this->add_media($item);
             });
     }
     public function category()
