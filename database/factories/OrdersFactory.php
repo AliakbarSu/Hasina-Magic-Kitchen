@@ -24,11 +24,13 @@ class OrdersFactory extends Factory
             'address' => $this->faker->address(),
             'date' => $this->faker->date(),
             'time' => $this->faker->time(),
-            'note' => $this->faker->text(),
+            'note' => $this->faker->paragraph(),
             'customer_id' => Customers::factory(1)
                 ->create()
                 ->first(),
-            'total' => $this->faker->randomNumber(),
+            'subtotal' => $this->faker->numberBetween($min = 150, $max = 2000),
+            'tax' => $this->faker->numberBetween($min = 10, $max = 300),
+            'total' => $this->faker->numberBetween($min = 200, $max = 2500),
             'status' => ['pending', 'completed', 'canceled'][
                 array_rand([1, 2, 3], 1)
             ],

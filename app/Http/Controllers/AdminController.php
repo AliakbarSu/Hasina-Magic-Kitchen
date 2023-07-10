@@ -19,13 +19,10 @@ class AdminController extends Controller
         ]);
     }
 
-    public function order_details(
-        Request $request,
-        OrdersController $ordersController,
-        Orders $orders
-    ) {
+    public function order_details(Request $request, Orders $orders)
+    {
         return Inertia::render('Admin/OrderDetails', [
-            'order' => $ordersController->find_order($request->id, $orders),
+            'order' => $orders->get_order_by_id($request->id),
         ]);
     }
 

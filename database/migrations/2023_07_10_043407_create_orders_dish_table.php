@@ -10,17 +10,20 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('addons_orders', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create('dish_menu_order', function (Blueprint $table) {
+            $table->uuid('menu_id');
             $table->uuid('order_id');
             $table->uuid('dish_id');
-            $table->integer('quantity');
+            $table
+                ->foreign('menu_id')
+                ->references('id')
+                ->on('menus')
+                ->onDelete('cascade');
             $table
                 ->foreign('dish_id')
                 ->references('id')
                 ->on('dishes')
                 ->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
@@ -29,6 +32,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('addons_orders');
+        Schema::dropIfExists('dish_menu_order');
     }
 };

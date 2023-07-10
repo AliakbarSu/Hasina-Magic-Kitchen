@@ -2,18 +2,16 @@
 
 namespace App\Services\TaxCalculations;
 
-use Nette\Utils\Floats;
-
 class TaxCalculations
 {
     protected $gst = 0.15;
-    public function calculateGST(float $total): float
+    public function calculateGST($total)
     {
-        return Floats::round($total * $this->gst, 2);
+        return round((float) $total * $this->gst, 2);
     }
 
-    public function afterTax(float $total): float
+    public function afterTax($total)
     {
-        return Floats::round($total + $this->calculateGST($total), 2);
+        return round((float) $total + $this->calculateGST($total), 2);
     }
 }

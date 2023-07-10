@@ -2,20 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Models\AddonsOrder;
 use App\Models\Category;
-use App\Models\Customers;
 use App\Models\Dish;
-use App\Models\ItemsMenuOrder;
-use App\Models\ItemsOrder;
 use App\Models\Menu;
 use App\Models\Orders;
+use App\Models\User;
 use Database\Factories\AdminFactory;
-use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Stripe\Customer;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,6 +19,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        User::factory(1)->create();
+
         $path = Storage::path('test_files/default-photo1.jpg');
         $file = new UploadedFile(
             $path,
@@ -45,36 +42,44 @@ class DatabaseSeeder extends Seeder
                 $menu->dishes()->attach($dishes->random(rand(1, 3)));
                 $menu->options()->attach($dishes->random(rand(1, 2)));
                 $menu->attachMedia($file);
+                $menu->save();
                 return $menu;
             });
+        $menu_ids = $menus->pluck('id')->toArray();
         $orders = Orders::factory(3)
             ->create()
-            ->each(function ($order) use ($menus, $dishes) {
-                for ($i = 0; $i < 3; $i++) {
-                    $menu_id = $menus->toArray()[rand(0, 2)]['id'];
-                    $itemOrder = new ItemsOrder();
-                    $itemOrder->order_id = $order['id'];
-                    $itemOrder->menu_id = $menu_id;
-                    $itemOrder->quantity = 1;
-                    $itemOrder->save();
-                    for ($j = 0; $j < 3; $j++) {
-                        $itemMenuOrder = new ItemsMenuOrder();
-                        $itemMenuOrder->item_id = $itemOrder['id'];
-                        $itemMenuOrder->dish_id = $dishes->toArray()[
-                            rand(0, 3)
-                        ]['id'];
-                        $itemMenuOrder->save();
-                    }
+            ->each(function ($order) use ($menu_ids, $dishes) {
+                foreach ($menu_ids as $key => $id) {
+                    $order->items()->attach([
+                        $id => [
+                            'quantity' => rand(1, 3),
+                        ],
+                    ]);
+                    $order
+                        ->items()
+                        ->each(function ($item) use ($dishes, $order) {
+                            $dish_ids = $dishes
+                                ->pluck('id')
+                                ->random(1, 2)
+                                ->toArray();
+                            foreach ($dish_ids as $key => $id) {
+                                $item->order_dishes()->attach([
+                                    $id => [
+                                        'order_id' => $order->id,
+                                    ],
+                                ]);
+                            }
+                        });
                 }
+                return $order;
             });
         $orders->each(function ($order) use ($dishes) {
-            $dishes_array = $dishes->toArray();
-            $random_key = array_rand($dishes_array);
-            AddonsOrder::factory(3)->create([
-                'dish_id' => $dishes_array[$random_key]['id'],
-                'order_id' => $order->id,
-                'quantity' => 1,
-            ]);
+            $dishes_ids = $dishes->pluck('id')->toArray();
+            foreach ($dishes_ids as $key => $id) {
+                $order->addons()->attach([
+                    $id => ['quantity' => rand(1, 3)],
+                ]);
+            }
         });
     }
 }

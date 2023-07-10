@@ -45,11 +45,11 @@ export default function OrderMenu({ order }: { order: Order }) {
                                         </thead>
                                         <tbody className="divide-y divide-gray-800">
                                             {order.items.map((ord) => (
-                                                <tr key={ord.menu.id}>
+                                                <tr key={ord.id}>
                                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
-                                                        {ord.menu.name}
+                                                        {ord.name}
                                                     </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">{ord.dishes.map(dish => dish.at(0)?.name).join(', ')}</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">{ord.dishes.map(dish => dish.name).join(', ')}</td>
                                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">{ord.quantity}</td>
                                                     {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">{person.role}</td>
                                                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">

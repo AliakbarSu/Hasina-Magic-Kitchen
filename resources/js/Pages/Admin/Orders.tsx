@@ -5,14 +5,17 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import OrderList from './Components/OrderList';
+import { Addon, Dish, Media, Menu } from '@/types/application';
+
 
 export interface Order {
     id: string;
     customer_name: string;
     status: string;
     subtotal: number;
-    gst: number;
-    total: string;
+    delivery_fee: number;
+    tax: number;
+    total: number;
     date: string;
     time: string;
     address: string;
@@ -20,31 +23,16 @@ export interface Order {
     phone: string;
     note: string;
     created_at: string;
-    addons: {
-        quantity: number;
-        id: string;
-        items: {
-            id: string;
-            name: string;
-        }[]
-    }[]
     items: {
-        quantity: string;
-        menu: {
-            id: string;
-            name: string;
-            price: string;
-            description: string;
-            created_at: string;
-            media: {
-                url: string
-            }[]
-        },
-        dishes: [{
-            id: string;
-            name: string;
-        }[]]
-    }[]
+        id: string;
+        name: string;
+        quantity: number;
+        price: number;
+        description: string;
+        media: Media[];
+        dishes: Dish[],
+    }[];
+    addons: Addon[]
 }
 
 export default function Orders({ auth, mustVerifyEmail, status, orders }: PageProps<{ mustVerifyEmail: boolean, status?: string, orders: any[] }>) {

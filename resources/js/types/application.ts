@@ -51,7 +51,7 @@ export type OrderResponse = {
     payment_link: string;
 };
 
-export interface Addon {
+export interface Addon extends Dish {
     name: string;
     dish_id: string;
     quantity: number;

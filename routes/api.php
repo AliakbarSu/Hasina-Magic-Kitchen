@@ -36,10 +36,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/media', [MenuController::class, 'add_menu_media']);
         Route::delete('/', [MenuController::class, 'delete_menu']);
     });
-
-    Route::get('/order', [OrdersController::class, 'all_orders']);
-    Route::get('/order/{id}', [OrdersController::class, 'find_order']);
 });
+Route::get('/order', [OrdersController::class, 'all_orders']);
+Route::get('/order/{id}', [OrdersController::class, 'find_order']);
 
 Route::get('/category', [CategoryController::class, 'all_categories']);
 Route::get('/category/{id}', [CategoryController::class, 'category']);

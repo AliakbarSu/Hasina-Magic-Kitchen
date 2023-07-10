@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Orders extends Model
 {
@@ -28,17 +27,33 @@ class Orders extends Model
     public function all_orders()
     {
         $orders = $this->with([
-            'items' => ['menu', 'menu_items.dishes'],
+            'items' => ['dishes', 'order_dishes'],
             'customer',
-            'addons' => ['items'],
+            'addons',
         ])->get();
         return $orders->map(function ($order) {
-            $order->items = $order->items->map(function ($item) {
-                $item->dishes = $item->menu_items->map(function ($menu_item) {
-                    return $menu_item->dishes;
+            $order->items = $order->items->transform(function ($item, $order) {
+                $item->quantity = $item->pivot->quantity;
+                $item->media = Orders::add_media($item);
+                $item->makeHidden('pivot');
+                $item->dishes->each(function ($dish) {
+                    $dish->makeHidden('pivot');
+                    $dish->media = Orders::add_media($dish);
                 });
-                $item->menu_item = [];
-                return $item;
+                $order_dishes = $item
+                    ->order_dishes()
+                    ->where('order_id', '=', $item->pivot->orders_id)
+                    ->get();
+
+                $order_dishes->each(function ($dish) {
+                    $dish->makeHidden('pivot');
+                    $dish->media = Orders::add_media($dish);
+                });
+                return [...$item->toArray(), 'order_dishes' => $order_dishes];
+            });
+            $order->addons->each(function ($addon) {
+                $addon->makeHidden('pivot');
+                $addon->media = Orders::add_media($addon);
             });
             return $order;
         });
@@ -46,31 +61,18 @@ class Orders extends Model
 
     public function get_order_by_id(string $id)
     {
-        $order = $this->with([
-            'items' => ['menu', 'menu_items.dishes'],
-            'customer',
-            'addons' => ['items'],
-        ])->find($id);
-        $order->items = $order->items->map(function ($item) {
-            $item->dishes = $item->menu_items->map(function ($menu_item) {
-                return $menu_item->dishes;
-            });
-            $item->menu_item = [];
-            $item->menu_items = [];
-            $item->menu->media = Orders::add_media($item->menu);
-            return $item;
-        });
+        $order = $this->all_orders()->find($id);
         return $order;
     }
 
     public function items()
     {
-        return $this->hasMany(ItemsOrder::class, 'order_id', 'id');
+        return $this->belongsToMany(Menu::class)->withPivot('quantity');
     }
 
     public function addons()
     {
-        return $this->hasMany(AddonsOrder::class, 'order_id', 'id');
+        return $this->belongsToMany(Dish::class)->withPivot('quantity');
     }
 
     public function customer()
@@ -85,7 +87,6 @@ class Orders extends Model
         $order->save();
     }
 
-    // returns an array of dates that are not available for orders
     public function availability()
     {
         $orders = $this->all()

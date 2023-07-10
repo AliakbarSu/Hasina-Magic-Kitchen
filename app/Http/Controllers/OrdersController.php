@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AddonsOrder;
-use App\Models\ItemsMenuOrder;
-use App\Models\ItemsOrder;
+use App\Models\OrderDishes;
 use App\Models\Orders;
 use App\Notifications\OrderCreated;
+use App\Services\TaxCalculations\TaxCalculations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
 class OrdersController extends Controller
 {
+    private $delivery_fee_rate = 25.0;
     public function all_orders(Orders $orders)
     {
         return $orders->all_orders()->toJson();
@@ -25,10 +25,97 @@ class OrdersController extends Controller
 
     public function add_order(
         Request $request,
-        CustomersController $customersController,
-        AdminController $adminController
+        CustomersController $customersController
     ) {
-        $validatedData = $request->validate([
+        $validatedData = $this->validate_order($request);
+        // TODO Needs to be implemented
+        // if (!Orders::can_palce_order()) {
+        //     return response(400)->json('Cannot place order for this date!');
+        // }
+        $customer = $customersController->create_customer($request);
+        $order = $this->create_order($validatedData, $customer->id);
+        try {
+            $payment = $customer->payWith(
+                $order->total * 100,
+                ['card'],
+                [
+                    'metadata' => ['order_id' => $order->id],
+                ]
+            );
+            return response()->json([
+                'id' => $order->id,
+                'message' => 'Order created successfully',
+                'client_secret' => $payment->client_secret,
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json([
+                'message' => 'Payment failed',
+            ]);
+        }
+    }
+
+    private function create_order($orderDetails, $customer_id): Orders
+    {
+        $order = new Orders();
+        $order->customer_name = $orderDetails['customer_name'];
+        $order->phone = $orderDetails['phone'];
+        $order->email = $orderDetails['email'];
+        $order->address = $orderDetails['address'];
+        $order->date = date('Y-m-d', strtotime($orderDetails['date']));
+        $order->time = $orderDetails['time'];
+        $order->note = $orderDetails['note'];
+        $order->status = 'pending';
+        $order->customer()->associate($customer_id);
+        $order->save();
+        $this->save_order_items($order, $orderDetails['items']);
+        $this->save_order_addons($order, $orderDetails);
+        $order->subtotal = $this->calculate_subtotal($order);
+        $order->delivery_fee = $this->calculate_delivery_fee();
+        $order->tax = $this->calculate_order_tax($order);
+        $order->total = $this->calculate_total($order);
+        $order->save();
+        return $order;
+    }
+
+    private function save_order_items(Orders $order, $orderDetails)
+    {
+        $convertedArray = [];
+        foreach ($orderDetails as $key => $value) {
+            $convertedArray[$value['menu_id']] = [
+                'quantity' => $value['quantity'],
+            ];
+        }
+        $order->items()->attach($convertedArray);
+        $order->items->each(function ($item) use ($orderDetails) {
+            $column = array_column($orderDetails, 'menu_id');
+            $menu_index = array_search($item->id, $column);
+            $dishes = $orderDetails[$menu_index]['dishes'];
+            foreach ($dishes as $key => $value) {
+                $item->order_dishes()->attach([
+                    $value => [
+                        'order_id' => $item->pivot['orders_id'],
+                    ],
+                ]);
+            }
+        });
+        return $order;
+    }
+
+    private function save_order_addons(Orders $order, $orderDetails)
+    {
+        $convertedArray = [];
+        foreach ($orderDetails['addons'] as $key => $value) {
+            $convertedArray[$value['dish_id']] = [
+                'quantity' => $value['quantity'],
+            ];
+        }
+        return $order->addons()->attach($convertedArray);
+    }
+
+    private function validate_order($request)
+    {
+        return $request->validate([
             'customer_name' => ['required', 'string', 'max:50'],
             'phone' => ['required', 'numeric', 'min:10'],
             'email' => ['required', 'email'],
@@ -49,91 +136,34 @@ class OrdersController extends Controller
             'addons.*.dish_id' => ['exists:dishes,id'],
             'addons.*.quantity' => ['numeric', 'min:1', 'max:500'],
         ]);
-        // TODO Needs to be implemented
-        // if (!Orders::can_palce_order()) {
-        //     return response(400)->json('Cannot place order for this date!');
-        // }
-        $customer = $customersController->create_customer($request);
-        $order = $this->create_order($validatedData, $customer->id);
-        try {
-            $payment = $customer->payWith(
-                $order->total * 100,
-                ['card'],
-                [
-                    'metadata' => ['order_id' => $order->id],
-                ]
-            );
-        } catch (\Throwable $th) {
-            Log::error($th);
-        }
-        return response()->json([
-            'id' => $order->id,
-            'message' => 'Order created successfully',
-            'client_secret' => $payment->client_secret,
-        ]);
     }
 
-    private function create_order($orderDetails, $customer_id): Orders
+    private function calculate_subtotal(Orders $order)
     {
-        $order = new Orders();
-        $order->customer_name = $orderDetails['customer_name'];
-        $order->phone = $orderDetails['phone'];
-        $order->email = $orderDetails['email'];
-        $order->address = $orderDetails['address'];
-        $order->date = date('Y-m-d', strtotime($orderDetails['date']));
-        $order->time = $orderDetails['time'];
-        $order->note = $orderDetails['note'];
-        $order->total = 100;
-        $order->status = 'pending';
-        $order->customer()->associate($customer_id);
-        $order->save();
-        $this->save_order_items($order, $orderDetails);
-        $this->save_order_addons($order, $orderDetails['addons']);
-        $order->total = $this->calculate_total($order);
-        $order->save();
-        return $order;
-    }
-
-    private function save_order_items(Orders $order, $orderDetails)
-    {
-        $menu_items = array_map(function ($item) use ($order) {
-            $itemOrder = new ItemsOrder([
-                'menu_id' => $item['menu_id'],
-                'order_id' => $order->id,
-                'quantity' => $item['quantity'],
-            ]);
-            $itemOrder->save();
-            $itemMenuOrder = array_map(function ($dish) use ($itemOrder) {
-                return new ItemsMenuOrder([
-                    'dish_id' => $dish,
-                    'item_id' => $itemOrder['menu_id'],
-                ]);
-            }, $item['dishes']);
-            $itemOrder->menu_items()->saveMany($itemMenuOrder);
-            return $itemOrder;
-        }, $orderDetails['items']);
-        $order->items()->saveMany($menu_items);
-    }
-
-    private function save_order_addons(Orders $order, $addons_array)
-    {
-        $addons = array_map(function ($addon) use ($order) {
-            return new AddonsOrder([
-                'dish_id' => $addon['dish_id'],
-                'order_id' => $order->id,
-                'quantity' => $addon['quantity'],
-            ]);
-        }, $addons_array);
-        $order->addons()->saveMany($addons);
+        $order_items_total = $order->items->reduce(function ($carry, $item) {
+            return $carry + $item->price * $item->pivot->quantity;
+        }, 0);
+        $order_addons_total = $order->addons->reduce(function ($carry, $addon) {
+            return $carry + $addon->price * $addon->pivot->quantity;
+        }, 0);
+        return $order_items_total + $order_addons_total;
     }
 
     private function calculate_total($order)
     {
-        $total = 0;
-        foreach ($order->items as $item) {
-            $total += $item->menu->price;
-        }
-        return $total;
+        return round($order->subtotal + $order->tax + $order->delivery_fee, 2);
+    }
+
+    private function calculate_order_tax($order)
+    {
+        $taxCalculations = resolve(TaxCalculations::class);
+        $subTotal = $order->subtotal + $order->delivery_fee;
+        return $taxCalculations->calculateGST($subTotal);
+    }
+
+    private function calculate_delivery_fee()
+    {
+        return $this->delivery_fee_rate;
     }
 
     public function get_availability(Orders $orders)

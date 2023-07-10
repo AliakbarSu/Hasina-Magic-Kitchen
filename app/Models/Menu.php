@@ -40,6 +40,11 @@ class Menu extends Model
         return $this->belongsToMany(Dish::class, 'dish_menu');
     }
 
+    public function order_dishes()
+    {
+        return $this->belongsToMany(Dish::class, 'dish_menu_order');
+    }
+
     public function options()
     {
         return $this->belongsToMany(Dish::class, 'menu_options');

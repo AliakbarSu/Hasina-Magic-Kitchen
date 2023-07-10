@@ -25,7 +25,10 @@ return new class extends Migration {
             $table->date('date');
             $table->time('time');
             $table->text('note');
-            $table->integer('total');
+            $table->decimal('delivery_fee')->nullable();
+            $table->decimal('subtotal')->nullable();
+            $table->decimal('total')->nullable();
+            $table->decimal('tax')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();
         });

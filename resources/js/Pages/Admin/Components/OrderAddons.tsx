@@ -47,7 +47,7 @@ export default function OrderMenu({ order }: { order: Order }) {
                                             {order.addons.map((ord) => (
                                                 <tr key={ord.id}>
                                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
-                                                        {ord.items.at(0)?.name}
+                                                        {ord.name}
                                                     </td>
                                                     {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">{ord.dishes.map(dish => dish[0].name).join(', ')}</td> */}
                                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">{ord.quantity}</td>

@@ -65,20 +65,45 @@ export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
                                 className="mt-6 divide-y divide-gray-200 border-t border-gray-200 text-sm font-medium text-gray-500"
                             >
                                 {order.items.map((item) => (
-                                    <li key={item.menu.id} className="flex space-x-6 py-6">
+                                    <li key={item.id} className="flex space-x-6 py-6">
                                         <img
-                                            src={item.menu.media.at(0)?.url}
+                                            src={item.media.at(0)?.url}
                                             alt={"Photo of menu item"}
                                             className="h-24 w-24 flex-none rounded-md bg-gray-100 object-cover object-center"
                                         />
                                         <div className="flex-auto space-y-1">
                                             <h3 className="text-gray-900">
-                                                <span >{item.menu.name}</span>
+                                                <span >{item.name}</span>
                                             </h3>
                                             {/* <p>{product.color}</p> */}
                                             <p><b>Quantity: </b>{item.quantity}</p>
                                         </div>
-                                        <p className="flex-none font-medium text-gray-900">{formatNZD(+item.menu.price)} NZD</p>
+                                        <p className="flex-none font-medium text-gray-900">{formatNZD(item.price)} NZD</p>
+                                    </li>
+                                ))}
+                            </ul>
+                            <dl className="mt-16 text-sm font-medium">
+                                <dt className="text-gray-900">Addons</dt>
+                            </dl>
+                            <ul
+                                role="list"
+                                className="mt-6 divide-y divide-gray-200 border-t border-gray-200 text-sm font-medium text-gray-500"
+                            >
+                                {order.addons.map((item) => (
+                                    <li key={item.id} className="flex space-x-6 py-6">
+                                        <img
+                                            src={item.media.at(0)?.url}
+                                            alt={"Photo of menu item"}
+                                            className="h-24 w-24 flex-none rounded-md bg-gray-100 object-cover object-center"
+                                        />
+                                        <div className="flex-auto space-y-1">
+                                            <h3 className="text-gray-900">
+                                                <span >{item.name}</span>
+                                            </h3>
+                                            {/* <p>{product.color}</p> */}
+                                            <p><b>Quantity: </b>{item.quantity}</p>
+                                        </div>
+                                        <p className="flex-none font-medium text-gray-900">{formatNZD(item.price)} NZD</p>
                                     </li>
                                 ))}
                             </ul>
@@ -86,17 +111,17 @@ export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
                             <dl className="space-y-6 border-t border-gray-200 pt-6 text-sm font-medium text-gray-500">
                                 <div className="flex justify-between">
                                     <dt>Subtotal</dt>
-                                    <dd className="text-gray-900">{formatNZD(order?.subtotal || 0)} NZD</dd>
+                                    <dd className="text-gray-900">{formatNZD(order.subtotal)} NZD</dd>
                                 </div>
 
                                 <div className="flex justify-between">
                                     <dt>Shipping</dt>
-                                    <dd className="text-gray-900">$25.00 NZD</dd>
+                                    <dd className="text-gray-900">{formatNZD(order.delivery_fee)} NZD</dd>
                                 </div>
 
                                 <div className="flex justify-between">
                                     <dt>GST</dt>
-                                    <dd className="text-gray-900">{formatNZD(order?.gst || 0)} NZD</dd>
+                                    <dd className="text-gray-900">{formatNZD(order.tax)} NZD</dd>
                                 </div>
 
                                 <div className="flex items-center justify-between border-t border-gray-200 pt-6 text-gray-900">
