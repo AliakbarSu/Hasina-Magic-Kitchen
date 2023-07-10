@@ -56,6 +56,12 @@ export default function Example() {
                                     >
                                         Contact
                                     </Link>
+                                    <Link
+                                        href={route('faqs')}
+                                        className={classNames("inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-md font-medium text-white hover:border-gray-300 hover:text-gray-300")}
+                                    >
+                                        FAQS
+                                    </Link>
                                 </div>
                                 <button
                                     type="button"
@@ -111,6 +117,14 @@ export default function Example() {
                                     classNames("block border-l-4 py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700", route().current("contact") && "text-indigo-700 border-indigo-500 bg-indigo-50", !route().current('contact') && "text-white border-transparent")}
                             >
                                 Contact
+                            </Disclosure.Button>
+                            <Disclosure.Button
+                                as={Link}
+                                href={route('faqs')}
+                                className={
+                                    classNames("block border-l-4 py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700", route().current("faqs") && "text-indigo-700 border-indigo-500 bg-indigo-50", !route().current('faqs') && "text-white border-transparent")}
+                            >
+                                FAQS
                             </Disclosure.Button>
                         </div>
                     </Disclosure.Panel>

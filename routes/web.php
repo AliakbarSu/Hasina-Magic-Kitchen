@@ -63,6 +63,10 @@ Route::get('/contact', function () {
     return Inertia::render('Contact', []);
 })->name('contact');
 
+Route::get('/faqs', function () {
+    return Inertia::render('FAQS', []);
+})->name('faqs');
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })
