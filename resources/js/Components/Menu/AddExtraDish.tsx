@@ -2,7 +2,7 @@ import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { Dish } from '@/types/application';
 import { useDispatch, useSelector } from 'react-redux';
 import { addOrUpdate, removeAddon } from '@/store/slice/cart';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { RootState } from '@/store';
 import { formatNZD } from '@/utils/currentcy';
@@ -25,12 +25,13 @@ const CartAddon = ({ item }: { item: Dish }) => {
             return;
         }
         dispatch(
-            addOrUpdate({ ...addon, quantity: quantity, dish_id: addon.id })
+            addOrUpdate({ ...addon, quantity: quantity })
         );
     };
 
+
     useEffect(() => {
-        const addon = cartAddons.find((addon) => addon.dish_id === item.id);
+        const addon = cartAddons.find((addon) => addon.id === item.id);
         if (addon) {
             setQuantity(addon.quantity);
         } else {
@@ -177,10 +178,7 @@ export function AddExtraDish() {
             </div>
             <div className="relative mt-4 flex bg-gray-100 border rounded-md pb-10 pt-2">
                 {addedAddons.map((item) => (
-                    <div
-                        className="mx-2 bg-green-600 p-1 rounded-md text-white text-md"
-                        key={item.dish_id}
-                    >
+                    <div className="mx-2 bg-green-600 p-1 rounded-md text-white text-md" key={item.id}>
                         <span>{item.name}</span>
                         <span className="text-sm px-1">x</span>
                         <span>{item.quantity}</span>

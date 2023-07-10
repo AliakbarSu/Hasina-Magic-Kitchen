@@ -43,7 +43,7 @@ export interface Order {
         dishes: string[];
         quantity: number;
     }[];
-    addons: { dish_id: string; quantity: number }[];
+    addons: Addon[];
 }
 
 export type OrderResponse = {
@@ -52,7 +52,5 @@ export type OrderResponse = {
 };
 
 export interface Addon extends Dish {
-    name: string;
-    dish_id: string;
     quantity: number;
 }

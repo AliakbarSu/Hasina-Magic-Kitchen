@@ -37,9 +37,15 @@ class OrderCreated extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->line('Hi there')
-            ->action('View your order', url('/'))
-            ->line('Your order has been placed!');
+            ->line(`Hi $this->order->customer->name`)
+            ->action(
+                'View your order',
+                url(env('APP_URL') . '/order-summary/' . $this->order->id)
+            )
+            ->lines([
+                'Thank you for placing an order!',
+                'We will start preparing your order as soon as possible.',
+            ]);
     }
 
     /**

@@ -6,7 +6,7 @@ import {
     useStripe,
 } from '@stripe/react-stripe-js';
 import { Head, router, useForm } from '@inertiajs/react';
-import { Order } from '@/types/application';
+import { Addon, Order } from '@/types/application';
 import axios from 'axios';
 import { Footer } from '@/Components/UI/Footer';
 import { formatNZD } from '@/utils/currentcy';
@@ -33,7 +33,7 @@ function Checkout() {
 export default Checkout;
 
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import { CartItem, clearCart, removeItem, selectCartTotal } from '@/store/slice/cart';
+import { CartItem, clearCart, removeAddon, removeItem, selectCartTotal } from '@/store/slice/cart';
 import { RootState } from '@/store';
 import { EmailInput } from '@/Components/Checkout/EmailInput';
 import { TimeInput } from '@/Components/Checkout/TimeInput';
@@ -92,6 +92,10 @@ function InfoSection() {
 
     const removeCartItem = (item: CartItem) => {
         dispatch(removeItem(item.id))
+    }
+
+    const removeAddonHandler = (addon: Addon) => {
+        dispatch(removeAddon(addon.id))
     }
 
     const formHandler = async (e: FormEvent) => {
@@ -155,6 +159,7 @@ function InfoSection() {
             setLoading(false);
         }
     };
+
 
     function calculateGST(price: number) {
         const result = price * GST;
@@ -230,6 +235,40 @@ function InfoSection() {
                                             {formatNZD(item.price)}
                                         </p>
                                         <p onClick={() => removeCartItem(item)} className='text-sm text-red-600 cursor-pointer hover:text-red-300'><b>Remove</b></p>
+                                    </div>
+
+                                </li>
+                            ))}
+                        </ul>
+                        <h3 className="text-md">
+                            Addons
+                        </h3>
+                        <ul
+                            role="list"
+                            className="divide-y divide-white divide-opacity-10 text-sm font-medium"
+                        >
+                            {cartAddons.map((item) => (
+                                <li
+                                    key={item.id}
+                                    className="flex items-start space-x-4 py-6"
+                                >
+                                    <img
+                                        src={item.media.at(0)?.url}
+                                        alt={`Image of ${item.name} menu`}
+                                        className="border h-20 w-20 flex-none rounded-md object-cover object-center"
+                                    />
+                                    <div className="flex-auto space-y-1">
+                                        <h3 className="text-black">
+                                            {item.name}
+                                        </h3>
+                                        <p>{item.description}</p>
+                                        <p className="text-gray-900 font-extrabold"><b>Qty: </b>${item.quantity}</p>
+                                    </div>
+                                    <div>
+                                        <p className="flex-none text-base font-medium text-black mb-2">
+                                            {formatNZD(item.price)}
+                                        </p>
+                                        <p onClick={() => removeAddonHandler(item)} className='text-sm text-red-600 cursor-pointer hover:text-red-300'><b>Remove</b></p>
                                     </div>
 
                                 </li>
