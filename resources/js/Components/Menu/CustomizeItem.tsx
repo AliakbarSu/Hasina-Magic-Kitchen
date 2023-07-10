@@ -3,6 +3,7 @@ import { formatNZD } from '@/utils/currentcy';
 import { AddExtraDish } from './AddExtraDish';
 import { MenuItems } from './MenuItems';
 import { useSelector } from 'react-redux';
+import { MutableRefObject } from 'react';
 
 const policies = [
     {
@@ -15,7 +16,11 @@ const policies = [
     },
 ];
 
-export function CustomizeItem() {
+export function CustomizeItem(props: {
+    setOpen: (value: boolean) => void;
+    cancelButtonRef: MutableRefObject<null>;
+    onApplyHandler: () => void;
+}) {
     const selectedMenu = useSelector((state: any) => state.menu.selectedMenu);
     return (
         <div className="bg-white">
@@ -48,18 +53,21 @@ export function CustomizeItem() {
                                         Description
                                     </h2>
 
-                                    <div
-                                        className="prose prose-sm mt-4 text-gray-500"
-
-                                    >{selectedMenu.description}</div>
+                                    <div className="prose prose-sm mt-4 text-gray-500">
+                                        {selectedMenu.description}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="mt-8 lg:col-span-5">
                             {/* Product details */}
-                            <MenuItems menu={selectedMenu} items={selectedMenu.dishes} />
+                            <MenuItems
+                                menu={selectedMenu}
+                                items={selectedMenu.dishes}
+                            />
                             <AddExtraDish />
+
                             {/* <Tags /> */}
                             {/* Policies */}
                             {/* <section
@@ -88,6 +96,23 @@ export function CustomizeItem() {
                                     ))}
                                 </dl>
                             </section> */}
+                            <div className="lg:mt-[35rem] mt-10 max-w-7xl w-full flex justify-center lg:justify-end items-center gap-2">
+                                <button
+                                    type="button"
+                                    className="inline-flex max-w-xs w-full justify-center rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+                                    onClick={() => props.setOpen(false)}
+                                    ref={props.cancelButtonRef}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    className="inline-flex max-w-xs w-full justify-center rounded-md bg-indigo-600 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+                                    onClick={props.onApplyHandler}
+                                >
+                                    Apply
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -95,4 +120,3 @@ export function CustomizeItem() {
         </div>
     );
 }
-
