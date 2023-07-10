@@ -15,6 +15,7 @@ const initialState: CartState = {
 
 import { Addon, Menu } from '@/types/application';
 import { clearCart as emptyCart } from '../../utils/cart_localstorage';
+import { RootState } from '..';
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -35,7 +36,7 @@ const cartSlice = createSlice({
         },
         addOrUpdate: (state, action: PayloadAction<Addon>) => {
             const addonExist = state.addons.find(
-                (addon) => addon.dish_id === action.payload.dish_id
+                (addon) => addon.id === action.payload.id
             );
             if (!addonExist) {
                 state.addons = [...state.addons, action.payload];
@@ -43,7 +44,7 @@ const cartSlice = createSlice({
                 addonExist.quantity =
                     action.payload.quantity > 0 ? action.payload.quantity : 0;
                 state.addons = state.addons.map((addon) => {
-                    if (addon.dish_id === action.payload.dish_id) {
+                    if (addon.id === action.payload.id) {
                         return addonExist;
                     }
                     return addon;
@@ -52,7 +53,7 @@ const cartSlice = createSlice({
         },
         removeAddon: (state, action: PayloadAction<string>) => {
             state.addons = state.addons.filter(
-                (addon) => addon.dish_id !== action.payload
+                (addon) => addon.id !== action.payload
             );
         },
         removeItem: (state, action: PayloadAction<string>) => {
@@ -127,11 +128,16 @@ export const {
     clearCart,
 } = cartSlice.actions;
 
-export const selectCartTotal = (state: { cart: { items: CartItem[] } }) => {
-    return state.cart.items.reduce(
+export const selectCartTotal = (state: RootState) => {
+    const addonsTotal = state.cart.addons.reduce(
+        (total, addon) => total + addon.price * addon.quantity,
+        0
+    );
+    const itemsTotal = state.cart.items.reduce(
         (total, item) => total + item.price * item.numOfPeople,
         0
     );
+    return addonsTotal + itemsTotal;
 };
 
 export const selectAddons = (state: { cart: { addons: Addon[] } }) => {
