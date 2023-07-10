@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OrderDishes;
 use App\Models\Orders;
 use App\Notifications\OrderCreated;
+use App\Rules\AddressExits;
 use App\Services\TaxCalculations\TaxCalculations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -108,7 +109,7 @@ class OrdersController extends Controller
             'customer_name' => ['required', 'string', 'max:50'],
             'phone' => ['required', 'numeric', 'min:10'],
             'email' => ['required', 'email'],
-            'address' => ['required', 'string'],
+            'address' => ['required', 'string', new AddressExits()],
             'date' => ['required', 'date'],
             'time' => ['required', 'date_format:H:i'],
             'note' => ['required', 'string', 'max:80'],
@@ -190,30 +191,31 @@ class OrdersController extends Controller
         return $orders->availability();
     }
 
+    static function google_address_validator($address)
+    {
+        $street_address = collect(explode(',', $address))->first();
+        $sublocality = collect(explode(',', $address))->get(1);
+        $result = Http::post(env('GOOGLE_ADDRESS_API'), [
+            'address' => [
+                'regionCode' => 'NZ',
+                'locality' => 'Auckland',
+                'sublocality' => $sublocality,
+                'addressLines' => $street_address,
+            ],
+        ]);
+        return !property_exists(
+            $result->object()->result->verdict,
+            'hasUnconfirmedComponents'
+        );
+    }
+
     public function validate_address(Request $request)
     {
         $validatedData = $request->validate([
             'address' => 'required',
         ]);
         $address = $validatedData['address'];
-        $response = Http::post(env('GOOGLE_ADDRESS_API'), [
-            'address' => [
-                'regionCode' => 'NZ',
-                'locality' => 'Auckland',
-                'addressLines' => $address,
-            ],
-        ]);
-        if (
-            property_exists(
-                $response->object()->result->verdict,
-                'hasUnconfirmedComponents'
-            )
-        ) {
-            $isInvalid = !$response->object()->result->verdict
-                ->hasUnconfirmedComponents;
-            return response(['validation_result' => $isInvalid]);
-        } else {
-            return response(['validation_result' => true]);
-        }
+        $isValid = $this->google_address_validator($address);
+        return response(['validation_result' => $isValid]);
     }
 }
