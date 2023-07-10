@@ -33,7 +33,7 @@ function Checkout() {
 export default Checkout;
 
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import { CartItem, clearCart, selectCartTotal } from '@/store/slice/cart';
+import { CartItem, clearCart, removeItem, selectCartTotal } from '@/store/slice/cart';
 import { RootState } from '@/store';
 import { EmailInput } from '@/Components/Checkout/EmailInput';
 import { TimeInput } from '@/Components/Checkout/TimeInput';
@@ -41,6 +41,7 @@ import { NameInput } from '@/Components/Checkout/NameInput';
 import { NoteInput } from '@/Components/Checkout/NoteInput';
 import { classNames } from '@/utils/classNames';
 import { useDispatch } from 'react-redux';
+import { InformationCircleIcon } from '@heroicons/react/20/solid';
 
 function InfoSection() {
     const { setData, data, post, errors, setError, clearErrors } = useForm({
@@ -87,6 +88,10 @@ function InfoSection() {
         setLoading(false);
         setErrorMessage(error.message);
     };
+
+    const removeCartItem = (item: CartItem) => {
+        dispatch(removeItem(item.id))
+    }
 
     const formHandler = async (e: FormEvent) => {
         e.preventDefault();
@@ -187,7 +192,16 @@ function InfoSection() {
                         <h2 id="summary-heading" className="sr-only">
                             Order summary
                         </h2>
-
+                        {cartItems.length === 0 && <div className="rounded-md bg-blue-50 p-4">
+                            <div className="flex mb-2 rounded-md">
+                                <div className="flex-shrink-0">
+                                    <InformationCircleIcon className="h-5 w-5 text-blue-400" aria-hidden="true" />
+                                </div>
+                                <div className="ml-3 flex-1 md:flex md:justify-between">
+                                    <p className="text-sm text-blue-700">Your cart is empty!</p>
+                                </div>
+                            </div>
+                        </div>}
                         <ul
                             role="list"
                             className="divide-y divide-white divide-opacity-10 text-sm font-medium"
@@ -209,9 +223,13 @@ function InfoSection() {
                                         <p>{item.description}</p>
                                         <p className="text-gray-900 font-extrabold">{`For ${item.numOfPeople} people`}</p>
                                     </div>
-                                    <p className="flex-none text-base font-medium text-black">
-                                        {formatNZD(item.price)}
-                                    </p>
+                                    <div>
+                                        <p className="flex-none text-base font-medium text-black mb-2">
+                                            {formatNZD(item.price)}
+                                        </p>
+                                        <p onClick={() => removeCartItem(item)} className='text-sm text-red-600 cursor-pointer hover:text-red-300'><b>Remove</b></p>
+                                    </div>
+
                                 </li>
                             ))}
                         </ul>
