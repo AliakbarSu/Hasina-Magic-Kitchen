@@ -62,7 +62,7 @@ function InfoSection() {
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const cartTotal = useSelector(selectCartTotal);
     const cartAddons = useSelector((state: RootState) => state.cart.addons);
-    const disableBtn = loading || hasErrors || !isDirty || cartItems.length === 0;
+    const disableBtn = loading || !isDirty || cartItems.length === 0;
 
     const formSchema = z.object({
         customer_name: z.string().min(2).max(20),
@@ -149,6 +149,7 @@ function InfoSection() {
             dispatch(clearCart())
             router.visit(route('order.summary', { id: data.id }));
         } catch (err) {
+            console.log(err);
             setOrderFailedModal(true);
         } finally {
             setLoading(false);
