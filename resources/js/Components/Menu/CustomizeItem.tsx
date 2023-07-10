@@ -96,7 +96,7 @@ export function CustomizeItem(props: {
                                     ))}
                                 </dl>
                             </section> */}
-                            <div className="lg:mt-[35rem] mt-10 max-w-7xl w-full flex justify-center lg:justify-end items-center gap-2">
+                            <div className="lg:mt-[560px] mt-10 max-w-7xl w-full flex justify-center lg:justify-end items-center gap-2">
                                 <button
                                     type="button"
                                     className="inline-flex max-w-xs w-full justify-center rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
