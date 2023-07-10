@@ -31,6 +31,7 @@ export interface Order {
         description: string;
         media: Media[];
         dishes: Dish[],
+        order_dishes: Dish[],
     }[];
     addons: Addon[]
 }

@@ -53,6 +53,7 @@ class Orders extends Model
             });
             $order->addons->each(function ($addon) {
                 $addon->makeHidden('pivot');
+                $addon->quantity = $addon->pivot->quantity;
                 $addon->media = Orders::add_media($addon);
             });
             return $order;
