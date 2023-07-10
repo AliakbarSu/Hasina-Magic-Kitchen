@@ -9,6 +9,8 @@ interface Address {
 }
 
 export function AddressInput(props: {
+    isAddressValidated: boolean;
+    setIsAddressValidated: (value: boolean) => void;
     setState: (value: string) => void;
     setError: (err: string | null) => void;
 }) {
@@ -31,23 +33,23 @@ export function AddressInput(props: {
             city,
             postCode,
         };
-        debounce(
-            () =>
-                axios
-                    .post('/api/validate/address', {
-                        address: `${address1}, ${suburb}`,
-                    })
-                    .then((result) => {
-                        const isValid = result.data.validation_result;
-                        setHasError(!isValid);
-                        if (!isValid) {
-                            props.setError('Invalid address');
-                        } else {
-                            props.setError(null);
-                        }
-                    }),
-            200
-        );
+        debounce(() => {
+            props.setIsAddressValidated(false);
+            return axios
+                .post('/api/validate/address', {
+                    address: `${address1}, ${suburb}`,
+                })
+                .then((result) => {
+                    const isValid = result.data.validation_result;
+                    setHasError(!isValid);
+                    if (!isValid) {
+                        props.setError('Invalid address');
+                    } else {
+                        props.setError(null);
+                    }
+                    props.setIsAddressValidated(true);
+                });
+        }, 200);
 
         props.setState(`${address.address1}, ${address.suburb}`);
     }, [address1, suburb, city, postCode]);

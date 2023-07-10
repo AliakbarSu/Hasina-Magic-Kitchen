@@ -33,7 +33,13 @@ function Checkout() {
 export default Checkout;
 
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import { CartItem, clearCart, removeAddon, removeItem, selectCartTotal } from '@/store/slice/cart';
+import {
+    CartItem,
+    clearCart,
+    removeAddon,
+    removeItem,
+    selectCartTotal,
+} from '@/store/slice/cart';
 import { RootState } from '@/store';
 import { EmailInput } from '@/Components/Checkout/EmailInput';
 import { TimeInput } from '@/Components/Checkout/TimeInput';
@@ -44,7 +50,16 @@ import { useDispatch } from 'react-redux';
 import { InformationCircleIcon } from '@heroicons/react/20/solid';
 
 function InfoSection() {
-    const { setData, data, post, errors, setError, clearErrors, isDirty, hasErrors } = useForm({
+    const {
+        setData,
+        data,
+        post,
+        errors,
+        setError,
+        clearErrors,
+        isDirty,
+        hasErrors,
+    } = useForm({
         customer_name: '',
         address: '',
         date: '',
@@ -62,7 +77,9 @@ function InfoSection() {
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const cartTotal = useSelector(selectCartTotal);
     const cartAddons = useSelector((state: RootState) => state.cart.addons);
-    const disableBtn = loading || !isDirty || cartItems.length === 0;
+    const [isAddressValidated, setIsAddressValidated] = useState(false);
+    const disableBtn =
+        loading || !isDirty || cartItems.length === 0 || !isAddressValidated;
 
     const formSchema = z.object({
         customer_name: z.string().min(2).max(20),
@@ -91,12 +108,12 @@ function InfoSection() {
     };
 
     const removeCartItem = (item: CartItem) => {
-        dispatch(removeItem(item.id))
-    }
+        dispatch(removeItem(item.id));
+    };
 
     const removeAddonHandler = (addon: Addon) => {
-        dispatch(removeAddon(addon.id))
-    }
+        dispatch(removeAddon(addon.id));
+    };
 
     const formHandler = async (e: FormEvent) => {
         e.preventDefault();
@@ -114,7 +131,7 @@ function InfoSection() {
                 setError(
                     issue.path.at(0) as any,
                     errorMessages[
-                    issue.path.at(0) as keyof typeof errorMessages
+                        issue.path.at(0) as keyof typeof errorMessages
                     ]
                 );
             });
@@ -150,7 +167,7 @@ function InfoSection() {
             await stripe?.confirmCardPayment(data.client_secret, {
                 payment_method: paymentMethod?.paymentMethod?.id,
             });
-            dispatch(clearCart())
+            dispatch(clearCart());
             router.visit(route('order.summary', { id: data.id }));
         } catch (err) {
             console.log(err);
@@ -159,7 +176,6 @@ function InfoSection() {
             setLoading(false);
         }
     };
-
 
     function calculateGST(price: number) {
         const result = price * GST;
@@ -199,16 +215,23 @@ function InfoSection() {
                         <h2 id="summary-heading" className="sr-only">
                             Order summary
                         </h2>
-                        {cartItems.length === 0 && <div className="rounded-md bg-blue-50 p-4">
-                            <div className="flex mb-2 rounded-md">
-                                <div className="flex-shrink-0">
-                                    <InformationCircleIcon className="h-5 w-5 text-blue-400" aria-hidden="true" />
-                                </div>
-                                <div className="ml-3 flex-1 md:flex md:justify-between">
-                                    <p className="text-sm text-blue-700">Your cart is empty!</p>
+                        {cartItems.length === 0 && (
+                            <div className="rounded-md bg-blue-50 p-4">
+                                <div className="flex mb-2 rounded-md">
+                                    <div className="flex-shrink-0">
+                                        <InformationCircleIcon
+                                            className="h-5 w-5 text-blue-400"
+                                            aria-hidden="true"
+                                        />
+                                    </div>
+                                    <div className="ml-3 flex-1 md:flex md:justify-between">
+                                        <p className="text-sm text-blue-700">
+                                            Your cart is empty!
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>}
+                        )}
                         <ul
                             role="list"
                             className="divide-y divide-white divide-opacity-10 text-sm font-medium"
@@ -234,15 +257,17 @@ function InfoSection() {
                                         <p className="flex-none text-base font-medium text-black mb-2">
                                             {formatNZD(item.price)}
                                         </p>
-                                        <p onClick={() => removeCartItem(item)} className='text-sm text-red-600 cursor-pointer hover:text-red-300'><b>Remove</b></p>
+                                        <p
+                                            onClick={() => removeCartItem(item)}
+                                            className="text-sm text-red-600 cursor-pointer hover:text-red-300"
+                                        >
+                                            <b>Remove</b>
+                                        </p>
                                     </div>
-
                                 </li>
                             ))}
                         </ul>
-                        <h3 className="text-md">
-                            Addons
-                        </h3>
+                        <h3 className="text-md">Addons</h3>
                         <ul
                             role="list"
                             className="divide-y divide-white divide-opacity-10 text-sm font-medium"
@@ -262,15 +287,23 @@ function InfoSection() {
                                             {item.name}
                                         </h3>
                                         <p>{item.description}</p>
-                                        <p className="text-gray-900 font-extrabold"><b>Qty: </b>${item.quantity}</p>
+                                        <p className="text-gray-900 font-extrabold">
+                                            <b>Qty: </b>${item.quantity}
+                                        </p>
                                     </div>
                                     <div>
                                         <p className="flex-none text-base font-medium text-black mb-2">
                                             {formatNZD(item.price)}
                                         </p>
-                                        <p onClick={() => removeAddonHandler(item)} className='text-sm text-red-600 cursor-pointer hover:text-red-300'><b>Remove</b></p>
+                                        <p
+                                            onClick={() =>
+                                                removeAddonHandler(item)
+                                            }
+                                            className="text-sm text-red-600 cursor-pointer hover:text-red-300"
+                                        >
+                                            <b>Remove</b>
+                                        </p>
                                     </div>
-
                                 </li>
                             ))}
                         </ul>
@@ -304,7 +337,7 @@ function InfoSection() {
                     </div>
                     <div className="mt-10 flex justify-end border-t border-gray-200 pt-6">
                         <button
-                            form='checkout-form'
+                            form="checkout-form"
                             disabled={disableBtn}
                             type="submit"
                             className={classNames(
@@ -328,7 +361,7 @@ function InfoSection() {
                         Delivery details
                     </h2>
 
-                    <form onSubmit={formHandler} id='checkout-form'>
+                    <form onSubmit={formHandler} id="checkout-form">
                         <div className="@container mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0 flex flex-col gap-3.5">
                             {/* Content goes here */}
                             {/* <InfoTab /> */}
@@ -411,14 +444,25 @@ function InfoSection() {
                                         </span>
                                     )}
                                     <AddressInput
+                                        isAddressValidated={isAddressValidated}
+                                        setIsAddressValidated={
+                                            setIsAddressValidated
+                                        }
                                         setState={(address) =>
                                             setData('address', address)
                                         }
-                                        setError={(error) =>
-                                            error && setError('address', error)
-                                        }
+                                        setError={(error) => {
+                                            error === null
+                                                ? clearErrors('address')
+                                                : setError('address', error);
+                                        }}
                                     />
-                                    {errors.address && (
+                                    {!isAddressValidated && isDirty && (
+                                        <span className="flex items-center font-medium tracking-wide text-green-500 text-xs ml-1">
+                                            waiting for validation...
+                                        </span>
+                                    )}
+                                    {errors.address && isAddressValidated && (
                                         <span className="flex items-center font-medium tracking-wide text-red-500 text-xs ml-1">
                                             {errors.address}
                                         </span>
@@ -436,8 +480,6 @@ function InfoSection() {
                                     )}
                                 </div>
                             </div>
-
-
                         </div>
                     </form>
                 </section>
