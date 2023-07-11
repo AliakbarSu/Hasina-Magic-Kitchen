@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderConfirmed;
+use App\Mail\OrderCreated;
 use App\Models\OrderDishes;
 use App\Models\Orders;
-use App\Notifications\OrderCreated;
 use App\Rules\AddressExits;
 use App\Services\TaxCalculations\TaxCalculations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 
 class OrdersController extends Controller
 {
@@ -37,7 +39,7 @@ class OrdersController extends Controller
         $order = $this->create_order($validatedData, $customer->id);
         $payment_intent = $this->create_payment_intent($customer, $order);
         Log::info('Order created successfully', ['order_id' => $order->id]);
-        $this->notify_customer($customer, $order);
+        $this->customer_order_create_mail($customer, $order);
         return response()->json([
             'id' => $order->id,
             'message' => 'Order created successfully',
@@ -96,7 +98,7 @@ class OrdersController extends Controller
     {
         $convertedArray = [];
         foreach ($orderDetails['addons'] as $key => $value) {
-            $convertedArray[$value['dish_id']] = [
+            $convertedArray[$value['id']] = [
                 'quantity' => $value['quantity'],
             ];
         }
@@ -123,7 +125,7 @@ class OrdersController extends Controller
             'items.*.menu_id' => ['required', 'uuid', 'exists:menus,id'],
             'items.*.quantity' => ['numeric', 'max:500', 'min:1'],
             'addons' => ['array'],
-            'addons.*.dish_id' => ['exists:dishes,id'],
+            'addons.*.id' => ['exists:dishes,id'],
             'addons.*.quantity' => ['numeric', 'min:1', 'max:500'],
         ]);
     }
@@ -177,10 +179,19 @@ class OrdersController extends Controller
         }
     }
 
-    private function notify_customer($customer, $order)
+    private function customer_order_create_mail($customer, $order)
     {
         try {
-            $customer->notify(new OrderCreated($order));
+            Mail::to($customer->email)->send(new OrderCreated($order));
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
+    }
+
+    private function customer_order_confirmed_mail($customer, $order)
+    {
+        try {
+            Mail::to($customer->email)->send(new OrderConfirmed($order));
         } catch (\Throwable $th) {
             Log::error($th);
         }

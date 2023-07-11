@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Mailer
@@ -13,7 +12,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'postmark'),
+    'default' => env('MAIL_MAILER', 'failover'),
 
     /*
     |--------------------------------------------------------------------------
@@ -80,10 +79,7 @@ return [
 
         'failover' => [
             'transport' => 'failover',
-            'mailers' => [
-                'smtp',
-                'log',
-            ],
+            'mailers' => ['smtp', 'postmark'],
         ],
     ],
 
@@ -116,10 +112,6 @@ return [
 
     'markdown' => [
         'theme' => 'default',
-
-        'paths' => [
-            resource_path('views/vendor/mail'),
-        ],
+        'paths' => [resource_path('views/vendor/mail')],
     ],
-
 ];
