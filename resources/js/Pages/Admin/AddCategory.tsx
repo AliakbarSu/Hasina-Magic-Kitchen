@@ -3,13 +3,11 @@ import { Head, useForm } from '@inertiajs/react'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps } from '@/types'
 import axios from 'axios'
+import { Category } from '@/types/application';
+import Categories from './Categories';
 
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
-
-export default function AddCategory({ auth }: PageProps<{}>) {
+export default function AddCategory({ auth, categories }: PageProps<{ categories: Category[] }>) {
 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
@@ -51,11 +49,11 @@ export default function AddCategory({ auth }: PageProps<{}>) {
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Add a Category</h2>}
         >
             <Head title="Add Category" />
-            <div className='mx-auto my-6 max-w-4xl'>
+            <div className='mx-auto my-6 sm:max-w-4xl px-4'>
+                <Categories categories={categories} />
                 <form onSubmit={onAddCategorySubmit}>
                     <div className="space-y-12">
                         <div className="border-b border-gray-900/10 pb-12">
-                            <h2 className="text-base font-semibold leading-7 text-gray-900">Category</h2>
                             {message.length > 0 && <p className="mt-1 text-md leading-6 text-green-600">
                                 {message}
                             </p>}

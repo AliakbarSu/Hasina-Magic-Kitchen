@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'category'], function () {
         Route::post('/', [CategoryController::class, 'add_category']);
-        Route::delete('/', [CategoryController::class, 'delete_category']);
+        Route::delete('/{id}', [CategoryController::class, 'delete_category']);
     });
 
     Route::group(['prefix' => 'dish'], function () {

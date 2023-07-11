@@ -30,9 +30,9 @@ class CategoryController extends Controller
         return $category->toJson();
     }
 
-    public function delete_category($id)
+    public function delete_category(Request $request)
     {
-        $category = Category::find($id);
+        $category = Category::find($request->id);
         $category->delete();
         return response()->json(['message' => 'Category deleted'], 200);
     }
