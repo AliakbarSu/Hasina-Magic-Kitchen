@@ -50,9 +50,9 @@ class DishController extends Controller
         return response()->json(['message' => 'Dish media added'], 200);
     }
 
-    public function delete_dish($id)
+    public function delete_dish(Request $request)
     {
-        $dish = Dish::find($id);
+        $dish = Dish::find($request->id);
         $dish->delete();
         Log::info('Dish deleted', ['id' => $dish->id]);
         return response()->json(['message' => 'Dish deleted'], 200);

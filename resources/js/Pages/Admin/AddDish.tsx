@@ -3,15 +3,12 @@ import { Head, useForm } from '@inertiajs/react'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps } from '@/types'
 import { UserCircleIcon } from '@heroicons/react/24/solid'
-import { Category } from '@/types/application'
+import { Category, Dish } from '@/types/application'
 import axios from 'axios'
+import Dishes from './Dishes';
 
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
-
-export default function AddDish({ auth, categories }: PageProps<{ categories: Category[] }>) {
+export default function AddDish({ auth, categories, dishes }: PageProps<{ categories: Category[], dishes: Dish[] }>) {
 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
@@ -80,11 +77,11 @@ export default function AddDish({ auth, categories }: PageProps<{ categories: Ca
         >
             <Head title="Orders" />
             <div className='mx-auto my-6 max-w-4xl'>
+                <Dishes dishes={dishes} />
                 <form onSubmit={onAddDishSubmit}>
                     {/* <input type="hidden" name="_token" value={ } /> */}
                     <div className="space-y-12">
                         <div className="border-b border-gray-900/10 pb-12">
-                            <h2 className="text-base font-semibold leading-7 text-gray-900">Dish</h2>
                             {message.length > 0 && <p className="mt-1 text-md leading-6 text-green-600">
                                 {message}
                             </p>}

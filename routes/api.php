@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'dish'], function () {
         Route::post('/', [DishController::class, 'add_dish']);
         Route::post('/media', [DishController::class, 'add_dish_media']);
-        Route::delete('/', [DishController::class, 'delete_dish']);
+        Route::delete('/{id}', [DishController::class, 'delete_dish']);
     });
 
     Route::group(['prefix' => 'menu'], function () {
