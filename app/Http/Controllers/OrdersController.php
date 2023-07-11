@@ -115,7 +115,7 @@ class OrdersController extends Controller
             'address' => ['required', 'string', new AddressExits()],
             'date' => ['required', 'date'],
             'time' => ['required', 'date_format:H:i'],
-            'note' => ['required', 'string', 'max:80'],
+            'note' => ['string', 'max:80'],
             'items' => ['required', 'array'],
             'items.*.dishes' => [
                 'required',
