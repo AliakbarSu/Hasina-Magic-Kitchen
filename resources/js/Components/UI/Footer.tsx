@@ -1,7 +1,7 @@
 const navigation = [
     {
         name: 'Facebook',
-        href: '#',
+        href: 'https://www.facebook.com',
         active: true,
         icon: (props: any) => (
             <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
@@ -15,7 +15,7 @@ const navigation = [
     },
     {
         name: 'Instagram',
-        href: '#',
+        href: 'https://www.instagram.com',
         active: true,
         icon: (props: any) => (
             <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
@@ -29,7 +29,7 @@ const navigation = [
     },
     {
         name: 'Twitter',
-        href: '#',
+        href: 'https://www.twitter.com',
         active: false,
         icon: (props: any) => (
             <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
