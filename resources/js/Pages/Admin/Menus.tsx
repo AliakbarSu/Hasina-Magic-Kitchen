@@ -1,16 +1,16 @@
-import { Category, Dish } from "@/types/application"
+import { Category, Dish, Menu } from "@/types/application"
 import axios from "axios"
 import { useState } from "react"
 
-export default function Dishes({ dishes }: { dishes: Dish[] }) {
+export default function Menus({ menus }: { menus: Menu[] }) {
 
-    const [allDishes, setAllDishes] = useState<Dish[]>(dishes)
+    const [allMenus, setAllMenus] = useState<Menu[]>(menus)
 
-    const onDeleteDish = async (id: string) => {
-        axios.delete(`/api/dish/${id}`).catch((err) => {
+    const onDeleteMenu = async (id: string) => {
+        axios.delete(`/api/menu/${id}`).catch((err) => {
             console.log(err.response.data)
         }).then((res) => {
-            setAllDishes(allDishes.filter((dish) => dish.id !== id))
+            setAllMenus(allMenus.filter((menu) => menu.id !== id))
             alert('Category deleted successfully')
         })
     }
@@ -29,6 +29,9 @@ export default function Dishes({ dishes }: { dishes: Dish[] }) {
                                             Name
                                         </th>
                                         <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                            Price
+                                        </th>
+                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                             Description
                                         </th>
                                         <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
@@ -37,14 +40,15 @@ export default function Dishes({ dishes }: { dishes: Dish[] }) {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 bg-white">
-                                    {allDishes.map((dish) => (
-                                        <tr key={dish.id}>
+                                    {allMenus.map((menu) => (
+                                        <tr key={menu.id}>
                                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                                {dish.name}
+                                                {menu.name}
                                             </td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{dish.description}</td>
+                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{menu.price}</td>
+                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{menu.description}</td>
                                             <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                <span onClick={() => onDeleteDish(dish.id)} className="text-indigo-600 hover:text-indigo-900">
+                                                <span onClick={() => onDeleteMenu(menu.id)} className="text-indigo-600 hover:text-indigo-900">
                                                     Delete
                                                 </span>
                                             </td>

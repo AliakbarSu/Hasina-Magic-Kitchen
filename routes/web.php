@@ -95,18 +95,22 @@ Route::middleware('auth')->group(function () {
     );
 
     Route::get('/admin/add-category', function (Category $category) {
-        return Inertia::render('Admin/AddCategory', []);
+        return Inertia::render('Admin/AddCategory', [
+            'categories' => $category->get_all_categories()->toArray(),
+        ]);
     })->name('admin.addCategory');
 
-    Route::get('/admin/add-dish', function (Category $category) {
+    Route::get('/admin/add-dish', function (Category $category, Dish $dishes) {
         return Inertia::render('Admin/AddDish', [
             'categories' => $category->get_all_categories()->toArray(),
+            'dishes' => $dishes->all()->toArray(),
         ]);
     })->name('admin.addDish');
 
     Route::get('/admin/add-menu', function (Dish $dishes) {
         return Inertia::render('Admin/AddMenu', [
             'dishes' => $dishes->all()->toArray(),
+            'menus' => Menu::all()->toArray(),
         ]);
     })->name('admin.addMenu');
 

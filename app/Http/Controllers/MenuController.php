@@ -46,9 +46,9 @@ class MenuController extends Controller
         return response()->json(['message' => 'Menu media added'], 200);
     }
 
-    public function delete_menu($id)
+    public function delete_menu(Request $request)
     {
-        $menu = Menu::find($id);
+        $menu = Menu::find($request->id);
         $menu->delete();
         Log::info('Menu deleted', ['id' => $menu->id]);
         return response()->json(['message' => 'Menu deleted'], 200);

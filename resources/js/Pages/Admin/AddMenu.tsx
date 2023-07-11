@@ -3,15 +3,12 @@ import { Head, useForm } from '@inertiajs/react'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps } from '@/types'
 import { UserCircleIcon } from '@heroicons/react/24/solid'
-import { Dish } from '@/types/application'
+import { Dish, Menu } from '@/types/application'
 import axios from 'axios'
+import Menus from './Menus';
 
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
-
-export default function AddMenu({ auth, dishes }: PageProps<{ dishes: Dish[] }>) {
+export default function AddMenu({ auth, dishes, menus }: PageProps<{ dishes: Dish[], menus: Menu[] }>) {
 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
@@ -88,10 +85,10 @@ export default function AddMenu({ auth, dishes }: PageProps<{ dishes: Dish[] }>)
         >
             <Head title="add Menu" />
             <div className='mx-auto my-6 max-w-4xl'>
+                <Menus menus={menus} />
                 <form onSubmit={onAddMenuSubmit}>
                     <div className="space-y-12">
                         <div className="border-b border-gray-900/10 pb-12">
-                            <h2 className="text-base font-semibold leading-7 text-gray-900">Menu</h2>
                             {message.length > 0 && <p className="mt-1 text-md leading-6 text-green-600">
                                 {message}
                             </p>}

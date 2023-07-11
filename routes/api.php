@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'menu'], function () {
         Route::post('/', [MenuController::class, 'add_menu']);
         Route::post('/media', [MenuController::class, 'add_menu_media']);
-        Route::delete('/', [MenuController::class, 'delete_menu']);
+        Route::delete('/{id}', [MenuController::class, 'delete_menu']);
     });
 });
 Route::get('/order', [OrdersController::class, 'all_orders']);
