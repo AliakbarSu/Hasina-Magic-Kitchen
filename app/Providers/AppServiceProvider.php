@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
+use App\Broadcasting\NexmoSMS;
 use App\Models\Customers;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
 
@@ -23,5 +24,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Cashier::useCustomerModel(Customers::class);
+        Notification::extend('nexmo', function ($app) {
+            return new NexmoSMS();
+        });
     }
 }

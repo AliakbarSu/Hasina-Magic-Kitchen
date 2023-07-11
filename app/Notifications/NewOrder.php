@@ -21,6 +21,13 @@ class NewOrder extends Notification
     }
     private $order;
 
+    public function toNexmo($notifiable)
+    {
+        return [
+            'to' => env('SMS_TO'),
+            'text' => 'New Order' . $this->order->id,
+        ];
+    }
     /**
      * Get the notification's delivery channels.
      *
@@ -28,7 +35,7 @@ class NewOrder extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['nexmo'];
     }
 
     /**
