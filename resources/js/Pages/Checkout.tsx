@@ -48,6 +48,7 @@ import { NoteInput } from '@/Components/Checkout/NoteInput';
 import { classNames } from '@/utils/classNames';
 import { useDispatch } from 'react-redux';
 import { InformationCircleIcon } from '@heroicons/react/20/solid';
+import { optimizeImage } from '@/utils/cloudinary';
 
 function InfoSection() {
     const {
@@ -242,7 +243,7 @@ function InfoSection() {
                                     className="flex items-start space-x-4 py-6"
                                 >
                                     <img
-                                        src={item.media.at(0)?.url}
+                                        src={optimizeImage(item.media.at(0)?.url, 300, 300)}
                                         alt={`Image of ${item.name} menu`}
                                         className="border h-20 w-20 flex-none rounded-md object-cover object-center"
                                     />
@@ -278,7 +279,7 @@ function InfoSection() {
                                     className="flex items-start space-x-4 py-6"
                                 >
                                     <img
-                                        src={item.media.at(0)?.url}
+                                        src={optimizeImage(item.media.at(0)?.url, 300, 300)}
                                         alt={`Image of ${item.name} menu`}
                                         className="border h-20 w-20 flex-none rounded-md object-cover object-center"
                                     />

@@ -6,6 +6,7 @@ import { Footer } from '@/Components/UI/Footer';
 import { Head, Link } from "@inertiajs/react";
 import dayjs from "dayjs";
 import { useState } from "react";
+import { optimizeImage } from "@/utils/cloudinary";
 
 
 export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
@@ -67,7 +68,7 @@ export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
                                 {order.items.map((item) => (
                                     <li key={item.id} className="flex space-x-6 py-6">
                                         <img
-                                            src={item.media.at(0)?.url}
+                                            src={optimizeImage(item.media.at(0)?.url, 400, 400)}
                                             alt={"Photo of menu item"}
                                             className="h-24 w-24 flex-none rounded-md bg-gray-100 object-cover object-center"
                                         />

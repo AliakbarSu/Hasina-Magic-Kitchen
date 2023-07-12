@@ -6,6 +6,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { RootState } from '@/store';
 import { formatNZD } from '@/utils/currentcy';
+import { optimizeImage } from '@/utils/cloudinary';
 
 type ModalProps = {
     open: boolean;
@@ -37,7 +38,7 @@ const CartAddon = ({ item, onUpdateAddon }: { item: Dish, onUpdateAddon: (addon:
         <div key={item.id} className="group relative">
             <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                 <img
-                    src={item.media.at(0)?.url}
+                    src={optimizeImage(item.media.at(0)?.url, 500, 500)}
                     alt={''}
                     className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                 />
