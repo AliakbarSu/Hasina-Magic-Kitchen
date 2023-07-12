@@ -1,6 +1,10 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Dish } from '@/types/application';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 type OptionsModalProps = {
     dishes: Dish[];
@@ -22,7 +26,7 @@ export function ReplaceOptionsModal({
         setOptions(() => dishes.at(0)?.id || '');
     }, [dishes]);
 
-    const onInputChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const onInputChangeHandler = (e: SelectChangeEvent) => {
         setOptions(() => e.target.value);
     };
 
@@ -64,26 +68,21 @@ export function ReplaceOptionsModal({
                         >
                             <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 w-full sm:max-w-2xl sm:p-6">
                                 <div className="sm:col-span-3">
-                                    <label
-                                        htmlFor="dishes"
-                                        className="block text-sm font-medium leading-6 text-gray-900"
-                                    >
-                                        Dishes
-                                    </label>
                                     <form className="mt-2">
-                                        <select
-                                            value={dishes.at(0)?.id}
-                                            onChange={onInputChangeHandler}
-                                            id="dishes"
-                                            name="dishes"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        >
-                                            {dishes.map(({ name, id }) => (
-                                                <option key={id} value={id}>
-                                                    {name}
-                                                </option>
-                                            ))}
-                                        </select>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="select-dishes">Dishes</InputLabel>
+                                            <Select
+                                                labelId="select-dishes"
+                                                id="select-dishes"
+                                                value={dishes.at(0)?.id}
+                                                label="Age"
+                                                onChange={onInputChangeHandler}
+                                            >
+                                                {dishes.map(({ name, id }) => (
+                                                    <MenuItem value={id} key={id}>{name}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
                                     </form>
                                 </div>
                                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
