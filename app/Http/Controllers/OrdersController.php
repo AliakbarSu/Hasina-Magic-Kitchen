@@ -224,7 +224,7 @@ class OrdersController extends Controller
     public function validate_address(Request $request)
     {
         $validatedData = $request->validate([
-            'address' => 'required',
+            'address' => 'required|min:4',
         ]);
         $address = $validatedData['address'];
         $isValid = $this->google_address_validator($address);

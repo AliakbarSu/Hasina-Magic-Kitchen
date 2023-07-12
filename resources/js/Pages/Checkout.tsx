@@ -131,7 +131,7 @@ function InfoSection() {
                 setError(
                     issue.path.at(0) as any,
                     errorMessages[
-                        issue.path.at(0) as keyof typeof errorMessages
+                    issue.path.at(0) as keyof typeof errorMessages
                     ]
                 );
             });
@@ -267,7 +267,7 @@ function InfoSection() {
                                 </li>
                             ))}
                         </ul>
-                        <h3 className="text-md">Addons</h3>
+                        {cartAddons.length > 0 && <h3 className="text-md">Addons</h3>}
                         <ul
                             role="list"
                             className="divide-y divide-white divide-opacity-10 text-sm font-medium"
