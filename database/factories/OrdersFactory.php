@@ -31,9 +31,13 @@ class OrdersFactory extends Factory
             'subtotal' => $this->faker->numberBetween($min = 150, $max = 2000),
             'tax' => $this->faker->numberBetween($min = 10, $max = 300),
             'total' => $this->faker->numberBetween($min = 200, $max = 2500),
-            'status' => ['pending', 'completed', 'canceled'][
-                array_rand([1, 2, 3], 1)
-            ],
+            'status' => [
+                'created',
+                'confirmed',
+                'make',
+                'completed',
+                'canceled',
+            ][array_rand([1, 2, 3], 1)],
         ];
     }
 }

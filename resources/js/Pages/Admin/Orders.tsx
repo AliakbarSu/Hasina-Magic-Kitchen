@@ -7,11 +7,18 @@ import { PageProps } from '@/types';
 import OrderList from './Components/OrderList';
 import { Addon, Dish, Media, Menu } from '@/types/application';
 
+export enum OrderStatus {
+    Created = 'created',
+    Confirmed = 'confirmed',
+    Make = 'make',
+    Completed = 'completed',
+    Canceled = 'canceled',
+}
 
 export interface Order {
     id: string;
     customer_name: string;
-    status: string;
+    status: OrderStatus;
     subtotal: number;
     delivery_fee: number;
     tax: number;
@@ -41,14 +48,6 @@ export default function Orders({ auth, mustVerifyEmail, status, orders }: PagePr
         status: 'pending',
         order_id: '',
     });
-
-
-
-
-
-    const onSubmitHandler = (order: any) => {
-        patch(route('admin.orders.update.status'));
-    }
 
     return (
         <AuthenticatedLayout

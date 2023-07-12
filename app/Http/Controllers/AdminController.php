@@ -39,7 +39,9 @@ class AdminController extends Controller
                 new OrderPlaced($order)
             );
         }
-        return redirect()->back();
+        return redirect()
+            ->back()
+            ->with(['orders' => $orders->all_orders()]);
     }
 
     public function notifiy_new_order(Orders $order)

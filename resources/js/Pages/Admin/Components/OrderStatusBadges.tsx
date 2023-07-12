@@ -1,32 +1,30 @@
+import { OrderStatus } from "../Orders"
 
-export enum OrderStatus {
-    'placed' = "placed",
-    'confirmed' = 'confirmed',
-    'canceled' = 'canceled',
-    'completed' = 'completed',
-    'make' = 'make'
-}
 
 export default function OrderStatusBadges({ status }: { status: OrderStatus }) {
-    if (status === OrderStatus.placed) {
+    if (status === OrderStatus.Created) {
         return <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-orange-300 ring-1 ring-inset ring-gray-500/10">
-            قرار داده شده
+            Created
         </span>
-    } else if (status === OrderStatus.confirmed) {
+    } else if (status === OrderStatus.Confirmed) {
         return <span className="inline-flex items-center rounded-md bg-yellow-400 px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10">
-            تکمیل
+            Confirmed
         </span>
-    } else if (status === OrderStatus.make) {
+    } else if (status === OrderStatus.Make) {
         return <span className="inline-flex items-center rounded-md bg-orange-300 px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10">
-            در ساخت
+            Make
         </span>
-    } else if (status === OrderStatus.completed) {
+    } else if (status === OrderStatus.Completed) {
         return <span className="inline-flex items-center rounded-md bg-green-600 px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10">
-            تکمیل
+            Completed
+        </span>
+    } else if (status === OrderStatus.Canceled) {
+        return <span className="inline-flex items-center rounded-md bg-red-600 px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10">
+            Canceled
         </span>
     } else {
         return <span className="inline-flex items-center rounded-md bg-red-600 px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10">
-            لغو
+            Unknown
         </span>
     }
 
