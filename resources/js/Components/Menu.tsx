@@ -73,58 +73,60 @@ export function MenuItem({
         setOpen(true);
     }
     return (
-        <div className="group flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
-            <Modal open={open} setOpen={setOpen} />
-            <div className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
-                <img
-                    src={product.media.at(0)?.url}
-                    alt={'Menu Plate'}
-                    className="h-full w-full object-cover object-center sm:h-full sm:w-full"
-                />
-            </div>
-            <div className="flex flex-1 flex-col space-y-2 p-4">
-                <h3 className="text-xl font-medium text-gray-900">
-                    {/* <a href={product.href}> */}
-                    {/* <span aria-hidden="true" className="absolute inset-0" /> */}
-                    {product.name}
-                    {/* </a> */}
-                </h3>
-                <p className="text-sm text-gray-700">{product.description}</p>
-                <p className="text-base font-extrabold text-gray-500  pb-4">
-                    {`$${product.price} Per Person`}
-                </p>
+        <div className='relative'>
+            <div className="group flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
+                <Modal open={open} setOpen={setOpen} />
+                <div className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
+                    <img
+                        src={product.media.at(0)?.url}
+                        alt={'Menu Plate'}
+                        className="h-full w-full object-cover object-center sm:h-full sm:w-full"
+                    />
+                </div>
+                <div className="flex flex-1 flex-col space-y-2 p-4">
+                    <h3 className="text-xl font-medium text-gray-900">
+                        {/* <a href={product.href}> */}
+                        {/* <span aria-hidden="true" className="absolute inset-0" /> */}
+                        {product.name}
+                        {/* </a> */}
+                    </h3>
+                    <p className="text-sm text-gray-700">{product.description}</p>
+                    <p className="text-base font-extrabold text-gray-500  pb-4">
+                        {`$${product.price} Per Person`}
+                    </p>
 
-                {cartItem.length > 0 ? (
-                    <>
-                        <PeopleInput
-                            state={numOfPeople}
-                            setState={setNumOfPeople}
-                        />
-                        { }
-                        <div className='flex gap-2'>
-                            <button
-                                onClick={onCustomizeClickHandler}
-                                className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            >
-                                Customize
-                            </button>
-                            <button
-                                onClick={onRemoveItemHandler}
-                                className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                            >
-                                Remove
-                            </button>
-                        </div>
+                    {cartItem.length > 0 ? (
+                        <>
+                            <PeopleInput
+                                state={numOfPeople}
+                                setState={setNumOfPeople}
+                            />
+                            { }
+                            <div className='flex gap-2'>
+                                <button
+                                    onClick={onCustomizeClickHandler}
+                                    className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                >
+                                    Customize
+                                </button>
+                                <button
+                                    onClick={onRemoveItemHandler}
+                                    className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                >
+                                    Remove
+                                </button>
+                            </div>
 
-                    </>
-                ) : (
-                    <button
-                        onClick={addToCartHandler}
-                        className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                        Add to cart
-                    </button>
-                )}
+                        </>
+                    ) : (
+                        <button
+                            onClick={addToCartHandler}
+                            className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                            Add to cart
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );
