@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { RadioGroup } from '@headlessui/react'
 import { CurrencyDollarIcon, ClockIcon, CalendarIcon } from '@heroicons/react/24/outline'
-import { Order } from './Orders'
+import { Order, OrderStatus } from './Orders'
 import OrderMenu from "./Components/OrderMenu"
 import OrderAddons from "./Components/OrderAddons"
 import { Head, Link } from '@inertiajs/react'
-import OrderStatusBadges, { OrderStatus } from './Components/OrderStatusBadges'
+import OrderStatusBadges from './Components/OrderStatusBadges'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps } from '@/types'
 
