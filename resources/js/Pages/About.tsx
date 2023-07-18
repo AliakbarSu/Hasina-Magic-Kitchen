@@ -6,13 +6,8 @@ import { Footer } from '@/Components/UI/Footer'
 import { useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { optimizeImage } from '@/utils/cloudinary'
 
-const navigation = [
-    { name: 'Product', href: '#' },
-    { name: 'Features', href: '#' },
-    { name: 'Resources', href: '#' },
-    { name: 'Company', href: '#' },
-]
 const stats = [
     { label: 'Meals delieverd', value: '44000' },
     { label: 'Customers served', value: '122' },
@@ -59,26 +54,6 @@ const team = [
     },
     // More people...
 ]
-const blogPosts = [
-    {
-        id: 1,
-        title: 'Vel expedita assumenda placeat aut nisi optio voluptates quas',
-        href: '#',
-        description:
-            'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.',
-        imageUrl:
-            'https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3603&q=80',
-        date: 'Mar 16, 2020',
-        datetime: '2020-03-16',
-        author: {
-            name: 'Michael Foster',
-            imageUrl:
-                'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        },
-    },
-    // More posts...
-]
-
 
 export default function About() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -145,8 +120,8 @@ export default function About() {
                                         <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
                                             <div className="relative">
                                                 <img
-                                                    src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80"
-                                                    alt=""
+                                                    src={optimizeImage("https://res.cloudinary.com/dd1okznpy/image/upload/v1689659364/thumbnails/afghan-cusine-dish-delicious_oeqbeb.jpg")}
+                                                    alt="photo of afghani dish - afghan cuisine"
                                                     className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                                                 />
                                                 <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
@@ -155,16 +130,16 @@ export default function About() {
                                         <div className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
                                             <div className="relative">
                                                 <img
-                                                    src="https://images.unsplash.com/photo-1485217988980-11786ced9454?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80"
-                                                    alt=""
+                                                    src={optimizeImage("https://res.cloudinary.com/dd1okznpy/image/upload/v1689659362/thumbnails/boolani-dish-afghan-food_p8ejzd.jpg")}
+                                                    alt="photo of boolani dish - afghani food"
                                                     className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                                                 />
                                                 <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
                                             </div>
                                             <div className="relative">
                                                 <img
-                                                    src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=focalpoint&fp-x=.4&w=396&h=528&q=80"
-                                                    alt=""
+                                                    src={optimizeImage("https://res.cloudinary.com/dd1okznpy/image/upload/v1689659362/thumbnails/ashak-afghani-dish-middle-eastern_mgs2ya.jpg")}
+                                                    alt="photo of ashak afghani dish"
                                                     className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                                                 />
                                                 <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
@@ -173,16 +148,16 @@ export default function About() {
                                         <div className="w-44 flex-none space-y-8 pt-32 sm:pt-0">
                                             <div className="relative">
                                                 <img
-                                                    src="https://images.unsplash.com/photo-1670272504528-790c24957dda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=left&w=400&h=528&q=80"
-                                                    alt=""
+                                                    src={optimizeImage("https://res.cloudinary.com/dd1okznpy/image/upload/v1689659380/thumbnails/baklawa-sweet-turkish-pastry_ps5hnw.jpg")}
+                                                    alt="photo of baklawa - aghani dish"
                                                     className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                                                 />
                                                 <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
                                             </div>
                                             <div className="relative">
                                                 <img
-                                                    src="https://images.unsplash.com/photo-1670272505284-8faba1c31f7d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80"
-                                                    alt=""
+                                                    src={optimizeImage("https://res.cloudinary.com/dd1okznpy/image/upload/v1689659363/thumbnails/mantoo-dish-afghan-mantoo-food_wajy9w.jpg")}
+                                                    alt="photo of mantoo dish - afghani food"
                                                     className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                                                 />
                                                 <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
@@ -221,7 +196,7 @@ export default function About() {
                                         </p>
                                     </div>
                                 </div>
-                                <div className="lg:flex lg:flex-auto lg:justify-center">
+                                {/* <div className="lg:flex lg:flex-auto lg:justify-center">
                                     <dl className="w-64 space-y-8 xl:w-80">
                                         {stats.map((stat) => (
                                             <div key={stat.label} className="flex flex-col-reverse gap-y-4">
@@ -230,7 +205,7 @@ export default function About() {
                                             </div>
                                         ))}
                                     </dl>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -238,7 +213,7 @@ export default function About() {
                     {/* Image section */}
                     <div className="mt-32 sm:mt-40 xl:mx-auto xl:max-w-7xl xl:px-8">
                         <img
-                            src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80"
+                            src="https://res.cloudinary.com/dd1okznpy/image/upload/v1689659362/thumbnails/ashak-afghani-dish-middle-eastern_mgs2ya.jpg"
                             alt=""
                             className="aspect-[5/2] w-full object-cover xl:rounded-3xl"
                         />
@@ -331,7 +306,7 @@ export default function About() {
                     </div> */}
 
                     {/* Team section */}
-                    <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-48 lg:px-8">
+                    {/* <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-48 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0">
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Our team</h2>
                             <p className="mt-6 text-lg leading-8 text-gray-600">
@@ -351,7 +326,7 @@ export default function About() {
                                 </li>
                             ))}
                         </ul>
-                    </div>
+                    </div> */}
 
                     {/* Blog section */}
                     {/* <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8">
