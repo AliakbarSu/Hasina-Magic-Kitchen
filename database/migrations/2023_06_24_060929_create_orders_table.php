@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->string('address');
             $table->date('date');
             $table->time('time');
-            $table->text('note');
+            $table->longText('note');
             $table->decimal('delivery_fee')->nullable();
             $table->decimal('subtotal')->nullable();
             $table->decimal('total')->nullable();
