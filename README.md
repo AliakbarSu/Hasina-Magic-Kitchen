@@ -1,72 +1,32 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<p align="left">
+    <a href="https://hasina.store" target="_blank">
+        <img src="https://res.cloudinary.com/dd1okznpy/image/upload/q_30/v1689726346/thumbnails/Screenshot_2023-07-18_at_6.03.36_PM_h79ewi.png" width="400" alt="Hasina Magic Kitchen Website">
+    </a>
 </p>
 
-## About Laravel
+## Food Catering Management System
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This GitHub repository contains a web application built using the Laravel framework and AWS services, designed to cater to the needs of a food catering business. The system provides a comprehensive solution for managing transactions, order placements, and seamless communication with customers through email and SMS notifications.
 
--   [Simple, fast routing engine](https://laravel.com/docs/routing).
--   [Powerful dependency injection container](https://laravel.com/docs/container).
--   Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
--   Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
--   Database agnostic [schema migrations](https://laravel.com/docs/migrations).
--   [Robust background job processing](https://laravel.com/docs/queues).
--   [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Key Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   **Order Management:** Customers can easily browse through the available menu items, place orders, and track their order status. The system provides a user-friendly interface for managing orders efficiently.
+-   **Transaction Handling:** The application facilitates secure and reliable transaction management, allowing customers to make online payments for their orders. Integration with popular payment gateways ensures smooth payment processing.
+-   **Email Notifications:** Automated email notifications are sent to customers at various stages of the order lifecycle. These notifications include order confirmation, payment receipt, and order status updates, ensuring clear and timely communication.
+-   **SMS Notifications:** Real-time SMS notifications are sent to customers, providing order confirmations, delivery updates, and any important changes related to their orders. This feature enables efficient communication and enhances the customer experience.
 
-## Learning Laravel
+## Additional Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
--   **[Vehikl](https://vehikl.com/)**
--   **[Tighten Co.](https://tighten.co)**
--   **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
--   **[64 Robots](https://64robots.com)**
--   **[Cubet Techno Labs](https://cubettech.com)**
--   **[Cyber-Duck](https://cyber-duck.co.uk)**
--   **[Many](https://www.many.co.uk)**
--   **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
--   **[DevSquad](https://devsquad.com)**
--   **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
--   **[OP.GG](https://op.gg)**
--   **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
--   **[Lendio](https://lendio.com)**
+-   **Menu Management:** The system provides an intuitive interface for managing menus, including the ability to add, update, and delete menu items. Menu customization options, such as categorization and pricing, are also available.
+-   **Customer Management:** The application allows efficient customer management, including the ability to store customer details, order history, and preferences. This helps in providing personalized services and targeted marketing campaigns.
+-   **Reporting and Analytics:** Comprehensive reporting and analytics functionalities are integrated to provide valuable insights into sales, popular menu items, customer preferences, and other key metrics. This information assists in making data-driven business decisions.
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+This project is not open for contributions at this time.
 
 ## Development
 
     - php artisan inertia:start-ssr
     - php artisan serve
     - php run dev
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
