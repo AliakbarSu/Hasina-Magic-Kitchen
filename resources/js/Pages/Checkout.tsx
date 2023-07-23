@@ -51,16 +51,7 @@ import { InformationCircleIcon } from '@heroicons/react/20/solid';
 import { optimizeImage } from '@/utils/cloudinary';
 
 function InfoSection() {
-    const {
-        setData,
-        data,
-        post,
-        errors,
-        setError,
-        clearErrors,
-        isDirty,
-        hasErrors,
-    } = useForm({
+    const { setData, data, errors, setError, clearErrors, isDirty } = useForm({
         customer_name: '',
         address: '',
         date: '',
@@ -72,7 +63,8 @@ function InfoSection() {
     const elements = useElements();
     const stripe = useStripe();
     const dispatch = useDispatch();
-    const [errorMessage, setErrorMessage] = useState('');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [__, setErrorMessage] = useState('');
     const [orderFailedModal, setOrderFailedModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -130,9 +122,9 @@ function InfoSection() {
         if (!results.success) {
             results.error.issues.forEach((issue) => {
                 setError(
-                    issue.path.at(0) as any,
+                    issue.path.at(0) as keyof typeof errorMessages,
                     errorMessages[
-                    issue.path.at(0) as keyof typeof errorMessages
+                        issue.path.at(0) as keyof typeof errorMessages
                     ]
                 );
             });
@@ -243,7 +235,11 @@ function InfoSection() {
                                     className="flex items-start space-x-4 py-6"
                                 >
                                     <img
-                                        src={optimizeImage(item.media.at(0)?.url, 300, 300)}
+                                        src={optimizeImage(
+                                            item.media.at(0)?.url,
+                                            300,
+                                            300
+                                        )}
                                         alt={`Image of ${item.name} menu`}
                                         className="border h-20 w-20 flex-none rounded-md object-cover object-center"
                                     />
@@ -268,7 +264,9 @@ function InfoSection() {
                                 </li>
                             ))}
                         </ul>
-                        {cartAddons.length > 0 && <h3 className="text-md">Addons</h3>}
+                        {cartAddons.length > 0 && (
+                            <h3 className="text-md">Addons</h3>
+                        )}
                         <ul
                             role="list"
                             className="divide-y divide-white divide-opacity-10 text-sm font-medium"
@@ -279,7 +277,11 @@ function InfoSection() {
                                     className="flex items-start space-x-4 py-6"
                                 >
                                     <img
-                                        src={optimizeImage(item.media.at(0)?.url, 300, 300)}
+                                        src={optimizeImage(
+                                            item.media.at(0)?.url,
+                                            300,
+                                            300
+                                        )}
                                         alt={`Image of ${item.name} menu`}
                                         className="border h-20 w-20 flex-none rounded-md object-cover object-center"
                                     />

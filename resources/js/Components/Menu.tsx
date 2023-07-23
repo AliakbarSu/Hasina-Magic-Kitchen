@@ -5,10 +5,7 @@ import { setSelectedMenu } from '@/store/slice/menu';
 import { UsersIcon, PlusIcon, MinusIcon } from '@heroicons/react/20/solid';
 import { optimizeImage } from '@/utils/cloudinary';
 
-
-
 export default function MenuList({ menu }: { menu: Menu[] }) {
-
     return (
         <>
             <div className="bg-white">
@@ -34,7 +31,6 @@ export default function MenuList({ menu }: { menu: Menu[] }) {
                 </div>
             </div>
 
-
             {/* <Example open={open} setOpen={setOpen} /> */}
         </>
     );
@@ -44,18 +40,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addItem, removeItem, updateQuantity } from '@/store/slice/cart';
 import { RootState } from '@/store';
 
-export function MenuItem({
-    product,
-}: {
-    product: Menu
-}) {
-
-
+export function MenuItem({ product }: { product: Menu }) {
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
 
     const [numOfPeople, setNumOfPeople] = useState(15);
-
 
     const addToCartHandler = () => {
         dispatch(addItem({ ...product, numOfPeople: numOfPeople }));
@@ -66,19 +55,19 @@ export function MenuItem({
     );
 
     const onRemoveItemHandler = () => {
-        dispatch(removeItem(product.id))
-    }
+        dispatch(removeItem(product.id));
+    };
 
     useEffect(() => {
         dispatch(updateQuantity({ id: product.id, quantity: numOfPeople }));
-    }, [numOfPeople])
+    }, [numOfPeople]);
 
     const onCustomizeClickHandler = () => {
-        dispatch(setSelectedMenu(product))
+        dispatch(setSelectedMenu(product));
         setOpen(true);
-    }
+    };
     return (
-        <div className='relative'>
+        <div className="relative">
             <div className="group flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
                 <Modal open={open} setOpen={setOpen} />
                 <div className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
@@ -95,7 +84,9 @@ export function MenuItem({
                         {product.name}
                         {/* </a> */}
                     </h3>
-                    <p className="text-sm text-gray-700">{product.description}</p>
+                    <p className="text-sm text-gray-700">
+                        {product.description}
+                    </p>
                     <p className="text-base font-extrabold text-gray-500  pb-4">
                         {`$${product.price} Per Person`}
                     </p>
@@ -106,8 +97,8 @@ export function MenuItem({
                                 state={numOfPeople}
                                 setState={setNumOfPeople}
                             />
-                            { }
-                            <div className='flex gap-2'>
+                            {}
+                            <div className="flex gap-2">
                                 <button
                                     onClick={onCustomizeClickHandler}
                                     className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -121,7 +112,6 @@ export function MenuItem({
                                     Remove
                                 </button>
                             </div>
-
                         </>
                     ) : (
                         <button
@@ -137,23 +127,21 @@ export function MenuItem({
     );
 }
 
-
 function PeopleInput(props: {
     state: number;
     setState: (value: number) => void;
 }) {
-
     const onIncreaseHandler = () => {
         if (props.state < 200) {
             props.setState(props.state + 1);
         }
-    }
+    };
 
     const onDecreaseHandler = () => {
         if (props.state > 15) {
             props.setState(props.state - 1);
         }
-    }
+    };
 
     return (
         <div>
@@ -178,7 +166,7 @@ function PeopleInput(props: {
                         min="15"
                         max="200"
                         value={props.state}
-                        onChange={(e) => null}
+                        onChange={() => null}
                         className="block w-full rounded-none rounded-l-md border-gray-300 pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         placeholder="Minimum 15 people"
                     />
@@ -207,6 +195,3 @@ function PeopleInput(props: {
         </div>
     );
 }
-
-
-

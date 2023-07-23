@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import Nav from '@/Layouts/Nav';
 import { Footer } from '@/Components/UI/Footer';
 import MessageSent from '@/Components/Contact/MessageSent';
@@ -7,18 +7,16 @@ import { z } from 'zod';
 import { PhoneNumberInput } from '@/Components/Checkout/PhoneNumberInput';
 
 export default function Contact() {
-    const [agreed, setAgreed] = useState(false);
     const [messageSent, setMessageSent] = useState(false);
-    const { post, data, setData, setError, errors, hasErrors, clearErrors } =
-        useForm({
-            first_name: '',
-            last_name: '',
-            company: '',
-            email: '',
-            number: 0,
-            message: '',
-            terms: true,
-        });
+    const { post, data, setData, setError, errors, clearErrors } = useForm({
+        first_name: '',
+        last_name: '',
+        company: '',
+        email: '',
+        number: 0,
+        message: '',
+        terms: true,
+    });
 
     const formSchema = z.object({
         first_name: z.string().min(2).max(20),
@@ -42,7 +40,7 @@ export default function Contact() {
         terms: '',
     };
 
-    const onSubmitHandler = (e: any) => {
+    const onSubmitHandler = (e: FormEvent) => {
         e.preventDefault();
 
         // Do validation here
@@ -51,9 +49,9 @@ export default function Contact() {
         if (!results.success) {
             results.error.issues.forEach((issue) => {
                 setError(
-                    issue.path.at(0) as any,
+                    issue.path.at(0) as keyof typeof errorMessages,
                     errorMessages[
-                    issue.path.at(0) as keyof typeof errorMessages
+                        issue.path.at(0) as keyof typeof errorMessages
                     ]
                 );
             });
@@ -282,7 +280,7 @@ export default function Contact() {
                             type="submit"
                             className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
-                            Let's talk
+                            Let&apos;s talk
                         </button>
                     </div>
                 </form>

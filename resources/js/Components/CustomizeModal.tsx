@@ -11,7 +11,7 @@ export default function CustomizeModal({
     setOpen,
 }: {
     open: boolean;
-    setOpen: any;
+    setOpen: (value: boolean) => void;
 }) {
     const cancelButtonRef = useRef(null);
     const dispatch = useDispatch();

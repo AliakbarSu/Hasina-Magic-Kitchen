@@ -1,20 +1,23 @@
-import { Category } from "@/types/application"
-import axios from "axios"
-import { useState } from "react"
+import { Category } from '@/types/application';
+import axios from 'axios';
+import { useState } from 'react';
 
 export default function Categories({ categories }: { categories: Category[] }) {
-
-    const [allCategories, setAllCategories] = useState<Category[]>(categories)
+    const [allCategories, setAllCategories] = useState<Category[]>(categories);
 
     const onDeleteCategory = async (id: string) => {
-        axios.delete(`/api/category/${id}`).catch((err) => {
-            console.log(err.response.data)
-        }).then((res) => {
-            setAllCategories(allCategories.filter((category) => category.id !== id))
-            alert('Category deleted successfully')
-        })
-    }
-
+        axios
+            .delete(`/api/category/${id}`)
+            .catch((err) => {
+                console.log(err.response.data);
+            })
+            .then(() => {
+                setAllCategories(
+                    allCategories.filter((category) => category.id !== id)
+                );
+                alert('Category deleted successfully');
+            });
+    };
 
     return (
         <div>
@@ -25,14 +28,25 @@ export default function Categories({ categories }: { categories: Category[] }) {
                             <table className="min-w-full divide-y divide-gray-300">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
                                             Name
                                         </th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
                                             Description
                                         </th>
-                                        <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                            <span className="sr-only">Delete</span>
+                                        <th
+                                            scope="col"
+                                            className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                                        >
+                                            <span className="sr-only">
+                                                Delete
+                                            </span>
                                         </th>
                                     </tr>
                                 </thead>
@@ -42,9 +56,18 @@ export default function Categories({ categories }: { categories: Category[] }) {
                                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                                 {category.name}
                                             </td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{category.description}</td>
+                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                {category.description}
+                                            </td>
                                             <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                <span onClick={() => onDeleteCategory(category.id)} className="text-indigo-600 hover:text-indigo-900">
+                                                <span
+                                                    onClick={() =>
+                                                        onDeleteCategory(
+                                                            category.id
+                                                        )
+                                                    }
+                                                    className="text-indigo-600 hover:text-indigo-900"
+                                                >
                                                     Delete
                                                 </span>
                                             </td>
@@ -57,5 +80,5 @@ export default function Categories({ categories }: { categories: Category[] }) {
                 </div>
             </div>
         </div>
-    )
+    );
 }

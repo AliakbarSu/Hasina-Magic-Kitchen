@@ -1,7 +1,7 @@
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker, TimePickerProps } from '@mui/x-date-pickers/TimePicker';
-import dayjs, { Dayjs } from 'dayjs';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import dayjs from 'dayjs';
 import { TimeValidationError } from '@mui/x-date-pickers';
 
 const fiveAM = dayjs().set('hour', 5).startOf('hour');
@@ -12,11 +12,6 @@ export function TimeInput(props: {
     setState: (value: string) => void;
     setError: (value: string) => void;
 }) {
-    const shouldDisableTime: TimePickerProps<Dayjs>['shouldDisableTime'] = (
-        value,
-        view
-    ) => view === 'hours' && value.hour() >= 20;
-
     const timeChangeHandler = (value: dayjs.Dayjs | null) => {
         const time = value?.format('HH:MM');
         props.setState(`${time}`);

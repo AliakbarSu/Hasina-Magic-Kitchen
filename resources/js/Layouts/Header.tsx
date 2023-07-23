@@ -39,15 +39,15 @@ export function Container({
 }: {
     size: 'xs' | 'sm' | 'md' | 'lg'; // Update the type to a union of allowed keys
     className?: string; // Use string as the type for className
-    children: ReactNode
+    children: ReactNode;
 }) {
     return <div className={clsx(styles[size], className)} {...props} />;
 }
 
 // --------------------------------------------------------------------
-import React, { ReactElement, ReactNode, useId } from 'react';
+import { ReactNode, useId } from 'react';
 
-export function Pattern({
+export const Pattern = ({
     size = 40,
     gapX = 16,
     gapY = 8,
@@ -58,10 +58,16 @@ export function Pattern({
         [1, 0, 1, 1, 0, 0, 0, 1],
     ],
     ...props
-}) {
-    let id = useId();
-    let width = pattern[0].length * size + (pattern[0].length - 1) * gapX;
-    let height = pattern.length * size + (pattern.length - 1) * gapY;
+}: {
+    size?: number;
+    gapX?: number;
+    gapY?: number;
+    pattern?: number[][];
+    className: string;
+}) => {
+    const id = useId();
+    const width = pattern[0].length * size + (pattern[0].length - 1) * gapX;
+    const height = pattern.length * size + (pattern.length - 1) * gapY;
 
     return (
         <svg aria-hidden="true" width={width} height={height} {...props}>
@@ -107,4 +113,4 @@ export function Pattern({
             )}
         </svg>
     );
-}
+};

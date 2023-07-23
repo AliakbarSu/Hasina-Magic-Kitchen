@@ -1,64 +1,78 @@
-import { PageProps } from "@/types"
-import { Order } from "./Admin/Orders"
-import { formatNZD } from "@/utils/currentcy"
-import Nav from "@/Layouts/Nav"
+import { PageProps } from '@/types';
+import { Order } from './Admin/Orders';
+import { formatNZD } from '@/utils/currentcy';
+import Nav from '@/Layouts/Nav';
 import { Footer } from '@/Components/UI/Footer';
-import { Head, Link } from "@inertiajs/react";
-import dayjs from "dayjs";
-import { useState } from "react";
-import { optimizeImage } from "@/utils/cloudinary";
-
+import { Head, Link } from '@inertiajs/react';
+import dayjs from 'dayjs';
+import { useState } from 'react';
+import { optimizeImage } from '@/utils/cloudinary';
 
 export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
-    const [print, setPrint] = useState(false)
+    const [print, setPrint] = useState(false);
     const getTime = (time: string) => {
         return {
-            h: time.split(":").at(0) as unknown as number || 0,
-            m: time.split(":").at(1) as unknown as number || 0
-        }
-    }
+            h: (time.split(':').at(0) as unknown as number) || 0,
+            m: (time.split(':').at(1) as unknown as number) || 0,
+        };
+    };
 
     const savePage = () => {
-        setPrint(true)
+        setPrint(true);
         setTimeout(() => {
-            window.print()
-            setPrint(false)
-        }, 100)
-    }
+            window.print();
+            setPrint(false);
+        }, 100);
+    };
 
     return (
         <>
             <Head title="Order Summaries" />
             {!print && <Nav />}
             <main className="relative lg:min-h-full flex justify-center">
-
                 <div>
                     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:grid lg:max-w-7xl lg:gap-x-8 lg:px-8 lg:py-32 xl:gap-x-24">
                         <div className="lg:col-start-2">
-                            {!print ? <div className="flex justify-between">
-                                <h1 className="text-sm font-medium text-indigo-600">Payment successful</h1>
-                                <button
-                                    onClick={savePage}
-                                    type="button"
-                                    className="rounded bg-indigo-600 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                >
-                                    Save as PDF
-                                </button>
-                            </div>
-                                :
+                            {!print ? (
                                 <div className="flex justify-between">
-                                    <h1 className="text-sm font-medium text-indigo-600"><b>Customer Name: </b>{order.customer_name}</h1>
-                                </div>}
+                                    <h1 className="text-sm font-medium text-indigo-600">
+                                        Payment successful
+                                    </h1>
+                                    <button
+                                        onClick={savePage}
+                                        type="button"
+                                        className="rounded bg-indigo-600 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                    >
+                                        Save as PDF
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="flex justify-between">
+                                    <h1 className="text-sm font-medium text-indigo-600">
+                                        <b>Customer Name: </b>
+                                        {order.customer_name}
+                                    </h1>
+                                </div>
+                            )}
 
-                            {!print && <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Thanks for ordering</p>}
-                            {!print && <p className="mt-2 text-base text-gray-500">
-                                We appreciate your order, we’re currently processing it. So hang tight and we’ll send you confirmation
-                                very soon!
-                            </p>}
+                            {!print && (
+                                <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                                    Thanks for ordering
+                                </p>
+                            )}
+                            {!print && (
+                                <p className="mt-2 text-base text-gray-500">
+                                    We appreciate your order, we’re currently
+                                    processing it. So hang tight and we’ll send
+                                    you confirmation very soon!
+                                </p>
+                            )}
 
                             <dl className="mt-16 text-sm font-medium">
                                 <dt className="text-gray-900">Order ID</dt>
-                                <dd className="mt-2 text-indigo-600">{order.id}</dd>
+                                <dd className="mt-2 text-indigo-600">
+                                    {order.id}
+                                </dd>
                             </dl>
 
                             <ul
@@ -66,20 +80,32 @@ export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
                                 className="mt-6 divide-y divide-gray-200 border-t border-gray-200 text-sm font-medium text-gray-500"
                             >
                                 {order.items.map((item) => (
-                                    <li key={item.id} className="flex space-x-6 py-6">
+                                    <li
+                                        key={item.id}
+                                        className="flex space-x-6 py-6"
+                                    >
                                         <img
-                                            src={optimizeImage(item.media.at(0)?.url, 400, 400)}
-                                            alt={"Photo of menu item"}
+                                            src={optimizeImage(
+                                                item.media.at(0)?.url,
+                                                400,
+                                                400
+                                            )}
+                                            alt={'Photo of menu item'}
                                             className="h-24 w-24 flex-none rounded-md bg-gray-100 object-cover object-center"
                                         />
                                         <div className="flex-auto space-y-1">
                                             <h3 className="text-gray-900">
-                                                <span >{item.name}</span>
+                                                <span>{item.name}</span>
                                             </h3>
                                             {/* <p>{product.color}</p> */}
-                                            <p><b>Quantity: </b>{item.quantity}</p>
+                                            <p>
+                                                <b>Quantity: </b>
+                                                {item.quantity}
+                                            </p>
                                         </div>
-                                        <p className="flex-none font-medium text-gray-900">{formatNZD(item.price)} NZD</p>
+                                        <p className="flex-none font-medium text-gray-900">
+                                            {formatNZD(item.price)} NZD
+                                        </p>
                                     </li>
                                 ))}
                             </ul>
@@ -91,20 +117,28 @@ export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
                                 className="mt-6 divide-y divide-gray-200 border-t border-gray-200 text-sm font-medium text-gray-500"
                             >
                                 {order.addons.map((item) => (
-                                    <li key={item.id} className="flex space-x-6 py-6">
+                                    <li
+                                        key={item.id}
+                                        className="flex space-x-6 py-6"
+                                    >
                                         <img
                                             src={item.media.at(0)?.url}
-                                            alt={"Photo of menu item"}
+                                            alt={'Photo of menu item'}
                                             className="h-24 w-24 flex-none rounded-md bg-gray-100 object-cover object-center"
                                         />
                                         <div className="flex-auto space-y-1">
                                             <h3 className="text-gray-900">
-                                                <span >{item.name}</span>
+                                                <span>{item.name}</span>
                                             </h3>
                                             {/* <p>{product.color}</p> */}
-                                            <p><b>Quantity: </b>{item.quantity}</p>
+                                            <p>
+                                                <b>Quantity: </b>
+                                                {item.quantity}
+                                            </p>
                                         </div>
-                                        <p className="flex-none font-medium text-gray-900">{formatNZD(item.price)} NZD</p>
+                                        <p className="flex-none font-medium text-gray-900">
+                                            {formatNZD(item.price)} NZD
+                                        </p>
                                     </li>
                                 ))}
                             </ul>
@@ -112,44 +146,84 @@ export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
                             <dl className="space-y-6 border-t border-gray-200 pt-6 text-sm font-medium text-gray-500">
                                 <div className="flex justify-between">
                                     <dt>Subtotal</dt>
-                                    <dd className="text-gray-900">{formatNZD(order.subtotal)} NZD</dd>
+                                    <dd className="text-gray-900">
+                                        {formatNZD(order.subtotal)} NZD
+                                    </dd>
                                 </div>
 
                                 <div className="flex justify-between">
                                     <dt>Shipping</dt>
-                                    <dd className="text-gray-900">{formatNZD(order.delivery_fee)} NZD</dd>
+                                    <dd className="text-gray-900">
+                                        {formatNZD(order.delivery_fee)} NZD
+                                    </dd>
                                 </div>
 
                                 <div className="flex justify-between">
                                     <dt>GST</dt>
-                                    <dd className="text-gray-900">{formatNZD(order.tax)} NZD</dd>
+                                    <dd className="text-gray-900">
+                                        {formatNZD(order.tax)} NZD
+                                    </dd>
                                 </div>
 
                                 <div className="flex items-center justify-between border-t border-gray-200 pt-6 text-gray-900">
                                     <dt className="text-base">Total</dt>
-                                    <dd className="text-base">{formatNZD(+order.total)}</dd>
+                                    <dd className="text-base">
+                                        {formatNZD(+order.total)}
+                                    </dd>
                                 </div>
                             </dl>
 
                             <dl className="mt-16 grid grid-cols-2 gap-x-4 text-sm text-gray-600">
                                 <div>
-                                    <dt className="font-medium text-gray-900">Shipping Address</dt>
+                                    <dt className="font-medium text-gray-900">
+                                        Shipping Address
+                                    </dt>
                                     <dd className="mt-2">
                                         <address className="not-italic">
-                                            {order.address.split(",").map(add => (
-                                                <span key={add} className="block">{add}</span>
-                                            ))}
+                                            {order.address
+                                                .split(',')
+                                                .map((add) => (
+                                                    <span
+                                                        key={add}
+                                                        className="block"
+                                                    >
+                                                        {add}
+                                                    </span>
+                                                ))}
                                         </address>
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt className="font-medium text-gray-900">Order Date & Time</dt>
+                                    <dt className="font-medium text-gray-900">
+                                        Order Date & Time
+                                    </dt>
                                     <dd className="mt-2">
-                                        <time className="not-italic" dateTime={order.date}>
-                                            <span className="block"><b>Date: </b>{dayjs().format("DD/MM/YYYY")}</span>
+                                        <time
+                                            className="not-italic"
+                                            dateTime={order.date}
+                                        >
+                                            <span className="block">
+                                                <b>Date: </b>
+                                                {dayjs().format('DD/MM/YYYY')}
+                                            </span>
                                         </time>
-                                        <time className="not-italic" dateTime={order.time}>
-                                            <span className="block"><b>Time: </b>{dayjs().set('h', getTime(order.time).h).set("m", getTime(order.time).m).format("h:mm A")}</span>
+                                        <time
+                                            className="not-italic"
+                                            dateTime={order.time}
+                                        >
+                                            <span className="block">
+                                                <b>Time: </b>
+                                                {dayjs()
+                                                    .set(
+                                                        'h',
+                                                        getTime(order.time).h
+                                                    )
+                                                    .set(
+                                                        'm',
+                                                        getTime(order.time).m
+                                                    )
+                                                    .format('h:mm A')}
+                                            </span>
                                         </time>
                                     </dd>
                                 </div>
@@ -174,17 +248,22 @@ export default function OrderSummaries({ order }: PageProps<{ order: Order }>) {
                                 </div> */}
                             </dl>
 
-                            {!print && <div className="mt-16 border-t border-gray-200 py-6 text-right">
-                                <Link href={route('main.home')} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                                    Continue Ordering
-                                    <span aria-hidden="true"> &rarr;</span>
-                                </Link>
-                            </div>}
+                            {!print && (
+                                <div className="mt-16 border-t border-gray-200 py-6 text-right">
+                                    <Link
+                                        href={route('main.home')}
+                                        className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                                    >
+                                        Continue Ordering
+                                        <span aria-hidden="true"> &rarr;</span>
+                                    </Link>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
             </main>
             {!print && <Footer />}
         </>
-    )
+    );
 }

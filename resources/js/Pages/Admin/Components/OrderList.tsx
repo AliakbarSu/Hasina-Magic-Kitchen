@@ -1,52 +1,36 @@
-import { Fragment, useState } from 'react'
-import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
-import { Bars3Icon, MagnifyingGlassIcon, ShoppingCartIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { Order, OrderStatus } from '../Orders'
-import OrderStatusActions from "./OrderStatusActions"
-import { Link } from '@inertiajs/react'
-import OrderStatusBadges from './OrderStatusBadges'
-
-
+import { Order, OrderStatus } from '../Orders';
+import OrderStatusActions from './OrderStatusActions';
+import { Link } from '@inertiajs/react';
+import OrderStatusBadges from './OrderStatusBadges';
 
 type OrderListProps = {
     orders: Order[];
-}
+};
 
 export default function OrderList({ orders }: OrderListProps) {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
-
-    const orderStatusColor = (status: string) => {
-        if (status === "placed") {
-            return "text-orange-300";
-        } else if (status === "confirmed") {
-            return "text-green-600";
-        } else if (status === "completed") {
-            return "text-green-800";
-        } else if (status === "make") {
-            return "text-orange-600";
-        } else if (status === "canceled") {
-            return "text-red-600"
-        } else {
-            return "text-green-600"
-        }
-    }
-
     return (
-        <main className="mx-auto px-4 py-16 sm:px-6 sm:pb-32 sm:pt-24 lg:px-8" >
+        <main className="mx-auto px-4 py-16 sm:px-6 sm:pb-32 sm:pt-24 lg:px-8">
             <div className="mx-auto max-w-2xl">
-                <h1 className="text-3xl font-bold tracking-tight text-gray-900">Your Orders</h1>
+                <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+                    Your Orders
+                </h1>
                 <p className="mt-2 text-sm text-gray-500">
-                    Check the status of recent orders, manage returns, and discover similar products.
+                    Check the status of recent orders, manage returns, and
+                    discover similar products.
                 </p>
             </div>
 
             <div className="mx-auto max-w-2xl mt-12 space-y-16 sm:mt-16">
                 {orders.map((order) => (
-                    <section key={order.id} aria-labelledby={`${order.id}-heading`}>
+                    <section
+                        key={order.id}
+                        aria-labelledby={`${order.id}-heading`}
+                    >
                         <div className="space-y-1 md:flex md:items-baseline md:space-x-4 md:space-y-0">
-                            <h2 id={`${order.id}-heading`} className="text-lg font-medium text-gray-900 md:flex-shrink-0 w-2/4">
+                            <h2
+                                id={`${order.id}-heading`}
+                                className="text-lg font-medium text-gray-900 md:flex-shrink-0 w-2/4"
+                            >
                                 Order for <b>{order.customer_name}</b>
                             </h2>
                             <div className="space-y-5 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 md:min-w-0 md:flex-1">
@@ -55,9 +39,16 @@ export default function OrderList({ orders }: OrderListProps) {
                                     {/* <span className={classNames(orderStatusColor(order.status), "hover:" + orderStatusColor(order.status))}>
                                         {order.status}
                                     </span> */}
-                                    <OrderStatusBadges status={order.status as OrderStatus} />
+                                    <OrderStatusBadges
+                                        status={order.status as OrderStatus}
+                                    />
                                     <div className="ml-4 border-l border-gray-200 pl-4 sm:ml-6 sm:pl-6">
-                                        <Link href={route('admin.order_details', { id: order.id })} className="text-indigo-600 hover:text-indigo-500 text-xl">
+                                        <Link
+                                            href={route('admin.order_details', {
+                                                id: order.id,
+                                            })}
+                                            className="text-indigo-600 hover:text-indigo-500 text-xl"
+                                        >
                                             دیدن سفارش
                                         </Link>
                                     </div>
@@ -80,13 +71,13 @@ export default function OrderList({ orders }: OrderListProps) {
                                 </button>
                             </div> */}
                         </div>
-                        <OrderStatusActions order={order} onSelect={() => null} />
+                        <OrderStatusActions
+                            order={order}
+                            onSelect={() => null}
+                        />
                     </section>
                 ))}
             </div>
         </main>
-
-
-
-    )
+    );
 }

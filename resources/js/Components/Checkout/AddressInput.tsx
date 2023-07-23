@@ -1,13 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-interface Address {
-    address1: string;
-    suburb: string;
-    city: string;
-    postCode: string;
-}
-
 export function AddressInput(props: {
     isAddressValidated: boolean;
     setIsAddressValidated: (value: boolean) => void;
@@ -18,10 +11,11 @@ export function AddressInput(props: {
     const [suburb, setSuburb] = useState('');
     const [city, setCity] = useState('Auckland');
     const [postCode, setPostCode] = useState('');
-    const [hasError, setHasError] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [__, setHasError] = useState(false);
 
-    let timeout: any;
-    var debounce = function (func: () => Promise<void>, delay: number) {
+    let timeout: NodeJS.Timeout;
+    const debounce = function (func: () => Promise<void>, delay: number) {
         clearTimeout(timeout);
         timeout = setTimeout(func, delay);
     };

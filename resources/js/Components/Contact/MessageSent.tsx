@@ -1,10 +1,15 @@
-import { Fragment } from 'react'
-import { Transition } from '@headlessui/react'
-import { CheckCircleIcon } from '@heroicons/react/24/outline'
-import { XMarkIcon } from '@heroicons/react/20/solid'
+import { Fragment } from 'react';
+import { Transition } from '@headlessui/react';
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/20/solid';
 
-export default function MessageSent({ open, setOpen }: { open: boolean, setOpen: (value: boolean) => void }) {
-
+export default function MessageSent({
+    open,
+    setOpen,
+}: {
+    open: boolean;
+    setOpen: (value: boolean) => void;
+}) {
     return (
         <>
             {/* Global notification live region, render this permanently at the end of the document */}
@@ -28,22 +33,34 @@ export default function MessageSent({ open, setOpen }: { open: boolean, setOpen:
                             <div className="p-4">
                                 <div className="flex items-start">
                                     <div className="flex-shrink-0">
-                                        <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
+                                        <CheckCircleIcon
+                                            className="h-6 w-6 text-green-400"
+                                            aria-hidden="true"
+                                        />
                                     </div>
                                     <div className="ml-3 w-0 flex-1 pt-0.5">
-                                        <p className="text-sm font-medium text-gray-900">Successfully sent!</p>
-                                        <p className="mt-1 text-sm text-gray-500">Your message sent successfully!</p>
+                                        <p className="text-sm font-medium text-gray-900">
+                                            Successfully sent!
+                                        </p>
+                                        <p className="mt-1 text-sm text-gray-500">
+                                            Your message sent successfully!
+                                        </p>
                                     </div>
                                     <div className="ml-4 flex flex-shrink-0">
                                         <button
                                             type="button"
                                             className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                             onClick={() => {
-                                                setOpen(false)
+                                                setOpen(false);
                                             }}
                                         >
-                                            <span className="sr-only">Close</span>
-                                            <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+                                            <span className="sr-only">
+                                                Close
+                                            </span>
+                                            <XMarkIcon
+                                                className="h-5 w-5"
+                                                aria-hidden="true"
+                                            />
                                         </button>
                                     </div>
                                 </div>
@@ -53,5 +70,5 @@ export default function MessageSent({ open, setOpen }: { open: boolean, setOpen:
                 </div>
             </div>
         </>
-    )
+    );
 }

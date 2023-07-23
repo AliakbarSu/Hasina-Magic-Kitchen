@@ -1,27 +1,18 @@
-import { Menu } from '@/types/application';
 import { formatNZD } from '@/utils/currentcy';
 import { AddExtraDish } from './AddExtraDish';
 import { MenuItems } from './MenuItems';
 import { useSelector } from 'react-redux';
 import { MutableRefObject } from 'react';
-
-const policies = [
-    {
-        name: 'International delivery',
-        description: 'Get your order in 2 years',
-    },
-    {
-        name: 'Loyalty rewards',
-        description: "Don't look at other tees",
-    },
-];
+import { Menu } from '@/types/application';
 
 export function CustomizeItem(props: {
     setOpen: (value: boolean) => void;
     cancelButtonRef: MutableRefObject<null>;
     onApplyHandler: () => void;
 }) {
-    const selectedMenu = useSelector((state: any) => state.menu.selectedMenu);
+    const selectedMenu = useSelector(
+        (state: { menu: { selectedMenu: Menu } }) => state.menu.selectedMenu
+    );
     return (
         <div className="bg-white">
             <div className="pb-4 pt-6 sm:pb-4">

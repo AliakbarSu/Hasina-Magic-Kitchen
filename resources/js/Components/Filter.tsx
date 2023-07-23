@@ -1,7 +1,3 @@
-import { Category } from "@/types/application";
-
-
-
 const options = [
     {
         name: 'Vegetarian',
@@ -23,8 +19,7 @@ const options = [
     },
 ];
 
-
-function Filter({ categories }: { categories: Category[] }) {
+function Filter() {
     return (
         <ul
             role="list"
@@ -50,4 +45,3 @@ function Filter({ categories }: { categories: Category[] }) {
 }
 
 export default Filter;
-

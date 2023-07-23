@@ -72,10 +72,7 @@ const cartSlice = createSlice({
                 return item;
             });
         },
-        decreaseNumOfPeople: (
-            state,
-            action: PayloadAction<{ id: string; numOfPeople: number }>
-        ) => {},
+        decreaseNumOfPeople: () => {},
         updateQuantity: (
             state,
             {
@@ -100,7 +97,7 @@ const cartSlice = createSlice({
                 return item;
             });
         },
-        customizeItem: (state, action: PayloadAction<CartItem>) => {},
+        customizeItem: () => {},
         getItemQuantity: (state, action: PayloadAction<string>) => {
             state.items = state.items.filter((item) => {
                 if (item.id === action.payload) {

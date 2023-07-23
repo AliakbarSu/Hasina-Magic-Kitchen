@@ -1,37 +1,44 @@
-import { Fragment, useState } from 'react'
-import { Menu, Transition } from '@headlessui/react'
-import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
+import { Fragment, useState } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { Dish, Menu as MenuType } from '@/types/application';
 import { classNames } from '@/utils/classNames';
 import { ReplaceOptionsModal } from './ReplaceOptions';
 
-
 type DropdownProps = {
-    menu: MenuType,
-    item: Dish,
-    onApply: (id: string) => void,
-    onRemove: (id: string) => void
-}
+    menu: MenuType;
+    item: Dish;
+    onApply: (id: string) => void;
+    onRemove: (id: string) => void;
+};
 
-
-export default function Dropdown({ menu, onApply, onRemove, item }: DropdownProps) {
+export default function Dropdown({
+    menu,
+    onApply,
+    onRemove,
+    item,
+}: DropdownProps) {
     const [onReplace, setOnReplace] = useState(false);
-    const availableOptions = menu.options.filter(({ id }) => menu.dishes.find(({ id: dishId }) => dishId === id) === undefined);
+    const availableOptions = menu.options.filter(
+        ({ id }) =>
+            menu.dishes.find(({ id: dishId }) => dishId === id) === undefined
+    );
     return (
-        <Menu as="div" className="relative inline-block text-left" >
-            <ReplaceOptionsModal dishes={availableOptions} setOpen={setOnReplace} onApply={onApply} open={onReplace} />
+        <Menu as="div" className="relative inline-block text-left">
+            <ReplaceOptionsModal
+                dishes={availableOptions}
+                setOpen={setOnReplace}
+                onApply={onApply}
+                open={onReplace}
+            />
             <div>
                 <Menu.Button className="overflow-visible inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-
-                    <span className="sr-only">
-                        Open options
-                    </span>
+                    <span className="sr-only">Open options</span>
 
                     <EllipsisVerticalIcon
                         className="h-5 w-5"
                         aria-hidden="true"
                     />
-
                 </Menu.Button>
             </div>
 
@@ -50,7 +57,9 @@ export default function Dropdown({ menu, onApply, onRemove, item }: DropdownProp
                             {({ active }) => (
                                 <p
                                     className={classNames(
-                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                        active
+                                            ? 'bg-gray-100 text-gray-900'
+                                            : 'text-gray-700',
                                         'block px-4 py-2 text-sm'
                                     )}
                                     onClick={() => onRemove(item.id)}
@@ -62,9 +71,15 @@ export default function Dropdown({ menu, onApply, onRemove, item }: DropdownProp
                         <Menu.Item>
                             {({ active }) => (
                                 <p
-                                    onClick={onReplace ? () => setOnReplace(false) : () => setOnReplace(true)}
+                                    onClick={
+                                        onReplace
+                                            ? () => setOnReplace(false)
+                                            : () => setOnReplace(true)
+                                    }
                                     className={classNames(
-                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                        active
+                                            ? 'bg-gray-100 text-gray-900'
+                                            : 'text-gray-700',
                                         'block px-4 py-2 text-sm'
                                     )}
                                 >
@@ -76,6 +91,5 @@ export default function Dropdown({ menu, onApply, onRemove, item }: DropdownProp
                 </Menu.Items>
             </Transition>
         </Menu>
-    )
+    );
 }
-

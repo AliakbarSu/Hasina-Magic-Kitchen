@@ -1,5 +1,5 @@
-import { useForm } from "@inertiajs/react";
-import { Order, OrderStatus } from "../Orders";
+import { useForm } from '@inertiajs/react';
+import { Order, OrderStatus } from '../Orders';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -11,15 +11,25 @@ const availableStatus = [
     { id: OrderStatus.Make, title: 'Make' },
     { id: OrderStatus.Completed, title: 'Complete' },
     { id: OrderStatus.Canceled, title: 'Cancel' },
-]
+];
 
-export default function OrderStatusActions({ order }: { onSelect: (value: string) => void, order: Order }) {
-    const { patch, setData, data } = useForm({ status: order.status, order_id: order.id })
+export default function OrderStatusActions({
+    order,
+}: {
+    onSelect: (value: string) => void;
+    order: Order;
+}) {
+    const { patch, setData, data } = useForm({
+        status: order.status,
+        order_id: order.id,
+    });
 
     const onSubmitHandler = () => {
-        confirm(`Are you sure you want to change the status of this order to ${data.status}?`)
-        patch(route('admin.orders.update.status'))
-    }
+        confirm(
+            `Are you sure you want to change the status of this order to ${data.status}?`
+        );
+        patch(route('admin.orders.update.status'));
+    };
     const handleChange = (event: SelectChangeEvent) => {
         setData('status', event.target.value as OrderStatus);
     };
@@ -36,7 +46,12 @@ export default function OrderStatusActions({ order }: { onSelect: (value: string
                         onChange={handleChange}
                     >
                         {availableStatus.map((orderStatus) => (
-                            <MenuItem key={orderStatus.id} value={orderStatus.id}>{orderStatus.title}</MenuItem>
+                            <MenuItem
+                                key={orderStatus.id}
+                                value={orderStatus.id}
+                            >
+                                {orderStatus.title}
+                            </MenuItem>
                         ))}
                     </Select>
                 </FormControl>
@@ -49,9 +64,7 @@ export default function OrderStatusActions({ order }: { onSelect: (value: string
                 >
                     Update
                 </button>
-
             </div>
-
         </div>
-    )
+    );
 }

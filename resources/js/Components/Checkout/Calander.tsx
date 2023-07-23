@@ -1,6 +1,6 @@
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateValidationError, DesktopDatePicker } from '@mui/x-date-pickers';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
 
 export default function BasicDateCalendar({
     setState,
@@ -9,10 +9,14 @@ export default function BasicDateCalendar({
     setState: (value: string) => void;
     setError: (value: string) => void;
 }) {
-    const onDateChangeHandler = (value: any) => {
+    const onDateChangeHandler = (value: {
+        $D: string;
+        $M: string;
+        $y: string;
+    }) => {
         setState(`${value.$D}-${value.$M}-${value.$y}`);
     };
-    const onErrorHandler = (error: DateValidationError) => {
+    const onErrorHandler = () => {
         setError('Please select a valid date');
     };
     return (
@@ -22,7 +26,15 @@ export default function BasicDateCalendar({
                 onError={onErrorHandler}
                 label="Order date"
                 disablePast
-                onChange={onDateChangeHandler}
+                onChange={(e: unknown) =>
+                    onDateChangeHandler(
+                        e as {
+                            $D: string;
+                            $M: string;
+                            $y: string;
+                        }
+                    )
+                }
             />
         </LocalizationProvider>
     );

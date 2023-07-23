@@ -70,7 +70,9 @@ export function ReplaceOptionsModal({
                                 <div className="sm:col-span-3">
                                     <form className="mt-2">
                                         <FormControl fullWidth>
-                                            <InputLabel id="select-dishes">Dishes</InputLabel>
+                                            <InputLabel id="select-dishes">
+                                                Dishes
+                                            </InputLabel>
                                             <Select
                                                 labelId="select-dishes"
                                                 id="select-dishes"
@@ -79,7 +81,12 @@ export function ReplaceOptionsModal({
                                                 onChange={onInputChangeHandler}
                                             >
                                                 {dishes.map(({ name, id }) => (
-                                                    <MenuItem value={id} key={id}>{name}</MenuItem>
+                                                    <MenuItem
+                                                        value={id}
+                                                        key={id}
+                                                    >
+                                                        {name}
+                                                    </MenuItem>
                                                 ))}
                                             </Select>
                                         </FormControl>

@@ -1,11 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-// import DeleteUserForm from './Partials/DeleteUserForm';
-// import UpdatePasswordForm from './Partials/UpdatePasswordForm';
-// import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 import { Head, useForm } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import OrderList from './Components/OrderList';
-import { Addon, Dish, Media, Menu } from '@/types/application';
+import { Addon, Dish, Media } from '@/types/application';
 
 export enum OrderStatus {
     Created = 'created',
@@ -37,14 +34,17 @@ export interface Order {
         price: number;
         description: string;
         media: Media[];
-        dishes: Dish[],
-        order_dishes: Dish[],
+        dishes: Dish[];
+        order_dishes: Dish[];
     }[];
-    addons: Addon[]
+    addons: Addon[];
 }
 
-export default function Orders({ auth, mustVerifyEmail, status, orders }: PageProps<{ mustVerifyEmail: boolean, status?: string, orders: any[] }>) {
-    const { data, setData, patch, processing, errors, reset, setError } = useForm({
+export default function Orders({
+    auth,
+    orders,
+}: PageProps<{ mustVerifyEmail: boolean; status?: string; orders: Order[] }>) {
+    const { errors } = useForm({
         status: 'pending',
         order_id: '',
     });
@@ -52,7 +52,11 @@ export default function Orders({ auth, mustVerifyEmail, status, orders }: PagePr
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Orders</h2>}
+            header={
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                    Orders
+                </h2>
+            }
         >
             <Head title="Orders" />
             {errors.order_id ? <div>{errors.order_id}</div> : null}

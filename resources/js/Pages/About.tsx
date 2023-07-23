@@ -1,18 +1,14 @@
-import { Head } from '@inertiajs/react'
-import Nav from '@/Layouts/Nav'
-import Header from '@/Layouts/Header'
-import { Footer } from '@/Components/UI/Footer'
+import { Head } from '@inertiajs/react';
+import Nav from '@/Layouts/Nav';
+import { Footer } from '@/Components/UI/Footer';
 
-import { useState } from 'react'
-import { Dialog } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { optimizeImage } from '@/utils/cloudinary'
+import { optimizeImage } from '@/utils/cloudinary';
 
-const stats = [
-    { label: 'Meals delieverd', value: '44000' },
-    { label: 'Customers served', value: '122' },
-    { label: 'Positive reviews recieved', value: '101' },
-]
+// const stats = [
+//     { label: 'Meals delieverd', value: '44000' },
+//     { label: 'Customers served', value: '122' },
+//     { label: 'Positive reviews recieved', value: '101' },
+// ];
 const values = [
     {
         name: 'Authenticity',
@@ -42,28 +38,24 @@ const values = [
     {
         name: 'Customer Satisfaction',
         description:
-            'Your satisfaction is our top priority. We go the extra mile to ensure that each customer\'s experience exceeds expectations.Our team is responsive, accommodating, and dedicated to providing exceptional service that leaves you delighted and satisfied.',
+            "Your satisfaction is our top priority. We go the extra mile to ensure that each customer's experience exceeds expectations.Our team is responsive, accommodating, and dedicated to providing exceptional service that leaves you delighted and satisfied.",
     },
-]
-const team = [
-    {
-        name: 'Hasina Dilawari',
-        role: 'Founder & Chief',
-        imageUrl:
-            'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    },
-    // More people...
-]
+];
+// const team = [
+//     {
+//         name: 'Hasina Dilawari',
+//         role: 'Founder & Chief',
+//         imageUrl:
+//             'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+//     },
+// ];
 
 export default function About() {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     return (
         <div>
-            <Head title='About' />
+            <Head title="About" />
             <Nav />
             <div className="bg-white pb-24">
-
-
                 <main className="isolate">
                     {/* Hero section */}
                     <div className="relative isolate -z-10">
@@ -83,13 +75,22 @@ export default function About() {
                                     <path d="M.5 200V.5H200" fill="none" />
                                 </pattern>
                             </defs>
-                            <svg x="50%" y={-1} className="overflow-visible fill-gray-50">
+                            <svg
+                                x="50%"
+                                y={-1}
+                                className="overflow-visible fill-gray-50"
+                            >
                                 <path
                                     d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
                                     strokeWidth={0}
                                 />
                             </svg>
-                            <rect width="100%" height="100%" strokeWidth={0} fill="url(#1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84)" />
+                            <rect
+                                width="100%"
+                                height="100%"
+                                strokeWidth={0}
+                                fill="url(#1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84)"
+                            />
                         </svg>
                         <div
                             className="absolute left-1/2 right-0 top-0 -z-10 -ml-24 transform-gpu overflow-hidden blur-3xl lg:ml-24 xl:ml-48"
@@ -108,19 +109,28 @@ export default function About() {
                                 <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
                                     <div className="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
                                         <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                                            Discover the Authentic Flavors of Middle Eastern and Afghan Cuisine.
+                                            Discover the Authentic Flavors of
+                                            Middle Eastern and Afghan Cuisine.
                                         </h1>
                                         <p className="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
-                                            Welcome to our culinary journey through the rich and vibrant flavors of Middle Eastern and Afghan cuisine.
-                                            At Hasina's Magic Kitchen, we are passionate about bringing you an authentic dining experience that tantalizes your
-                                            taste buds and transports you to the heart of these fascinating cultures.
+                                            Welcome to our culinary journey
+                                            through the rich and vibrant flavors
+                                            of Middle Eastern and Afghan
+                                            cuisine. At Hasina&apos;s Magic
+                                            Kitchen, we are passionate about
+                                            bringing you an authentic dining
+                                            experience that tantalizes your
+                                            taste buds and transports you to the
+                                            heart of these fascinating cultures.
                                         </p>
                                     </div>
                                     <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
                                         <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
                                             <div className="relative">
                                                 <img
-                                                    src={optimizeImage("https://res.cloudinary.com/dd1okznpy/image/upload/v1689659364/thumbnails/afghan-cusine-dish-delicious_oeqbeb.jpg")}
+                                                    src={optimizeImage(
+                                                        'https://res.cloudinary.com/dd1okznpy/image/upload/v1689659364/thumbnails/afghan-cusine-dish-delicious_oeqbeb.jpg'
+                                                    )}
                                                     alt="photo of afghani dish - afghan cuisine"
                                                     className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                                                 />
@@ -130,7 +140,9 @@ export default function About() {
                                         <div className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
                                             <div className="relative">
                                                 <img
-                                                    src={optimizeImage("https://res.cloudinary.com/dd1okznpy/image/upload/v1689659362/thumbnails/boolani-dish-afghan-food_p8ejzd.jpg")}
+                                                    src={optimizeImage(
+                                                        'https://res.cloudinary.com/dd1okznpy/image/upload/v1689659362/thumbnails/boolani-dish-afghan-food_p8ejzd.jpg'
+                                                    )}
                                                     alt="photo of boolani dish - afghani food"
                                                     className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                                                 />
@@ -138,7 +150,9 @@ export default function About() {
                                             </div>
                                             <div className="relative">
                                                 <img
-                                                    src={optimizeImage("https://res.cloudinary.com/dd1okznpy/image/upload/v1689659362/thumbnails/ashak-afghani-dish-middle-eastern_mgs2ya.jpg")}
+                                                    src={optimizeImage(
+                                                        'https://res.cloudinary.com/dd1okznpy/image/upload/v1689659362/thumbnails/ashak-afghani-dish-middle-eastern_mgs2ya.jpg'
+                                                    )}
                                                     alt="photo of ashak afghani dish"
                                                     className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                                                 />
@@ -148,7 +162,9 @@ export default function About() {
                                         <div className="w-44 flex-none space-y-8 pt-32 sm:pt-0">
                                             <div className="relative">
                                                 <img
-                                                    src={optimizeImage("https://res.cloudinary.com/dd1okznpy/image/upload/v1689659380/thumbnails/baklawa-sweet-turkish-pastry_ps5hnw.jpg")}
+                                                    src={optimizeImage(
+                                                        'https://res.cloudinary.com/dd1okznpy/image/upload/v1689659380/thumbnails/baklawa-sweet-turkish-pastry_ps5hnw.jpg'
+                                                    )}
                                                     alt="photo of baklawa - aghani dish"
                                                     className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                                                 />
@@ -156,7 +172,9 @@ export default function About() {
                                             </div>
                                             <div className="relative">
                                                 <img
-                                                    src={optimizeImage("https://res.cloudinary.com/dd1okznpy/image/upload/v1689659363/thumbnails/mantoo-dish-afghan-mantoo-food_wajy9w.jpg")}
+                                                    src={optimizeImage(
+                                                        'https://res.cloudinary.com/dd1okznpy/image/upload/v1689659363/thumbnails/mantoo-dish-afghan-mantoo-food_wajy9w.jpg'
+                                                    )}
                                                     alt="photo of mantoo dish - afghani food"
                                                     className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
                                                 />
@@ -172,27 +190,50 @@ export default function About() {
                     {/* Content section */}
                     <div className="mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8">
                         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-                            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Our mission</h2>
+                            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                                Our mission
+                            </h2>
                             <div className="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
                                 <div className="lg:w-full lg:max-w-2xl lg:flex-auto">
                                     <p className="text-xl leading-8 text-gray-600">
-                                        We take great pride in sourcing the finest ingredients to ensure an authentic dining experience.
-                                        Each dish is prepared with meticulous attention to detail, using traditional cooking
-                                        techniques that capture the true essence of Middle Eastern and Afghan cuisine.
-                                        Whether you're planning a corporate event, wedding, or intimate gathering,
-                                        our catering services will elevate your occasion and leave a lasting impression on your guests.
+                                        We take great pride in sourcing the
+                                        finest ingredients to ensure an
+                                        authentic dining experience. Each dish
+                                        is prepared with meticulous attention to
+                                        detail, using traditional cooking
+                                        techniques that capture the true essence
+                                        of Middle Eastern and Afghan cuisine.
+                                        Whether you&apos;re planning a corporate
+                                        event, wedding, or intimate gathering,
+                                        our catering services will elevate your
+                                        occasion and leave a lasting impression
+                                        on your guests.
                                     </p>
                                     <div className="mt-10 max-w-xl text-base leading-7 text-gray-700">
                                         <p>
-                                            Experience the warmth and hospitality of Afghan cuisine, where bold flavors and wholesome ingredients take center stage.
-                                            From succulent kabuli pulao to savory mantu dumplings and comforting qorma, our Afghan dishes are a
-                                            testament to the rich cultural heritage and culinary expertise of this captivating region.
+                                            Experience the warmth and
+                                            hospitality of Afghan cuisine, where
+                                            bold flavors and wholesome
+                                            ingredients take center stage. From
+                                            succulent kabuli pulao to savory
+                                            mantu dumplings and comforting
+                                            qorma, our Afghan dishes are a
+                                            testament to the rich cultural
+                                            heritage and culinary expertise of
+                                            this captivating region.
                                         </p>
                                         <p className="mt-10">
-                                            Immerse yourself in the culinary traditions of the Middle East, where our skilled chefs artfully blend spices, herbs,
-                                            and premium ingredients to create iconic dishes like falafel, shawarma, hummus, and tabbouleh.
-                                            Savor the aromatic wonders of Persian cuisine with flavorful kebabs, fragrant rice dishes, and delectable
-                                            stews that will leave you craving for more.
+                                            Immerse yourself in the culinary
+                                            traditions of the Middle East, where
+                                            our skilled chefs artfully blend
+                                            spices, herbs, and premium
+                                            ingredients to create iconic dishes
+                                            like falafel, shawarma, hummus, and
+                                            tabbouleh. Savor the aromatic
+                                            wonders of Persian cuisine with
+                                            flavorful kebabs, fragrant rice
+                                            dishes, and delectable stews that
+                                            will leave you craving for more.
                                         </p>
                                     </div>
                                 </div>
@@ -222,7 +263,9 @@ export default function About() {
                     {/* Values section */}
                     <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0">
-                            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Our values</h2>
+                            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                                Our values
+                            </h2>
                             {/* <p className="mt-6 text-lg leading-8 text-gray-600">
                                 Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum cupiditate veritatis in
                                 accusamus quisquam.
@@ -231,8 +274,12 @@ export default function About() {
                         <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 text-base leading-7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                             {values.map((value) => (
                                 <div key={value.name}>
-                                    <dt className="font-semibold text-gray-900">{value.name}</dt>
-                                    <dd className="mt-1 text-gray-600">{value.description}</dd>
+                                    <dt className="font-semibold text-gray-900">
+                                        {value.name}
+                                    </dt>
+                                    <dd className="mt-1 text-gray-600">
+                                        {value.description}
+                                    </dd>
                                 </div>
                             ))}
                         </dl>
@@ -371,11 +418,8 @@ export default function About() {
                         </div>
                     </div> */}
                 </main>
-
-
             </div>
             <Footer />
         </div>
-
-    )
+    );
 }

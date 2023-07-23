@@ -1,4 +1,4 @@
-import { Fragment, PropsWithChildren, ReactNode } from 'react';
+import { Fragment, PropsWithChildren } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
 export default function Modal({
@@ -64,79 +64,5 @@ export default function Modal({
                 </Transition.Child>
             </Dialog>
         </Transition>
-    );
-}
-
-const projects = [
-    {
-        name: 'Graph API',
-        initials: 'GA',
-        href: '#',
-        members: 16,
-        bgColor: 'bg-pink-600',
-    },
-    {
-        name: 'Component Design',
-        initials: 'CD',
-        href: '#',
-        members: 12,
-        bgColor: 'bg-purple-600',
-    },
-    {
-        name: 'Templates',
-        initials: 'T',
-        href: '#',
-        members: 16,
-        bgColor: 'bg-yellow-500',
-    },
-    {
-        name: 'React Components',
-        initials: 'RC',
-        href: '#',
-        members: 8,
-        bgColor: 'bg-green-500',
-    },
-];
-import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
-
-function Tags() {
-    return (
-        <div className="h-[80px]">
-            <h2 className="text-sm font-medium text-gray-500">Base Foods</h2>
-
-            <ul
-                role="list"
-                className="mt-1 flex max-h-11 flex-col flex-wrap gap-1 overflow-x-scroll"
-            >
-                {projects.map((project) => (
-                    <li
-                        key={project.name}
-                        className="flex rounded-md shadow-sm"
-                    >
-                        <div className="flex flex-1 items-center justify-between truncate rounded-md border border-gray-200 bg-white">
-                            <div className="flex-1 truncate px-4 py-2 text-sm">
-                                <p className="font-medium text-gray-900 hover:text-gray-600">
-                                    {project.name}
-                                </p>
-                            </div>
-                            <div className="flex-shrink-0 pr-2">
-                                <button
-                                    type="button"
-                                    className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                >
-                                    <span className="sr-only">
-                                        Open options
-                                    </span>
-                                    <EllipsisVerticalIcon
-                                        className="h-5 w-5"
-                                        aria-hidden="true"
-                                    />
-                                </button>
-                            </div>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-        </div>
     );
 }

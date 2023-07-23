@@ -10,20 +10,24 @@ import { optimizeImage } from '@/utils/cloudinary';
 
 type ModalProps = {
     open: boolean;
-    setOpen: any;
+    setOpen: (value: boolean) => void;
     addons: Dish[];
 };
 
-const CartAddon = ({ item, onUpdateAddon }: { item: Dish, onUpdateAddon: (addon: Addon) => void }) => {
-    const dispatch = useDispatch();
+const CartAddon = ({
+    item,
+    onUpdateAddon,
+}: {
+    item: Dish;
+    onUpdateAddon: (addon: Addon) => void;
+}) => {
     const [quantity, setQuantity] = useState(0);
     const cartAddons = useSelector((state: RootState) => state.cart.addons);
 
     const onUpdateAddonHandler = (addon: Dish, quantity: number) => {
         setQuantity(quantity);
-        onUpdateAddon({ ...addon, quantity: quantity })
+        onUpdateAddon({ ...addon, quantity: quantity });
     };
-
 
     useEffect(() => {
         const addon = cartAddons.find((addon) => addon.id === item.id);
@@ -73,7 +77,8 @@ const CartAddon = ({ item, onUpdateAddon }: { item: Dish, onUpdateAddon: (addon:
                 <button
                     type="button"
                     onClick={() =>
-                        quantity < 100 && onUpdateAddonHandler(item, quantity + 1)
+                        quantity < 100 &&
+                        onUpdateAddonHandler(item, quantity + 1)
                     }
                     className="relative -ml-px inline-flex items-center space-x-2 rounded-r-md border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                 >
@@ -88,33 +93,37 @@ const CartAddon = ({ item, onUpdateAddon }: { item: Dish, onUpdateAddon: (addon:
 };
 
 const Modal = ({ open, setOpen, addons }: ModalProps) => {
-
     const dispatch = useDispatch();
     const [selectedAddons, setSelectedAddons] = useState<Addon[]>([]);
 
     const onUpdateAddon = () => {
         setOpen(false);
         selectedAddons.forEach((addon) => {
-            return addon.quantity === 0 ? dispatch(removeAddon(addon.id)) : dispatch(addOrUpdate(addon));
-        })
-
-
+            return addon.quantity === 0
+                ? dispatch(removeAddon(addon.id))
+                : dispatch(addOrUpdate(addon));
+        });
     };
 
     const onUpdateAddonHandler = (addon: Addon) => {
-        const exsisitingAddon = selectedAddons.find((item) => item.id === addon.id);
+        const exsisitingAddon = selectedAddons.find(
+            (item) => item.id === addon.id
+        );
         if (exsisitingAddon) {
-            setSelectedAddons(selectedAddons.map((item) => item.id === addon.id ? addon : item));
+            setSelectedAddons(
+                selectedAddons.map((item) =>
+                    item.id === addon.id ? addon : item
+                )
+            );
         } else {
             setSelectedAddons([...selectedAddons, addon]);
         }
-
-    }
+    };
 
     const onCancelHandler = () => {
         setOpen(false);
         setSelectedAddons([]);
-    }
+    };
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -139,7 +148,11 @@ const Modal = ({ open, setOpen, addons }: ModalProps) => {
                         </div>
                         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                             {addons.map((item) => (
-                                <CartAddon onUpdateAddon={onUpdateAddonHandler} key={item.id} item={item} />
+                                <CartAddon
+                                    onUpdateAddon={onUpdateAddonHandler}
+                                    key={item.id}
+                                    item={item}
+                                />
                             ))}
                         </div>
                     </div>
@@ -188,7 +201,10 @@ export function AddExtraDish() {
             </div>
             <div className="relative mt-4 flex bg-gray-100 border rounded-md pb-10 pt-2">
                 {addedAddons.map((item) => (
-                    <div className="mx-2 bg-green-600 p-1 rounded-md text-white text-md" key={item.id}>
+                    <div
+                        className="mx-2 bg-green-600 p-1 rounded-md text-white text-md"
+                        key={item.id}
+                    >
                         <span>{item.name}</span>
                         <span className="text-sm px-1">x</span>
                         <span>{item.quantity}</span>
